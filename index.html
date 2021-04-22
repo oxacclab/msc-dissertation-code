@@ -1,0 +1,101 @@
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+		<title>Curiosity demo</title>
+
+		<script src="js/jspsych.js"></script>
+		<script src="js/jspsych-html-keyboard-response.js"></script>
+		<script src="js/jspsych-instructions.js"></script>
+		<script src="js/jspsych-fullscreen.js"></script>
+		<script src="js/jspsych-survey-html-form.js"></script>
+		<script src="js/jspsych-survey-multi-select.js"></script>
+
+		<script src="js/helper_funcs.js"></script>
+		<script src="js/exp_parameters.js"></script>
+		<script src="js/get-set_trial_stimulus-prompt.js"></script>
+		<script src="js/instructions-practice_trials.js"></script>
+		<script src="js/define_trials.js"></script>
+		<script src="js/get_experiment_data.js"></script>
+		<script src="js/get_trials_and_trial-timeline.js"></script>
+		<script src="js/timeline_setting.js"></script>
+
+		<script src="js/jquery.min.js"></script>
+
+		<link href="css/jspsych.css" rel="stylesheet" type="text/css"></link>
+		<link href="css/css.css" rel="stylesheet" type="text/css"></link>
+
+	</head>
+	<body>
+
+		<div id="information-timer-container">
+			<span>Continuing to next trial: <progress value="0" id="information-timer"></progress></span> <!-- max is set via JS -->
+			<span id='timer-text-test'></span>
+		</div>
+		<div id="jspsych-target">
+			<!-- <div id="loading" style="">Experiment is loading - please wait</div> -->
+			<div id="loading" class="lds-facebook"><div></div><div></div><div></div></div>
+		</div>
+
+
+
+
+	</body>
+	<script>
+		show_timer_ms = false
+
+		document.getElementById('information-timer').max = INFORMATION_SAMPLING_DURATION
+
+		function saveData(filename, filedata){
+			$.ajax({
+				type:'post',
+				cache: false,
+				url: 'save_data.php',
+				data: {filename: filename, filedata: filedata}
+			});
+		}
+
+		function startExperiment() {
+				jsPsych.init({
+				display_element: 'jspsych-target',
+				timeline: timeline,
+				on_finish: function() {
+					document.getElementById('loading').remove()
+					jsPsych.data.displayData('json');
+					var subject_ID = Math.floor(Math.random()*10000);
+					saveData(subject_ID.toString()+'.csv', jsPsych.data.get().csv())
+					jsPsych.data.get().localSave('csv', subject_ID+'_testdata.csv')
+					
+				},
+				exclusions: {
+					min_width: 992,
+					min_height: 800
+				}
+			})
+		}
+
+		// preloading images first
+		var images = []
+		for (card of CARDS) {
+			images.push('images/'+card+'.png')
+		}
+		for (dealer of PT_TRIALS_DEALERS) {
+			images.push('images/'+dealer+'.png')
+		}
+		for (dealer of DEALERS) {
+			images.push('images/'+dealer+'.png')
+		}
+		for (slide=1; slide<=11; slide++) {
+			images.push('images/instructions-multi/Slide'+slide+'.jpg')
+			//images.push('images/instructions-single/Slide'+slide+'.jpg')
+		}
+		images.push('images/face_down_card.png')
+		images.push('images/question-mark.png')
+		images.push('images/arrow.png')
+		images.push('images/card-presentation-background.jpg')
+
+		jsPsych.pluginAPI.preloadImages(images, function(){ startExperiment(); });
+
+	</script>
+</html>
