@@ -61,7 +61,7 @@
 				display_element: 'jspsych-target',
 				timeline: timeline,
 				on_finish: function() {
-					document.getElementById('loading').remove()
+					// document.getElementById('loading').remove()
 					jsPsych.data.displayData('json');
 					var subject_ID = Math.floor(Math.random()*10000);
 					saveData(subject_ID.toString()+'.csv', jsPsych.data.get().csv())

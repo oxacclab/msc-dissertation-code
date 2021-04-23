@@ -1,3 +1,6 @@
+num = ((1454 - 1000) / 20) * 0.04
+console.log(num)
+console.log(Math.round((((1454 - 1000) / 20) * 0.04 + Number.EPSILON) * 100) / 100)
 var fullscreen_message = {
 	type: 'fullscreen',
 	full_screen_mode: true,
@@ -89,7 +92,7 @@ var inter_block_text = {
 											{'pp_card_guess': 'higher', 'block': last_block_id}])
 											.select('curr_trial_winnings').sum()
 		return ['<p>This is the end of block '+(last_block_id+1)+'. In this block you won '+last_block_winnings+' points.</p>'+
-				'<p>There are '+(BLOCKS - (last_block_id+1))+' blocks remaining.</p>'+
+				'<p>There is/are '+(BLOCKS - (last_block_id+1))+' block(s) remaining.</p>'+
 				'<p>You can take a break now if you wish and continue when you feel ready.</p>']
 	},
 	show_clickable_nav: true
@@ -98,14 +101,19 @@ var inter_block_text = {
 var debrief = {
 	type: 'instructions',
 	pages: function() {
-		// nearest 500
-		acquiredPoints = jsPsych.data.get().select('curr_trial_winnings').sum()
-		requiredPoints = Math.floor(acquiredPoints/500) * 500
-		if (requiredPoints == 0 || typeof requiredPoints != 'number') {
-			console.log("Problem")
+		let acquiredPoints = jsPsych.data.get().select('curr_trial_winnings').sum()
+		let currentBonus = 0
+		if (acquiredPoints >= 50000) {
+			currentBonus = 2
+		} else if (acquiredPoints > 35000) {
+			// each 300 points above 35000 grant £0.04
+			// rounding algorithm credits with number.epsilon https://stackoverflow.com/a/11832950
+			currentBonus = Math.round((((acquiredPoints - 35000) / 300) * 0.04 + Number.EPSILON) * 100) / 100
 		}
 		return ['<p>During the test trials you made the correct decision '+jsPsych.data.get().filter({'pp_card_correct': true}).count()+' times.</p>'+
-				'<p>This brought you a total of '+acquiredPoints+' points from both lotteries. To win the £2.00 bonus, you had to achieve '+requiredPoints+' points.\nHence, you win an additional £2.00.',
+				'<p>This brought you a total of '+acquiredPoints+' points from both lotteries.</p>'+
+				'<p>The bonus is calculated such that each 300 points above 35,000 grant £0.04 with the maximum £2.00 reached at 50,000 points.</p>'+
+				'<p>This means that your current bonus is equal to £'+currentBonus+'.</p>'+
 				'<p>Thank you for completing this experiment. Please click next to save your data and then you can close the browser.</p>'
 	]},
 	show_clickable_nav: true

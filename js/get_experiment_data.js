@@ -1,161 +1,3 @@
-// // dealer-ids generation
-// 		let dealer_id = getRandom(DEALERS, 1)[0]
-// 		const modular_connection = getRandom(MODULAR_NET_EDGES.filter(edge => edge.includes(dealer_id)), 1)[0]
-// 		const random_connection = getRandom(RANDOM_NET_EDGES.filter(edge => edge.includes(dealer_id)), 1)[0]
-
-// 		if (modular_connections_source == 'friends') {
-// 			var friends_dealer_id = modular_connection.replace(dealer_id, '').replace('--', '')
-// 			var work_dealer_id = random_connection.replace(dealer_id, '').replace('--', '')
-// 		} else {
-// 			var friends_dealer_id = random_connection.replace(dealer_id, '').replace('--', '')
-// 			var work_dealer_id = modular_connection.replace(dealer_id, '').replace('--', '')
-// 		}
-
-// function get_dealer_id_name_dict_randomised() {
-// 	let dealer_id_name_dict = {}
-// 	let male_names = ['John', 'Marc', 'Oscar', 'Charlie', 'Luis', 'Nick']
-// 	let female_names = ['Sarah', 'Katherine', 'Francesca', 'Rebekah', 'Victoria', 'Elizabeth']
-// 	let male_faces = ['d01', 'd02', 'd04', 'd05', 'd07', 'd10']
-// 	let female_faces = ['d03', 'd06', 'd08', 'd09', 'd11', 'd12']
-
-// 	for (s=0; s<=5; s++) {
-// 		male_names = shuffle(male_names)
-// 		female_names = shuffle(female_names)
-// 		male_faces = shuffle(male_faces)
-// 		female_faces = shuffle(female_faces)
-// 	}
-	
-// 	for (i=0; i<male_names.length; i++) {
-// 		dealer_id_name_dict[male_faces[i]] = male_names[i]
-// 		dealer_id_name_dict[female_faces[i]] = female_names[i]
-// 	}
-// 	return dealer_id_name_dict
-// }
-// // let DEALER_ID_NAME_DICT = get_dealer_id_name_dict_randomised()
-// // looks like this (but in random order):
-// let DEALER_ID_NAME_DICT = {'d01': 'John', 'd02': 'Jack', 'd03': 'Sarah', 'd04': 'Jake', 'd05': 'Charlie', 'd06': 'Katherine', 'd07': 'Luis',
-// 							'd08': 'Francesca', 'd09': 'Rebekah', 'd10': 'Nick', 'd11': 'Victoria', 'd12': 'Elizabeth'}
-// let DEALERS = Object.keys(DEALER_ID_NAME_DICT)
-
-// let MODULAR_NET_EDGES = ['d01--d02', 'd01--d03', 'd01--d04', 'd02--d03', 'd02--d04', 'd03--d12', 
-// 							'd04--d05', 'd05--d06', 'd05--d07', 'd06--d07', 'd06--d08', 'd07--d08', 
-// 							'd08--d09', 'd09--d10', 'd09--d11', 'd10--d11', 'd10--d12', 'd11--d12']
-// let RANDOM_NET_EDGES = 	['d01--d05', 'd01--d08', 'd01--d12', 'd02--d06', 'd02--d07', 'd02--d11', 
-// 							'd03--d05', 'd03--d10', 'd03--d11', 'd04--d08', 'd04--d09', 'd04--d11',
-// 							'd05--d09', 'd06--d09', 'd06--d12', 'd07--d10', 'd07--d12', 'd08--d10']
-
-
-// // in-house flat function to handle browser compatibility
-// // credits: https://stackoverflow.com/a/50993569/13078832
-// Object.defineProperty(Array.prototype, 'flat', {
-// 	value: function(depth = 1) {
-// 	  return this.reduce(function (flat, toFlatten) {
-// 		return flat.concat((Array.isArray(toFlatten) && (depth>1)) ? toFlatten.flat(depth-1) : toFlatten);
-// 	  }, []);
-// 	}
-// });
-// //e.g. ([1, 2, 3], 2) becomes [1, 1, 2, 2, 3, 3]
-// const expandArray = (arr, times) => arr.map(x => Array(times).fill(x)).flat()
-// function shuffle(array) {
-// 	var new_array = [...array];
-// 	var currentIndex = new_array.length, temporaryValue, randomIndex;
-
-// 	  // While there remain elements to shuffle...
-// 	while (0 !== currentIndex) {
-
-// 		// Pick a remaining element...
-// 		randomIndex = Math.floor(Math.random() * currentIndex);
-// 		currentIndex -= 1;
-
-// 		// And swap it with the current element.
-// 		temporaryValue = new_array[currentIndex];
-// 		new_array[currentIndex] = new_array[randomIndex];
-// 		new_array[randomIndex] = temporaryValue;
-// 	}
-// 	return new_array;
-// }
-// function getRandom(arr, n) {
-// 	var result = new Array(n),
-// 		len = arr.length,
-// 		taken = new Array(len);
-// 	if (n > len)
-// 		throw new RangeError("getRandom: more elements taken than available");
-// 	while (n--) {
-// 		var x = Math.floor(Math.random() * len);
-// 		result[n] = arr[x in taken ? taken[x] : x];
-// 		taken[x] = --len in taken ? taken[len] : len;
-// 	}
-// 	return result;
-// }
-
-
-
-
-modular_edges_masterlist = expandArray(MODULAR_NET_EDGES, 2)
-random_edges_masterlist = expandArray(RANDOM_NET_EDGES, 2)
-for (let s=0; s<5; s++) {
-		modular_edges_masterlist = shuffle(modular_edges_masterlist)
-		random_edges_masterlist = shuffle(random_edges_masterlist)
-	}
-
-// function getDealersCount(masterlist) {
-// 	let res = ''
-// 	for (i=0; i<DEALERS.length; i++) {
-// 		res += `${DEALERS[i]} = ${masterlist.filter(edge => edge.includes(DEALERS[i])).length}; `
-// 	}
-// 	return res
-// }
-
-function get_curr_trial_edges_recursion() {
-	dealer_id = getRandom(DEALERS, 1)[0]
-	// console.log('selected dealer:', dealer_id)
-	try {
-		modular_edge = getRandom(modular_edges_masterlist.filter(edge => edge.includes(dealer_id)), 1)[0]
-		random_edge = getRandom(random_edges_masterlist.filter(edge => edge.includes(dealer_id)), 1)[0]
-		// console.log(`isnde get_curr_trial_edges_recursion, modular_edge = ${modular_edge}, and random_edge = ${random_edge}`)
-		
-	}
-	catch(err) {
-		// console.log(err)
-		get_curr_trial_edges_recursion()
-	}
-	return [dealer_id, modular_edge, random_edge]
-}
-
-function get_curr_pp_dealers_and_edges() {
-	try {
-		curr_pp_dealers_order = []
-		curr_pp_modular_edges_order = []
-		curr_pp_random_edges_order = []
-		modular_edges_masterlist_copy = [...modular_edges_masterlist]
-		random_edges_masterlist_copy = [...random_edges_masterlist]
-		for (trial_ind=0; trial_ind<TRIALS_NUM; trial_ind++) {
-			recursion_res = get_curr_trial_edges_recursion()
-			dealer_id = recursion_res[0]
-			modular_edge = recursion_res[1]
-			random_edge = recursion_res[2]
-	
-			modular_edges_masterlist_copy.splice(modular_edges_masterlist_copy.indexOf(modular_edge), 1)
-			random_edges_masterlist_copy.splice(random_edges_masterlist_copy.indexOf(random_edge), 1)
-
-			curr_pp_dealers_order.push(dealer_id)
-			curr_pp_modular_edges_order.push(modular_edge)
-			curr_pp_random_edges_order.push(random_edge)
-		}
-	}
-	catch(err) {
-		get_curr_pp_dealers_and_edges()
-	}
-	return [curr_pp_dealers_order, curr_pp_modular_edges_order, curr_pp_random_edges_order]
-}
-
-// console.log(get_curr_pp_dealers_and_edges())
-// console.log('Success')
-
-
-
-
-
 function get_experiment_data_object() {
 	// function instead of hard-coded in order to allow the opportunity to dynamically set parameters before start of test trials
 	const experiment_data_object = {'pt_trials_feedback': {}, 'pt_trials': {}, 'test_trials': {}}
@@ -241,7 +83,60 @@ function get_experiment_data_object() {
 	}
 	
 	// controlling friends and colleagues connections
-	recursion_res = get_curr_pp_dealers_and_edges() // very, very ugly and nasty recursion
+
+	// first, setting up some functions and variables --- very, very ugly and nasty recursions but they work
+	modular_edges_masterlist = expandArray(MODULAR_NET_EDGES, 2)
+	random_edges_masterlist = expandArray(RANDOM_NET_EDGES, 2)
+	for (let s=0; s<5; s++) {
+			modular_edges_masterlist = shuffle(modular_edges_masterlist)
+			random_edges_masterlist = shuffle(random_edges_masterlist)
+		}
+
+	function get_curr_trial_edges_recursion() {
+		dealer_id = getRandom(DEALERS, 1)[0]
+		// console.log('selected dealer:', dealer_id)
+		try {
+			modular_edge = getRandom(modular_edges_masterlist.filter(edge => edge.includes(dealer_id)), 1)[0]
+			random_edge = getRandom(random_edges_masterlist.filter(edge => edge.includes(dealer_id)), 1)[0]
+			// console.log(`isnde get_curr_trial_edges_recursion, modular_edge = ${modular_edge}, and random_edge = ${random_edge}`)
+			
+		}
+		catch(err) {
+			// console.log(err)
+			get_curr_trial_edges_recursion()
+		}
+		return [dealer_id, modular_edge, random_edge]
+	}
+
+	function get_curr_pp_dealers_and_edges() {
+		try {
+			curr_pp_dealers_order = []
+			curr_pp_modular_edges_order = []
+			curr_pp_random_edges_order = []
+			modular_edges_masterlist_copy = [...modular_edges_masterlist]
+			random_edges_masterlist_copy = [...random_edges_masterlist]
+			for (trial_ind=0; trial_ind<TRIALS_NUM; trial_ind++) {
+				recursion_res = get_curr_trial_edges_recursion()
+				dealer_id = recursion_res[0]
+				modular_edge = recursion_res[1]
+				random_edge = recursion_res[2]
+		
+				modular_edges_masterlist_copy.splice(modular_edges_masterlist_copy.indexOf(modular_edge), 1)
+				random_edges_masterlist_copy.splice(random_edges_masterlist_copy.indexOf(random_edge), 1)
+
+				curr_pp_dealers_order.push(dealer_id)
+				curr_pp_modular_edges_order.push(modular_edge)
+				curr_pp_random_edges_order.push(random_edge)
+			}
+		}
+		catch(err) {
+			get_curr_pp_dealers_and_edges()
+		}
+		return [curr_pp_dealers_order, curr_pp_modular_edges_order, curr_pp_random_edges_order]
+	}
+
+	// now, running function to get info for current pp
+	recursion_res = get_curr_pp_dealers_and_edges()
 	dealers_id_masterlist = recursion_res[0]
 	if (modular_connections_source == 'friends') {
 		friends_edges_masterlist = recursion_res[1]
@@ -283,16 +178,6 @@ function get_experiment_data_object() {
 		const dealer_id = dealers_id_masterlist[trial_ind]
 		const friends_dealer_id = friends_edges_masterlist[trial_ind].replace(dealer_id, '').replace('--', '')
 		const work_dealer_id = work_edges_masterlist[trial_ind].replace(dealer_id, '').replace('--', '')
-		// const modular_connection = getRandom(MODULAR_NET_EDGES.filter(edge => edge.includes(dealer_id)), 1)[0]
-		// const random_connection = getRandom(RANDOM_NET_EDGES.filter(edge => edge.includes(dealer_id)), 1)[0]
-
-		// if (modular_connections_source == 'friends') {
-		// 	var friends_dealer_id = modular_connection.replace(dealer_id, '').replace('--', '')
-		// 	var work_dealer_id = random_connection.replace(dealer_id, '').replace('--', '')
-		// } else {
-		// 	var friends_dealer_id = random_connection.replace(dealer_id, '').replace('--', '')
-		// 	var work_dealer_id = modular_connection.replace(dealer_id, '').replace('--', '')
-		// }
 
 		const block_ind = Math.floor(trial_ind / TRIALS_PER_BLOCK)
 		const block_key = `block_0${block_ind}`
