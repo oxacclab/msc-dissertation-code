@@ -57,6 +57,17 @@
 			});
 		}
 
+		// capture info from Prolific
+		var subject_id = jsPsych.data.getURLVariable('PROLIFIC_PID');
+		var study_id = jsPsych.data.getURLVariable('STUDY_ID');
+		var session_id = jsPsych.data.getURLVariable('SESSION_ID');
+
+		jsPsych.data.addProperties({
+			subject_id: subject_id,
+			study_id: study_id,
+			session_id: session_id
+		});
+
 		function startExperiment() {
 				jsPsych.init({
 				display_element: 'jspsych-target',
@@ -67,7 +78,7 @@
 					var subject_ID = Math.floor(Math.random()*10000);
 					saveData(subject_ID.toString()+'.csv', jsPsych.data.get().csv())
 					jsPsych.data.get().localSave('csv', subject_ID+'_testdata.csv')
-					
+					window.location = "https://app.prolific.co/submissions/complete?cc=XXXXXXX"
 				},
 				exclusions: {
 					min_width: 992,

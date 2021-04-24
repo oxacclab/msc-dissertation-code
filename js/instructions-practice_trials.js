@@ -1,27 +1,27 @@
 var fullscreen_message = {
 	type: 'fullscreen',
 	full_screen_mode: true,
-	message: ["<p>Please enter full screen mode by clicking the button below to ensure best experience.</p>"+
-				"<p>It's important to stay in full screen mode once you've entered it - this allows us to best examine your performance.</p>"+
-				"<p>Please click the button below to enter full screen and continue with the experiment.</p>"],
+	message: ['<p class="instructions-text">Please enter full screen mode by clicking the button below to ensure best experience.</p>'+
+				'<p class="instructions-text">It\'s important to stay in full screen mode once you\'ve entered it - this allows us to best examine your performance.</p>'+
+				'<p class="instructions-text">Please click the button below to enter full screen and continue with the experiment.</p>'],
 	button_label: 'Enter full screen and continue with the experiment.'
 }
 
 var check_consent = function(elem) {
-  if (document.getElementById('consent_checkbox').checked && document.getElementById('consent_checkbox2').checked) {
-    return true;
-  }
-  else {
-    alert("If you wish to participate, you must check both boxes at the bottom of the page.");
-    return false;
-  }
-  return false;
+	if (document.getElementById('consent_checkbox').checked && document.getElementById('consent_checkbox2').checked) {
+		return true;
+	}
+ 	else {
+		alert("If you wish to participate, you must check both boxes at the bottom of the page.");
+		return false;
+	}
+	return false;
 };
 var pis = {
-  type:"external-html",
-  url: "pis.html",
-  cont_btn: "start",
-  check_fn: check_consent
+	type:"external-html",
+	url: "pis.html",
+	cont_btn: "start",
+	check_fn: check_consent
 };
 
 var instructions = {
