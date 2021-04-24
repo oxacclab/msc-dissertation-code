@@ -75,10 +75,12 @@
 				on_finish: function() {
 					// document.getElementById('loading').remove()
 					jsPsych.data.displayData('json');
-					var subject_ID = Math.floor(Math.random()*10000);
-					saveData(subject_ID.toString()+'.csv', jsPsych.data.get().csv())
-					jsPsych.data.get().localSave('csv', subject_ID+'_testdata.csv')
-					window.location = "https://app.prolific.co/submissions/complete?cc=XXXXXXX"
+					if (subject_id == null) {
+						subject_id = Math.floor(Math.random()*10000)
+					}
+					saveData(subject_id.toString()+'.csv', jsPsych.data.get().csv())
+					// jsPsych.data.get().localSave('csv', subject_id+'_testdata.csv')
+					window.location = "https://app.prolific.co/submissions/complete?cc=78A9CD78"
 				},
 				exclusions: {
 					min_width: 992,
@@ -98,10 +100,6 @@
 		for (dealer of DEALERS) {
 			images.push('images/'+dealer+'.png')
 		}
-		// for (slide=1; slide<=11; slide++) {
-		// 	images.push('images/instructions-multi/Slide'+slide+'.jpg')
-		// 	//images.push('images/instructions-single/Slide'+slide+'.jpg')
-		// }
 		for (instruction_image_html=1; instruction_image_html<=5; instruction_image_html++) {
 			images.push('images/instructions-multi-html/image'+instruction_image_html+'.png')
 		}

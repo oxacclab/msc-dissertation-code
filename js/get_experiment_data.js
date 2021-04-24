@@ -207,6 +207,6 @@ function get_experiment_data_object() {
 		}
 		// console.log(experiment_data_object)
 	}
-	console.log(experiment_data_object)
+	// console.log(experiment_data_object)
 	return experiment_data_object
 }

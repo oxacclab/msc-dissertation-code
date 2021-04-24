@@ -71,6 +71,7 @@ var exp_mode = {
 	}
 }
 
+// ---------------------------------------------------------------------YES manipulation of experimenter settings
 var exp_parameters = {
 	type: 'survey-html-form',
 	preamble: '<p>VIEW/SET EXPERIMENT PARAMETERS</p>'+
@@ -134,4 +135,29 @@ var exp_parameters = {
 		jsPsych.addNodeToEndOfTimeline(participant_debrief_timeline, jsPsych.resumeExperiment)
 	}
 }
-timeline.push(exp_parameters)
+// timeline.push(exp_parameters)
+
+
+
+// ---------------------------------------------------------------------NO manipulation of experimenter settings
+BLOCKS = TRIALS_NUM/TRIALS_PER_BLOCK //calc here otherwise get_trials_timeline does not work
+experiment_data_object = get_experiment_data_object()
+single_trial_order = get_single_trial_order()
+trials_timeline = get_trials_timeline(single_trial_order, experiment_data_object)
+
+var pt_trials_feedback_timeline = {
+	timeline: single_trial_order.concat([fixation_cross, pt_feedback]),
+	timeline_variables: Object.values(experiment_data_object['pt_trials_feedback'])
+}
+var pt_trials_NOfeedback_timeline = {
+	timeline: single_trial_order,
+	timeline_variables: Object.values(experiment_data_object['pt_trials'])
+}
+
+timeline.push(participant_intro_timeline) // conditional
+timeline.push(pt_trials_feedback_timeline)
+timeline.push(pt_trials_NOfeedback_timeline)
+timeline.push({timeline: [fixation_cross, pt_block_feedback, test_intro]})
+timeline.push(trials_timeline)
+timeline.push(fixation_cross)
+timeline.push(participant_debrief_timeline)

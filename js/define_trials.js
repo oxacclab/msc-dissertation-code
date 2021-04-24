@@ -20,8 +20,6 @@ var card_presentation_trial = {
 	choices: jsPsych.NO_KEYS,
 	on_finish: function(data) {
 		data.card_decision_prompt = this.prompt
-
-		console.log(jsPsych.data.get().values())
 	}
 }
 
