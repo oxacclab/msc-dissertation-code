@@ -6,6 +6,7 @@
 		<title>Curiosity demo</title>
 
 		<script src="js/jspsych.js"></script>
+		<script src="js/jspsych-external-html.js"></script>
 		<script src="js/jspsych-html-keyboard-response.js"></script>
 		<script src="js/jspsych-instructions.js"></script>
 		<script src="js/jspsych-fullscreen.js"></script>
@@ -86,9 +87,12 @@
 		for (dealer of DEALERS) {
 			images.push('images/'+dealer+'.png')
 		}
-		for (slide=1; slide<=11; slide++) {
-			images.push('images/instructions-multi/Slide'+slide+'.jpg')
-			//images.push('images/instructions-single/Slide'+slide+'.jpg')
+		// for (slide=1; slide<=11; slide++) {
+		// 	images.push('images/instructions-multi/Slide'+slide+'.jpg')
+		// 	//images.push('images/instructions-single/Slide'+slide+'.jpg')
+		// }
+		for (instruction_image_html=1; instruction_image_html<=5; instruction_image_html++) {
+			images.push('images/instructions-multi-html/image'+instruction_image_html+'.png')
 		}
 		images.push('images/face_down_card.png')
 		images.push('images/question-mark.png')

@@ -118,14 +118,14 @@ var exp_parameters = {
 		}
 
 		// not sure but this only works if I constantly pause
-		// jsPsych.pauseExperiment();
-		// jsPsych.addNodeToEndOfTimeline(participant_intro_timeline, jsPsych.resumeExperiment) // conditional
-		// jsPsych.pauseExperiment();
-		// jsPsych.addNodeToEndOfTimeline(pt_trials_feedback_timeline, jsPsych.resumeExperiment)
-		// jsPsych.pauseExperiment();
-		// jsPsych.addNodeToEndOfTimeline(pt_trials_NOfeedback_timeline, jsPsych.resumeExperiment)
-		// jsPsych.pauseExperiment();
-		// jsPsych.addNodeToEndOfTimeline({timeline: [fixation_cross, pt_block_feedback, test_intro]}, jsPsych.resumeExperiment)
+		jsPsych.pauseExperiment();
+		jsPsych.addNodeToEndOfTimeline(participant_intro_timeline, jsPsych.resumeExperiment) // conditional
+		jsPsych.pauseExperiment();
+		jsPsych.addNodeToEndOfTimeline(pt_trials_feedback_timeline, jsPsych.resumeExperiment)
+		jsPsych.pauseExperiment();
+		jsPsych.addNodeToEndOfTimeline(pt_trials_NOfeedback_timeline, jsPsych.resumeExperiment)
+		jsPsych.pauseExperiment();
+		jsPsych.addNodeToEndOfTimeline({timeline: [fixation_cross, pt_block_feedback, test_intro]}, jsPsych.resumeExperiment)
 		jsPsych.pauseExperiment();
 		jsPsych.addNodeToEndOfTimeline(trials_timeline, jsPsych.resumeExperiment)
 		jsPsych.pauseExperiment();

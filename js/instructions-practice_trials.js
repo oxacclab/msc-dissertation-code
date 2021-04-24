@@ -1,6 +1,3 @@
-num = ((1454 - 1000) / 20) * 0.04
-console.log(num)
-console.log(Math.round((((1454 - 1000) / 20) * 0.04 + Number.EPSILON) * 100) / 100)
 var fullscreen_message = {
 	type: 'fullscreen',
 	full_screen_mode: true,
@@ -10,37 +7,81 @@ var fullscreen_message = {
 	button_label: 'Enter full screen and continue with the experiment.'
 }
 
+var check_consent = function(elem) {
+  if (document.getElementById('consent_checkbox').checked && document.getElementById('consent_checkbox2').checked) {
+    return true;
+  }
+  else {
+    alert("If you wish to participate, you must check both boxes at the bottom of the page.");
+    return false;
+  }
+  return false;
+};
 var pis = {
-	type: 'survey-multi-select',
-	questions: [
-		{
-			prompt: '<div style="text-align: center"><iframe style="width: 700; height: 500" src="images/pis-temp/Nikolay Petrov_Online_PIS_draft2.htm"</iframe></div>',
-			options: ['I consent to take part in this research'],
-			horizontal: true,
-			required: true,
-			name: 'Consent'
-		}
-	],
-	preamble: '<p>What follows is the Info sheet but currently a demo look&feel until Ethics approval. Will get translated to proper html afterwards. Ditto for instructions.</p>'
-	
-}
+  type:"external-html",
+  url: "pis.html",
+  cont_btn: "start",
+  check_fn: check_consent
+};
 
 var instructions = {
 	type: 'instructions',
 	pages: function() {
-		images_html_arr = []
-		for (slide=1; slide<=11; slide++) {
-			if (INFORMATION_MULTIPLE_CHOICE) {
-				images_html_arr.push('<img style="width: 900px" src="images/instructions-multi/Slide'+slide+'.jpg"/>')
-			} else {
-				images_html_arr.push('<img style="width: 900px" src="images/instructions-single/Slide'+slide+'.jpg"/>')
-			}
-			
-		}
-		additional_html = ['<p class="instructions-text">You will now complete '+PT_TRIALS_NUM+' practice trials. The first '+FEEDBACK_TRIALS+' trials will provide short feedback '+
-							'to remind you of the rules. The following '+(PT_TRIALS_NUM-FEEDBACK_TRIALS)+' practice trials will NOT provide feedback.</p>'+
-							'<p class="instructions-text">Click the "Next" button to start.</p>']
-		return images_html_arr.concat(additional_html)
+		html = [	'<p class="instructions-text">You will earn a base amount of £5.00 for completing this experiment.</p>'+
+					'<p class="instructions-text">In addition, you can earn a bonus of up to £2, depending on your decisions and luck.</p>',
+
+					'<p class="instructions-text">In this experiment, we will try to simulate a casino environment. Much like in a casino, you will be playing a card game in which a dealer will be dealing the cards and you will make decisions. Your final winnings will be calculated based on your performance and the random award you are allocated on each card game round.</p>'+
+					'<p class="instructions-text">In between each round of the card game you can talk to the dealer for a short period of time and ask him/her questions. As in casinos, dealers are not allowed to help you so what the dealer tells you will have no bearing on your card game – this part is designed to simulate some small-talk you would have with the dealer in a real casino.</p>',
+
+					'<p class="instructions-text">Each card game round will consist of 2 stages:</p>'+
+					'<p class="instructions-text"><b>Stage 1: </b>You will be presented with a screen, where you will be dealt a playing card. The dealer will also deal a card for themselves but nobody will be able to see it. You will also see who is the person who dealt the cards.'+
+					'<div><img src="images/instructions-multi-html/image1.png"></div>',
+
+					'<p class="instructions-text">Each card game round will consist of 2 stages:</p>'+
+					'<p class="instructions-text"><b>Stage 1: </b>After a 2-second delay, a question will appear on the bottom of the screen asking you to make a decision whether the dealer’s card is lower or higher than yours. Press the corresponding keyboard key (1 for lower, 2 for higher) to make your decision.</p>'+
+					'<p class="instructions-text">Remember that this is the order of the cards from <b>lowest to highest: <br> Two > Three > Four > Five > Six > Seven > Eight > Nine > Ten > Jack > Queen > King > Ace</b></p>'+
+					'<p class="instructions-text"><b>IMPORTANT:</b> Note that the dealer’s card <b>CANNOT</b> be the same as yours. The computer’s card will <b>ALWAYS</b> be either lower or higher.</p>'+
+					'<div><img src="images/instructions-multi-html/image2.png"></div>',
+
+					'<p class="instructions-text">Each card game round will consist of 2 stages:</p>'+
+					'<p class="instructions-text"><b>Stage 2: </b>You will now be able to chat to the dealer and and ask about your current trial’s potential earnings or something about the dealer. The earnings from the current trial will be calculated as the sum of the two lotteries on the left-hand side of the screen. These lotteries differ in their range (shown in darkgrey) and average values (show in blue). For each trial, the computer will randomly draw one of five values from each lottery. These values are equally likely (20% each) and equally spaced.</p>'+
+					'<div style="float:left" class="instructions-text instructions-box">In the below example, Lottery 1 will draw 150 points on average. The actual draw could be 70, 110, 150, 190, or 230.</div>'+
+					'<div style="float:right" class="instructions-text instructions-box">In the below example, Lottery 2 will draw 170 points on average. The actual draw could be 130, 150, 170, 190, or 210.</div>'+
+					'<div><img style="margin-top: 15px;" src="images/instructions-multi-html/image3.png"></div>',
+
+					'<p class="instructions-text">Each card game round will consist of 2 stages:</p>'+
+					'<p class="instructions-text"><b>Stage 2: </b>In each trial, you can receive the sum of the draws from both lotteries. This will happen IF and ONLY IF you were correct in Stage 1 when deciding whether the dealer’s card is higher or lower.<br>However, whether you were correct OR what the draws of the lotteries were will not be revealed to you immediately.</p>'+
+					'<div style="float:left" class="instructions-text instructions-box">In the below example, Lottery 1 will draw 150 points on average. The actual draw could be 70, 110, 150, 190, or 230.</div>'+
+					'<div style="float:right" class="instructions-text instructions-box">In the below example, Lottery 2 will draw 170 points on average. The actual draw could be 130, 150, 170, 190, or 210.</div>'+
+					'<div><img style="margin-top: 15px;" src="images/instructions-multi-html/image3.png"></div>',
+
+					'<p class="instructions-text">Each card game round will consist of 2 stages:</p>'+
+					'<p class="instructions-text"><b>Stage 2: </b>You CAN choose whether you want to receive additional information about the trial – you can choose to reveal exactly how much you would win from each lottery, or you can choose to reveal information about the dealer – who they are friends with or who works the same time as them – to do so press the keyboard key corresponding to the information you want.</p>'+
+					'<p class="instructions-text"><b>NOTE</b> that this information will NOT in any way affect your trial’s winnings or your probability of winning in future rounds.</p>'+
+					'<div style="float:left" class="instructions-text instructions-box">In the below example, Lottery 1 will draw 150 points on average. The actual draw could be 70, 110, 150, 190, or 230.</div>'+
+					'<div style="float:right" class="instructions-text instructions-box">In the below example, Lottery 2 will draw 170 points on average. The actual draw could be 130, 150, 170, 190, or 210.</div>'+
+					'<div><img style="margin-top: 15px;" src="images/instructions-multi-html/image3.png"></div>',
+
+					'<p class="instructions-text">Each card game round will consist of 2 stages:</p>'+
+					'<p class="instructions-text"><b>Stage 2: </b>If you select to reveal one of the lotteries, a red line will appear and display the lottery’s draw. A question mark will display for the other lottery, unless you decide to reveal it as well when it will show its draw as well. Remember that regardless of whether you reveal the lotteries, they will be added to your points at the end (if you were correct in Stage 1 that is).</p>'+
+					'<div><span style="padding: 3px" class="instructions-text instructions-box">In the below example, the draw from lottery 1 is 110.</span></div>'+
+					'<div><img style="margin-top: 15px;" src="images/instructions-multi-html/image4.png"></div>',
+
+					'<p class="instructions-text">Each card game round will consist of 2 stages:</p>'+
+					'<p class="instructions-text"><b>Stage 2: </b>You can also choose to reveal either who the dealer is friends with or who works the same time as the dealer. In this example both are revealed and you can see that Katherine is friends with Luis and works the same time as Nick. You can choose to reveal only one of these, both, or none. Note that there is a 1-second delay between choices if you want to reveal more than one.</p>'+
+					'<div><img style="margin-top: 15px;" src="images/instructions-multi-html/image5.png"></div>',
+
+					'<p class="instructions-text">Each card game round will consist of 2 stages:</p>'+
+					'<p class="instructions-text"><b>Stage 2: </b>If you do not wish to reveal any additional information, you can just wait for the next card game round to begin. This will happen in 10 seconds and the loading bar at the top will give you an indication of this. <b>Regardless of whether you reveal information or not, the next round will start within the 10 seconds</b> - signified by the blue progress bar at the top.</p>'+
+					'<div><img style="margin-top: 15px;" src="images/instructions-multi-html/image5.png"></div>',
+
+					'<p class="instructions-text">Your total winnings will be shown to you at the end of the experiment and your bonus (up to £2) will be based on your points. The more points you have, the higher the bonus.</p>',
+
+					'<p class="instructions-text">You will now complete '+PT_TRIALS_NUM+' practice trials. The first '+FEEDBACK_TRIALS+' trials will provide short feedback '+
+					'to remind you of the rules. The following '+(PT_TRIALS_NUM-FEEDBACK_TRIALS)+' practice trials will NOT provide feedback.</p>'+
+					'<p class="instructions-text">Click the "Next" button to start.</p>'
+				]
+		return html
 	},
 	show_clickable_nav: true,
 	post_trial_gap: 1000
