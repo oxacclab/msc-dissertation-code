@@ -167,7 +167,7 @@ body {
 	height: inherit;
 }
 
-.payout-source-outside-bar {
+.lottery-outside-bar {
 	background-color: lightgrey; 
 	width: 25%;
 	height: inherit;
@@ -175,13 +175,13 @@ body {
 	margin: auto
 }
 
-.payout-source-limits-text {
+.lottery-limits-text {
 	font-size: 14px;
 	position: absolute;
 	color: grey;
 }
 
-.payout-source-inside-bar {
+.lottery-inside-bar {
 	width: -webkit-fill-available;
 	background-color: darkgrey;
 	background-clip: content-box;
@@ -274,7 +274,8 @@ body {
 	margin-left: 10px;
 }
 
-/*super turbo random styleing to get this Continue button in order*/
+/*super turbo random styling to get this Continue button in order*/
+/*applies only to the form where experiment settings are manipulated; see setting_timeline.js*/
 #jspsych-survey-html-form-next {
 	position: relative;
 	left: -350px;

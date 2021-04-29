@@ -15,7 +15,7 @@ function getRandom(arr, n) {
 function getRandomInt(min, max) {
 	min = Math.ceil(min);
 	max = Math.floor(max);
-	return Math.floor(Math.random() * (max - min + 1)) + min; //to consider whether necessary
+	return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 // in-house flat function to handle browser compatibility
@@ -47,25 +47,4 @@ function shuffle(array) {
 		new_array[randomIndex] = temporaryValue;
 	}
 	return new_array;
-}
-
-function get_dealer_id_name_dict_randomised() {
-	let dealer_id_name_dict = {}
-	let male_names = ['John', 'Marc', 'Oscar', 'Charlie', 'Luis', 'Nick']
-	let female_names = ['Sarah', 'Katherine', 'Francesca', 'Rebekah', 'Victoria', 'Elizabeth']
-	let male_faces = ['d01', 'd02', 'd04', 'd05', 'd07', 'd10']
-	let female_faces = ['d03', 'd06', 'd08', 'd09', 'd11', 'd12']
-
-	for (s=0; s<=5; s++) {
-		male_names = shuffle(male_names)
-		female_names = shuffle(female_names)
-		male_faces = shuffle(male_faces)
-		female_faces = shuffle(female_faces)
-	}
-	
-	for (i=0; i<male_names.length; i++) {
-		dealer_id_name_dict[male_faces[i]] = male_names[i]
-		dealer_id_name_dict[female_faces[i]] = female_names[i]
-	}
-	return dealer_id_name_dict
 }

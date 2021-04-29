@@ -102,7 +102,7 @@ var pt_feedback = {
 		card_decision_all_data = jsPsych.data.get().filter([{pt_pp_card_correct: 1}, {pt_pp_card_correct: 0}]).values()
 		card_decision_last_trial_data = card_decision_all_data[card_decision_all_data.length - 1]
 		html = '<p>In this trial your card was '+jsPsych.timelineVariable('card_self', true)+' and the dealer\'s card was a '+
-					jsPsych.timelineVariable('card_comp', true)+'</p>'+
+					jsPsych.timelineVariable('card_hidden', true)+'</p>'+
 				'<p>You guessed that the dealer\'s card was '+card_decision_last_trial_data['pp_card_guess']+'.</p>'
 		if (card_decision_last_trial_data['pt_pp_card_correct']) {
 			html += '<p>Hence you win the combined sum of both lotteries\' random draw, which amounts to '+
@@ -127,7 +127,7 @@ var test_intro = {
 var inter_block_text = {
 	type: 'instructions',
 	pages: function() {
-		// order is final trial-fixation cross-this trial, hence we use last 2 below
+		// order is final trial-fixation cross-this trial, hence we use last(2) below
 		last_block_id = jsPsych.data.get().last(2).values()[0]['block']
 		last_block_winnings = jsPsych.data.get().filter([{'pp_card_guess': 'lower', 'block': last_block_id},
 											{'pp_card_guess': 'higher', 'block': last_block_id}])

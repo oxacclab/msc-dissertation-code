@@ -5,14 +5,14 @@ function get_experiment_data_object() {
 	for (let pt_trial_ind = 0; pt_trial_ind < PT_TRIALS_NUM; pt_trial_ind++) {
 		// getting cards
 		let card_self = getRandom(CARDS, 1)[0]
-		let card_comp = getRandom(CARDS.filter(e => e !== card_self), 1)[0]
-		let card_correct = CARDS.indexOf(card_comp) > CARDS.indexOf(card_self) ? 'higher' : 'lower'
+		let card_hidden = getRandom(CARDS.filter(e => e !== card_self), 1)[0]
+		let card_correct = CARDS.indexOf(card_hidden) > CARDS.indexOf(card_self) ? 'higher' : 'lower'
 
 		// lottery-related calculations
 		let random_number = getRandomInt(111, 389)
 		let delta_EV = getRandom(DELTA_EV_CATEGORIES, 1)[0]
 		// lottery-related vars to save (except possible_winnings_arrays)
-		let high_variance_lottery = getRandom(['left', 'right'], 1)[0] // 'left'
+		let high_variance_lottery_left_or_right = getRandom(['left', 'right'], 1)[0] // 'left'
 		let high_variance_lottery_EV = random_number // 150
 		let low_variance_lottery_EV = random_number - delta_EV // 170
 		let high_variance_lottery_possible_winnings = [high_variance_lottery_EV - ((HIGH_VARIANCE_VALUE/4)*2),
@@ -25,8 +25,8 @@ function get_experiment_data_object() {
 													low_variance_lottery_EV - ((LOW_VARIANCE_VALUE/4)*0),
 													low_variance_lottery_EV - ((LOW_VARIANCE_VALUE/4)*(-1)),
 													low_variance_lottery_EV - ((LOW_VARIANCE_VALUE/4)*(-2))]
-		let left_lottery_winnings = high_variance_lottery === 'left' ? getRandom(high_variance_lottery_possible_winnings, 1)[0] : getRandom(low_variance_lottery_possible_winnings, 1)[0]
-		let right_lottery_winnings = high_variance_lottery === 'right' ? getRandom(high_variance_lottery_possible_winnings, 1)[0] : getRandom(low_variance_lottery_possible_winnings, 1)[0]
+		let left_lottery_winnings = high_variance_lottery_left_or_right === 'left' ? getRandom(high_variance_lottery_possible_winnings, 1)[0] : getRandom(low_variance_lottery_possible_winnings, 1)[0]
+		let right_lottery_winnings = high_variance_lottery_left_or_right === 'right' ? getRandom(high_variance_lottery_possible_winnings, 1)[0] : getRandom(low_variance_lottery_possible_winnings, 1)[0]
 		let total_lottery_winnings = left_lottery_winnings + right_lottery_winnings
 
 		// dealer-ids generation
@@ -41,9 +41,9 @@ function get_experiment_data_object() {
 			'block': 'pt',
 			'dealer_id': dealer_id, 
 			'card_self': card_self,
-			'card_comp': card_comp,
+			'card_hidden': card_hidden,
 			'card_correct': card_correct,
-			'high_variance_lottery': high_variance_lottery, 
+			'high_variance_lottery_left_or_right': high_variance_lottery_left_or_right, 
 			'high_variance_lottery_EV': high_variance_lottery_EV,
 			'low_variance_lottery_EV': low_variance_lottery_EV,
 			'left_lottery_winnings': left_lottery_winnings,
@@ -150,14 +150,14 @@ function get_experiment_data_object() {
 	for (let trial_ind = 0; trial_ind < TRIALS_NUM; trial_ind++) {	
 		// getting cards
 		let card_self = cards_trials_masterlist[trial_ind][0]
-		let card_comp = cards_trials_masterlist[trial_ind][1]
-		let card_correct = CARDS.indexOf(card_comp) > CARDS.indexOf(card_self) ? 'higher' : 'lower'
+		let card_hidden = cards_trials_masterlist[trial_ind][1]
+		let card_correct = CARDS.indexOf(card_hidden) > CARDS.indexOf(card_self) ? 'higher' : 'lower'
 
 		// lottery-related calculations
 		let random_number = getRandomInt(131, 369)
 		let delta_EV = getRandom(DELTA_EV_CATEGORIES, 1)[0]
 		// lottery-related vars to save (except possible_winnings_arrays)
-		let high_variance_lottery = high_variance_lottery_across_trials[trial_ind]
+		let high_variance_lottery_left_or_right = high_variance_lottery_across_trials[trial_ind]
 		let high_variance_lottery_EV = random_number
 		let low_variance_lottery_EV = random_number - delta_EV
 		let high_variance_lottery_possible_winnings = [high_variance_lottery_EV - ((HIGH_VARIANCE_VALUE/4)*2),
@@ -170,8 +170,8 @@ function get_experiment_data_object() {
 													low_variance_lottery_EV - ((LOW_VARIANCE_VALUE/4)*0),
 													low_variance_lottery_EV - ((LOW_VARIANCE_VALUE/4)*(-1)),
 													low_variance_lottery_EV - ((LOW_VARIANCE_VALUE/4)*(-2))]
-		let left_lottery_winnings = high_variance_lottery === 'left' ? getRandom(high_variance_lottery_possible_winnings, 1)[0] : getRandom(low_variance_lottery_possible_winnings, 1)[0]
-		let right_lottery_winnings = high_variance_lottery === 'right' ? getRandom(high_variance_lottery_possible_winnings, 1)[0] : getRandom(low_variance_lottery_possible_winnings, 1)[0]
+		let left_lottery_winnings = high_variance_lottery_left_or_right === 'left' ? getRandom(high_variance_lottery_possible_winnings, 1)[0] : getRandom(low_variance_lottery_possible_winnings, 1)[0]
+		let right_lottery_winnings = high_variance_lottery_left_or_right === 'right' ? getRandom(high_variance_lottery_possible_winnings, 1)[0] : getRandom(low_variance_lottery_possible_winnings, 1)[0]
 		let total_lottery_winnings = left_lottery_winnings + right_lottery_winnings
 
 		// replacing applied on a case-by-case basis; alternatively could be done on the whole list above
@@ -193,9 +193,9 @@ function get_experiment_data_object() {
 			'trial': trial_ind,
 			'dealer_id': dealer_id, 
 			'card_self': card_self,
-			'card_comp': card_comp,
+			'card_hidden': card_hidden,
 			'card_correct': card_correct,
-			'high_variance_lottery': high_variance_lottery, 
+			'high_variance_lottery_left_or_right': high_variance_lottery_left_or_right, 
 			'high_variance_lottery_EV': high_variance_lottery_EV,
 			'low_variance_lottery_EV': low_variance_lottery_EV,
 			'left_lottery_winnings': left_lottery_winnings,
