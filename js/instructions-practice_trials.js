@@ -34,26 +34,32 @@ var instructions = {
 					'<p class="instructions-text">In between each round of the card game you can talk to the dealer for a short period of time and ask him/her questions. As in casinos, dealers are not allowed to help you so what the dealer tells you will have no bearing on your card game – this part is designed to simulate some small-talk you would have with the dealer in a real casino.</p>',
 
 					'<p class="instructions-text">Each card game round will consist of 2 stages:</p>'+
-					'<p class="instructions-text"><b>Stage 1: </b>You will be presented with a screen, where you will be dealt a playing card. The dealer will also deal a card for themselves but nobody will be able to see it. You will also see who is the person who dealt the cards.'+
+					'<p class="instructions-text"><b>Stage 1: </b>You will be presented with a screen, where you will be dealt a playing card. The dealer will also deal a hidden card. You will also see who is the person who dealt the cards.'+
 					'<div><img src="images/instructions-multi-html/image1.png"></div>',
 
 					'<p class="instructions-text">Each card game round will consist of 2 stages:</p>'+
-					'<p class="instructions-text"><b>Stage 1: </b>After a 2-second delay, a question will appear on the bottom of the screen asking you to make a decision whether the dealer’s card is lower or higher than yours. Press the corresponding keyboard key (1 for lower, 2 for higher) to make your decision.</p>'+
-					'<p class="instructions-text">Remember that this is the order of the cards from <b>lowest to highest: <br> Two > Three > Four > Five > Six > Seven > Eight > Nine > Ten > Jack > Queen > King > Ace</b></p>'+
-					'<p class="instructions-text"><b>IMPORTANT:</b> Note that the dealer’s card <b>CANNOT</b> be the same as yours. The computer’s card will <b>ALWAYS</b> be either lower or higher.</p>'+
+					'<p class="instructions-text"><b>Stage 1: </b>After a half-second delay, a question will appear on the bottom of the screen asking you to make a decision whether the hidden card is lower or higher than yours. Press the corresponding keyboard key (1 for lower, 2 for higher) to make your decision.</p>'+
+					'<p class="instructions-text">Remember that this is the order of the cards from <b>lowest to highest: <br> Ace > Two > Three > Four > Five > Six > Seven > Eight > Nine > Ten > Jack > Queen > King</b></p>'+
+					'<p class="instructions-text"><b>IMPORTANT:</b> Note that the hidden card <b>CANNOT</b> be the same as yours. The hidden card will <b>ALWAYS</b> be either lower or higher.</p>'+
 					'<div><img src="images/instructions-multi-html/image2.png"></div>',
 
 					'<p class="instructions-text">Each card game round will consist of 2 stages:</p>'+
-					'<p class="instructions-text"><b>Stage 2: </b>You will now be able to chat to the dealer and and ask about your current trial’s potential earnings or something about the dealer. The earnings from the current trial will be calculated as the sum of the two lotteries on the left-hand side of the screen. These lotteries differ in their range (shown in darkgrey) and average values (show in blue). For each trial, the computer will randomly draw one of five values from each lottery. These values are equally likely (20% each) and equally spaced.</p>'+
-					'<div style="float:left" class="instructions-text instructions-box">In the below example, Lottery 1 will draw 150 points on average. The actual draw could be 70, 110, 150, 190, or 230.</div>'+
-					'<div style="float:right" class="instructions-text instructions-box">In the below example, Lottery 2 will draw 170 points on average. The actual draw could be 130, 150, 170, 190, or 210.</div>'+
-					'<div><img style="margin-top: 15px;" src="images/instructions-multi-html/image3.png"></div>',
+					'<div>'+ // container for the text
+					'<p class="instructions-text" style="width: 50%; float: left"><b>Stage 2: </b>You will now be able to chat to the dealer and and ask about your current trial’s potential earnings or something about the dealer. The earnings from the current trial will be calculated as the sum of the two lotteries on the left-hand side of the screen. These lotteries differ in their range (shown in darkgrey) and average values (show in blue). For each trial, the computer will randomly draw one of five values from each lottery. These values are equally likely (20% each) and equally spaced.</p>'+
+					'<div style="width: 50%; float: right; margin-block-start: 1em">'+ // container for the 2 boxes
+ 					'<div style="margin: auto auto 15 auto; width: 95%" class="instructions-text instructions-box">In the below example, Lottery 1 will draw 150 points on average. The actual draw could be 70, 110, 150, 190, or 230.</div>'+
+					'<div style="margin: auto auto 15 auto; width: 95%" class="instructions-text instructions-box">In the below example, Lottery 2 will draw 170 points on average. The actual draw could be 130, 150, 170, 190, or 210.</div>'+
+					'</div></div>'+
+					'<div><img src="images/instructions-multi-html/image3.png"></div>',
 
 					'<p class="instructions-text">Each card game round will consist of 2 stages:</p>'+
-					'<p class="instructions-text"><b>Stage 2: </b>In each trial, you can receive the sum of the draws from both lotteries. This will happen IF and ONLY IF you were correct in Stage 1 when deciding whether the dealer’s card is higher or lower.<br>However, whether you were correct OR what the draws of the lotteries were will not be revealed to you immediately.</p>'+
-					'<div style="float:left" class="instructions-text instructions-box">In the below example, Lottery 1 will draw 150 points on average. The actual draw could be 70, 110, 150, 190, or 230.</div>'+
-					'<div style="float:right" class="instructions-text instructions-box">In the below example, Lottery 2 will draw 170 points on average. The actual draw could be 130, 150, 170, 190, or 210.</div>'+
-					'<div><img style="margin-top: 15px;" src="images/instructions-multi-html/image3.png"></div>',
+					'<div>'+ // container for the text
+					'<p class="instructions-text" style="width: 50%; float: right"><b>Stage 2: </b>In each trial, you can receive the sum of the draws from both lotteries. This will happen IF and ONLY IF you were correct in Stage 1 when deciding whether the hidden card is higher or lower.<br>However, whether you were correct OR what the draws of the lotteries were will not be revealed to you immediately.</p>'+
+					'<div style="width: 50%; float: left; margin-block-start: 1em">'+ // container for the 2 boxes
+					'<div style="margin: auto auto 15 auto; width: 95%" class="instructions-text instructions-box">In the below example, Lottery 1 will draw 150 points on average. The actual draw could be 70, 110, 150, 190, or 230.</div>'+
+					'<div style="margin: auto auto 15 auto; width: 95%" class="instructions-text instructions-box">In the below example, Lottery 2 will draw 170 points on average. The actual draw could be 130, 150, 170, 190, or 210.</div>'+
+					'</div></div>'+
+					'<div><img src="images/instructions-multi-html/image3.png"></div>',
 
 					'<p class="instructions-text">Each card game round will consist of 2 stages:</p>'+
 					'<p class="instructions-text"><b>Stage 2: </b>You CAN choose whether you want to receive additional information about the trial – you can choose to reveal exactly how much you would win from each lottery, or you can choose to reveal information about the dealer – who they are friends with or who works the same time as them – to do so press the keyboard key corresponding to the information you want.</p>'+
@@ -64,16 +70,22 @@ var instructions = {
 
 					'<p class="instructions-text">Each card game round will consist of 2 stages:</p>'+
 					'<p class="instructions-text"><b>Stage 2: </b>If you select to reveal one of the lotteries, a red line will appear and display the lottery’s draw. A question mark will display for the other lottery, unless you decide to reveal it as well when it will show its draw as well. Remember that regardless of whether you reveal the lotteries, they will be added to your points at the end (if you were correct in Stage 1 that is).</p>'+
-					'<div><span style="padding: 3px" class="instructions-text instructions-box">In the below example, the draw from lottery 1 is 110.</span></div>'+
+					'<div><span style="padding: 3px" class="instructions-text instructions-box">In the below example, the draw from lottery 1 is 70.</span></div>'+
 					'<div><img style="margin-top: 15px;" src="images/instructions-multi-html/image4.png"></div>',
 
 					'<p class="instructions-text">Each card game round will consist of 2 stages:</p>'+
-					'<p class="instructions-text"><b>Stage 2: </b>You can also choose to reveal either who the dealer is friends with or who works the same time as the dealer. In this example both are revealed and you can see that Katherine is friends with Luis and works the same time as Nick. You can choose to reveal only one of these, both, or none. Note that there is a 1-second delay between choices if you want to reveal more than one.</p>'+
-					'<div><img style="margin-top: 15px;" src="images/instructions-multi-html/image5.png"></div>',
+					'<div><div style="float: left; width: 40%">'+
+					'<p class="instructions-text"><b>Stage 2: </b>You can also choose to reveal either who the dealer is friends with or who works the same time as the dealer. In this example both are revealed and you can see that Alan is friends with Mike and works the same time as Ted. You can choose to reveal only one of these, both, or none. Note that there is a 1-second delay between choices if you want to reveal more than one.</p>'+
+					'</div>'+
+					'<div style="float: left; width: 59%; margin-left: 1%"><img style="margin: 15 0 15 0; width: 100%" src="images/instructions-multi-html/image5.png"></div>'+
+					'</div>',
 
 					'<p class="instructions-text">Each card game round will consist of 2 stages:</p>'+
+					'<div><div style="float: right; width: 40%">'+
 					'<p class="instructions-text"><b>Stage 2: </b>If you do not wish to reveal any additional information, you can just wait for the next card game round to begin. This will happen in 10 seconds and the loading bar at the top will give you an indication of this. <b>Regardless of whether you reveal information or not, the next round will start within the 10 seconds</b> - signified by the blue progress bar at the top.</p>'+
-					'<div><img style="margin-top: 15px;" src="images/instructions-multi-html/image5.png"></div>',
+					'</div>'+
+					'<div style="float: right; width: 59%; margin-left: 1%"><img style="margin: 15 0 15 0; width: 100%" src="images/instructions-multi-html/image5.png"></div>'+
+					'</div>',
 
 					'<p class="instructions-text">Your total winnings will be shown to you at the end of the experiment and your bonus (up to £2) will be based on your points. The more points you have, the higher the bonus.</p>',
 
@@ -84,7 +96,8 @@ var instructions = {
 		return html
 	},
 	show_clickable_nav: true,
-	post_trial_gap: 1000
+	post_trial_gap: 1000,
+	show_page_number: true
 };
 
 var pt_block_feedback = {

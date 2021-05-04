@@ -7,7 +7,7 @@ var TRIALS_PER_BLOCK = 126/3
 var BLOCKS
 
 var INFORMATION_SAMPLING_DURATION = 10000
-var CARD_PRESENTATION_TRIAL_DURATION = 2000
+var CARD_PRESENTATION_TRIAL_DURATION = 500
 var INFORMATION_SAMPLING_INTERCHOICE_DELAY = 1000
 var HIGH_VARIANCE_VALUE = 160
 var LOW_VARIANCE_VALUE = 80
@@ -19,7 +19,7 @@ let DEALERS = Object.keys(DEALER_ID_NAME_DICT)
 let PT_TRIALS_DEALER_ID_NAME_DICT = {'d13': 'Joanne', 'd14': 'Margaret', 'd15': 'Alan',
 										'd16': 'Ted', 'd17': 'Mike', 'd18': 'Alysson'}
 let PT_TRIALS_DEALERS = Object.keys(PT_TRIALS_DEALER_ID_NAME_DICT)
-let CARDS = ['two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'jack', 'queen', 'king', 'ace']
+let CARDS = ['ace', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'jack', 'queen', 'king']
 let DELTA_EV_CATEGORIES = [-90, -70, -20, -5, 0, 5, 20, 70, 90]
 
 let MODULAR_NET_EDGES = ['d01--d02', 'd01--d03', 'd01--d04', 'd02--d03', 'd02--d04', 'd03--d12', 

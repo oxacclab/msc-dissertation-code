@@ -12,9 +12,9 @@ function get_experiment_data_object() {
 		let random_number = getRandomInt(111, 389)
 		let delta_EV = getRandom(DELTA_EV_CATEGORIES, 1)[0]
 		// lottery-related vars to save (except possible_winnings_arrays)
-		let high_variance_lottery_left_or_right = getRandom(['left', 'right'], 1)[0] // 'left'
-		let high_variance_lottery_EV = random_number // 150
-		let low_variance_lottery_EV = random_number - delta_EV // 170
+		let high_variance_lottery_left_or_right = getRandom(['left', 'right'], 1)[0] // 'left' // getRandom(['left', 'right'], 1)[0]
+		let high_variance_lottery_EV = random_number // 150 // random_number
+		let low_variance_lottery_EV = random_number - delta_EV // 170 // random_number - delta_EV
 		let high_variance_lottery_possible_winnings = [high_variance_lottery_EV - ((HIGH_VARIANCE_VALUE/4)*2),
 													high_variance_lottery_EV - ((HIGH_VARIANCE_VALUE/4)*1),
 													high_variance_lottery_EV - ((HIGH_VARIANCE_VALUE/4)*0),
@@ -59,12 +59,12 @@ function get_experiment_data_object() {
 	let modular_connections_source = getRandom(['friends', 'work'], 1)[0]
 
 	// controlling card pairs
-	cards_no_eight = CARDS.filter(e => e !== 'eight')
+	cards_no_middle_card = CARDS.filter(e => e !== 'seven')
 	cards_trials_masterlist = []
-	for (let cardSelf=0; cardSelf<cards_no_eight.length; cardSelf++) {
-		for (let cardHidden=0; cardHidden<cards_no_eight.length; cardHidden++) {
-			if (cards_no_eight[cardSelf] !== cards_no_eight[cardHidden]) {
-				cards_trials_masterlist.push([cards_no_eight[cardSelf], cards_no_eight[cardHidden]])
+	for (let cardSelf=0; cardSelf<cards_no_middle_card.length; cardSelf++) {
+		for (let cardHidden=0; cardHidden<cards_no_middle_card.length; cardHidden++) {
+			if (cards_no_middle_card[cardSelf] !== cards_no_middle_card[cardHidden]) {
+				cards_trials_masterlist.push([cards_no_middle_card[cardSelf], cards_no_middle_card[cardHidden]])
 			}
 		}
 	}
