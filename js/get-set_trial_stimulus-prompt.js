@@ -126,15 +126,22 @@ function update_information_sampling_stimulus(previous_stimulus, previous_key_pr
 	var newHTML = parser.parseFromString(previous_stimulus, 'text/html')
 
 	if (previous_key_press == 49 || previous_key_press == 50) {
+		
 		// one of the lotteries is chosen - update the line and the text accordingly
+		// most likely not the best solution but there you go
 		current_winnings_text = newHTML.getElementById('winnings-text').innerHTML
+
 		if (current_winnings_text.length < 1) {
 			new_winnings_text = previous_key_press == 49 ? left_lottery_winnings+' + ?' : '? + '+right_lottery_winnings
 			winnings_text_margin_left = 170
-		} else {
-			new_winnings_text = previous_key_press == 49 ? current_winnings_text.replace('?', left_lottery_winnings) : current_winnings_text.replace('?', right_lottery_winnings)
+		} else if (previous_key_press == 49 && current_winnings_text != left_lottery_winnings+' + ?') {
+			new_winnings_text = current_winnings_text.replace('?', left_lottery_winnings)
+			winnings_text_margin_left = 155
+		} else if (previous_key_press == 50 && current_winnings_text != '? + '+right_lottery_winnings) {
+			new_winnings_text = current_winnings_text.replace('?', right_lottery_winnings)
 			winnings_text_margin_left = 155
 		}
+
 		newHTML.getElementById('winnings-text').innerHTML = new_winnings_text
 		newHTML.getElementById('winnings-text').style.cssText = 'display: block; margin-left: '+winnings_text_margin_left+'px'
 		// indices for the newHTML call are 0 for the left line and 1 for the right line
