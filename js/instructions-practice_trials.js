@@ -133,9 +133,12 @@ var pt_feedback = {
 	stimulus: function() {
 		card_decision_all_data = jsPsych.data.get().filter([{pt_pp_card_correct: 1}, {pt_pp_card_correct: 0}]).values()
 		card_decision_last_trial_data = card_decision_all_data[card_decision_all_data.length - 1]
-		html = '<p>In this trial your card was '+jsPsych.timelineVariable('card_self', true)+' and the dealer\'s card was a '+
-					jsPsych.timelineVariable('card_hidden', true)+'</p>'+
-				'<p>You guessed that the dealer\'s card was '+card_decision_last_trial_data['pp_card_guess']+'.</p>'
+
+		hidden_card_string = jsPsych.timelineVariable('card_hidden', true)
+		hidden_card_string_capitalized = hidden_card_string.charAt(0).toUpperCase() + hidden_card_string.slice(1)
+		html = '<p>In this trial your card was '+jsPsych.timelineVariable('card_self', true)+' and the hidden card was a '+
+					hidden_card_string_capitalized+'</p>'+
+				'<p>You guessed that the hidden card was '+card_decision_last_trial_data['pp_card_guess']+'.</p>'
 		if (card_decision_last_trial_data['pt_pp_card_correct']) {
 			html += '<p>Hence you win the combined sum of both lotteries\' random draw, which amounts to '+
 						jsPsych.timelineVariable('total_lottery_winnings', true)+' points.</p>'
