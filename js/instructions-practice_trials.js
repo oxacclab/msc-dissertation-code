@@ -157,7 +157,10 @@ var pt_feedback = {
 
 var test_intro = {
 	type: 'instructions',
-	pages: ['<p class="instructions-text">You will now begin the test trials. There will be '+TRIALS_NUM+' trials in total.</p>'],
+	pages: ['<p class="instructions-text">You will now begin the test trials. There will be '+TRIALS_NUM+' trials in total.</p>'+
+			'<p class="instructions-text">This should take approximately 30 minutes.You will be allowed to take breaks during this time.</p>'+
+			'<p class="instructions-text">Press Next when you are ready to begin.</p>'
+	],
 	show_clickable_nav: true
 }
 
