@@ -136,7 +136,9 @@ var pt_feedback = {
 
 		hidden_card_string = jsPsych.timelineVariable('card_hidden', true)
 		hidden_card_string_capitalized = hidden_card_string.charAt(0).toUpperCase() + hidden_card_string.slice(1)
-		html = '<p>In this trial your card was '+jsPsych.timelineVariable('card_self', true)+' and the hidden card was a '+
+		card_self_string = jsPsych.timelineVariable('card_self', true)
+		card_self_string_capitalized = card_self_string.charAt(0).toUpperCase() + card_self_string.slice(1)
+		html = '<p>In this trial your card was '+card_self_string_capitalized+' and the hidden card was a '+
 					hidden_card_string_capitalized+'</p>'+
 				'<p>You guessed that the hidden card was '+card_decision_last_trial_data['pp_card_guess']+'.</p>'
 		if (card_decision_last_trial_data['pt_pp_card_correct']) {
