@@ -109,7 +109,7 @@ var instructions = {
 
 					// Page 12
 					'<p class="instructions-text">You will now complete '+PT_TRIALS_NUM+' practice trials. The first '+FEEDBACK_TRIALS+' trials will provide short feedback '+
-					'to remind you of the rules. The following '+(PT_TRIALS_NUM-FEEDBACK_TRIALS)+' practice trials will NOT provide feedback.</p>'+
+					'to remind you of the rules. The subsequent '+(PT_TRIALS_NUM-FEEDBACK_TRIALS)+' practice trials will NOT provide feedback.</p>'+
 					'<p class="instructions-text">Click the "Next" button to start.</p>'
 				]
 		return html
