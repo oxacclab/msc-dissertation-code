@@ -67,7 +67,7 @@ var instructions = {
 					// Page 6
 					'<p class="instructions-text">Each card game round will consist of 2 stages:</p>'+
 					'<div style="height: 210px">'+ // container for the text ; 210 is a bit of a magic number but seems to work
-					'<p class="instructions-text" style="width: 50%; float: right"><b>Stage 2: </b>If you guessed correctly in Stage 1 whether the hidden card was higher or lower, you will win the points value of BOTH lotteries.  If you guessed incorrectly, you won\'t win the points of either lotter.<br>However, whether you were correct OR what the draws of the lotteries were will not be revealed to you immediately.</p>'+
+					'<p class="instructions-text" style="width: 50%; float: right"><b>Stage 2: </b>If you guessed correctly in Stage 1 whether the hidden card was higher or lower, you will win the points value of BOTH lotteries.  If you guessed incorrectly, you won\'t win the points of either lottery.<br>However, whether you were correct OR what the draws of the lotteries were will not be revealed to you immediately.</p>'+
 					'<div style="width: 50%; float: left; margin-block-start: 1em">'+ // container for the 2 boxes
 					'<div style="margin: auto auto 15 auto; width: 95%" class="instructions-text instructions-box">In the below example, Lottery 1 will draw 150 points on average. The actual draw could be 70, 110, 150, 190, or 230.</div>'+
 					'<div style="margin: auto auto 15 auto; width: 95%" class="instructions-text instructions-box">In the below example, Lottery 2 will draw 170 points on average. The actual draw could be 130, 150, 170, 190, or 210.</div>'+
