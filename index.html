@@ -60,6 +60,12 @@
 		var study_id = jsPsych.data.getURLVariable('STUDY_ID');
 		var session_id = jsPsych.data.getURLVariable('SESSION_ID');
 
+		if (subject_id == null) {
+			subject_id = Math.floor(Math.random()*10000)
+		}
+
+		var DATA_SAVING_ITERATOR = 0
+
 		jsPsych.data.addProperties({
 			subject_id: subject_id,
 			study_id: study_id,
@@ -73,12 +79,12 @@
 				on_finish: function() {
 					// document.getElementById('loading').remove()
 					jsPsych.data.displayData('json');
-					if (subject_id == null) {
-						subject_id = Math.floor(Math.random()*10000)
-					}
+					// if (subject_id == null) {
+					// 	subject_id = Math.floor(Math.random()*10000)
+					// }
 					saveData(subject_id.toString()+'.csv', jsPsych.data.get().csv())
 					// jsPsych.data.get().localSave('csv', subject_id+'_testdata.csv')
-					window.location = "https://app.prolific.co/submissions/complete?cc=78A9CD78"
+					// window.location = "https://app.prolific.co/submissions/complete?cc=78A9CD78"
 				},
 				exclusions: {
 					min_width: 992,

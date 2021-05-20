@@ -65,6 +65,8 @@ function get_delay_trial_object(information_sampling_prompt_index_string) {
 			document.getElementById('information-timer').value = INFORMATION_SAMPLING_DURATION - jsPsych.data.get().last(1).values()[0]['information_sampling_time_remaining']
 		},
 		on_finish: function(data) {
+			data.trial_name = 'information_sampling_'+information_sampling_prompt_index_string+'_delay'
+
 			// on_finish means that if I try to get jsPsych data's last trial value, then it will be this trial, hence last(2) below
 			data['information_sampling_'+information_sampling_prompt_index_string+'_prompt'] = this.prompt
 			data.information_sampling_time_remaining = jsPsych.data.get().last(2).values()[0]['information_sampling_time_remaining'] - this.trial_duration
@@ -92,8 +94,17 @@ var card_presentation_trial = {
 				'<div class="card_decision_prompt" style="margin-left: 2.5%">Higher [Press 2]</div>'+
 			'</div>',
 	choices: jsPsych.NO_KEYS,
+	on_start: function() {
+		// console.log(jsPsych.data.get().values())
+		// jsPsych.data.get().localSave('csv', subject_id.toString()+'_'+DATA_SAVING_ITERATOR.toString()+'_testdata.csv')
+
+		saveData(subject_id.toString()+'_'+DATA_SAVING_ITERATOR.toString()+'.csv', jsPsych.data.get().csv())
+		DATA_SAVING_ITERATOR += 1
+	},
 	on_finish: function(data) {
-		data.card_decision_prompt = this.prompt
+		data.trial_name = 'card_presentation_trial'
+
+		data.card_decision_prompt = this.prompt	
 	}
 }
 
@@ -109,6 +120,8 @@ var card_decision = {
 		return curr_prompt
 	},
 	on_finish: function(data) {
+		data.trial_name = 'card_decision'
+
 		data.block = jsPsych.timelineVariable('block', true)
 		data.trial = jsPsych.timelineVariable('trial', true)
 		data.pp_card_guess = data.key_press == 49 ? 'lower' : 'higher'
@@ -142,6 +155,9 @@ var fixation_cross = {
 		if (jsPsych.timelineVariable('display_feedback', true) === false) {
 			jsPsych.endCurrentTimeline()
 		}
+	},
+	on_finish: function(data) {
+		data.trial_name = 'fixation_cross'
 	}
 }
 
@@ -168,6 +184,8 @@ var information_sampling_1 = {
 		return INFORMATION_SAMPLING_DURATION
 	},
 	on_finish: function(data) {
+		data.trial_name = 'information_sampling_1'
+
 		data.information_sampling_1_prompt = this.prompt
 		data.information_sampling_time_remaining = data.rt === null ? null : this.trial_duration - data.rt
 		
@@ -200,6 +218,8 @@ var information_sampling_2 = {
 		document.getElementById('information-timer').value = INFORMATION_SAMPLING_DURATION - this.trial_duration
 	},
 	on_finish: function(data) {
+		data.trial_name = 'information_sampling_2'
+
 		data.information_sampling_2_prompt = this.prompt
 		data.information_sampling_time_remaining = data.rt === null ? null : this.trial_duration - data.rt
 
@@ -244,6 +264,8 @@ var information_sampling_3 = {
 		document.getElementById('information-timer').value = INFORMATION_SAMPLING_DURATION - this.trial_duration
 	},
 	on_finish: function(data) {
+		data.trial_name = 'information_sampling_3'
+
 		data.information_sampling_3_prompt = this.prompt
 		data.information_sampling_time_remaining = data.rt === null ? null : this.trial_duration - data.rt
 
@@ -291,6 +313,8 @@ var information_sampling_4 = {
 		document.getElementById('information-timer').value = INFORMATION_SAMPLING_DURATION - this.trial_duration
 	},
 	on_finish: function(data) {
+		data.trial_name = 'information_sampling_4'
+
 		data.information_sampling_4_prompt = this.prompt
 		data.information_sampling_time_remaining = data.rt === null ? null : this.trial_duration - data.rt
 
@@ -332,6 +356,8 @@ var information_sampling_final_noChoice = {
 		document.getElementById('information-timer').value = INFORMATION_SAMPLING_DURATION - jsPsych.data.get().last(1).values()[0]['information_sampling_time_remaining']
 	},
 	on_finish: function(data) {
+		data.trial_name = 'information_sampling_final_noChoice'
+
 		last_trial_data = jsPsych.data.get().last(2).values()[0]
 		Object.keys(last_trial_data).some(function(key) {
 			key_match_cond = key.match(/(information_sampling_)([1, 2, 3, 4])(_prompt)/) != null
@@ -393,6 +419,7 @@ var information_sampling_final = {
 		document.getElementById('information-timer').value = INFORMATION_SAMPLING_DURATION - this.trial_duration
 	},
 	on_finish: function(data) {
+		data.trial_name = 'information_sampling_final'
 
 		data.info_sampled_1 = translate_key_press(jsPsych.data.get().last(8).values()[0]['key_press'])
 		data.info_sampled_1_rt = jsPsych.data.get().last(8).values()[0]['rt']
