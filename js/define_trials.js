@@ -94,13 +94,6 @@ var card_presentation_trial = {
 				'<div class="card_decision_prompt" style="margin-left: 2.5%">Higher [Press 2]</div>'+
 			'</div>',
 	choices: jsPsych.NO_KEYS,
-	on_start: function() {
-		// console.log(jsPsych.data.get().values())
-		// jsPsych.data.get().localSave('csv', subject_id.toString()+'_'+DATA_SAVING_ITERATOR.toString()+'_testdata.csv')
-
-		saveData(subject_id.toString()+'_'+DATA_SAVING_ITERATOR.toString()+'.csv', jsPsych.data.get().csv())
-		DATA_SAVING_ITERATOR += 1
-	},
 	on_finish: function(data) {
 		data.trial_name = 'card_presentation_trial'
 
@@ -152,9 +145,12 @@ var fixation_cross = {
 			document.getElementById('information-timer-container').style.display = 'none'
 		}
 
-		if (jsPsych.timelineVariable('display_feedback', true) === false) {
-			jsPsych.endCurrentTimeline()
-		}
+		// if (jsPsych.timelineVariable('display_feedback', true) === false) {
+		// 	jsPsych.endCurrentTimeline()
+		// }
+
+		saveData(subject_id.toString()+'_'+DATA_SAVING_ITERATOR.toString()+'.csv', jsPsych.data.get().csv())
+		DATA_SAVING_ITERATOR += 1
 	},
 	on_finish: function(data) {
 		data.trial_name = 'fixation_cross'
@@ -365,21 +361,22 @@ var information_sampling_final_noChoice = {
 				last_information_sampling_prompt_index = key[21] // the number is in the 21st pos
 			}
 		})
+		// crucially, here, the last seen prompt will be missign as the button is clicked within the last second and hence nothing is sampled/displayed
 		if (last_information_sampling_prompt_index === '1') {
-			data.info_sampled_1 = translate_key_press(jsPsych.data.get().last(2).values()[0]['key_press'])
-			data.info_sampled_1_rt = jsPsych.data.get().last(2).values()[0]['rt']
+			data.info_sampled_1 = 'missing'
+			data.info_sampled_1_rt = null
 		} else if (last_information_sampling_prompt_index === '2') {
 			data.info_sampled_1 = translate_key_press(jsPsych.data.get().last(4).values()[0]['key_press'])
 			data.info_sampled_1_rt = jsPsych.data.get().last(4).values()[0]['rt']
-			data.info_sampled_2 = translate_key_press(jsPsych.data.get().last(2).values()[0]['key_press'])
-			data.info_sampled_2_rt = jsPsych.data.get().last(2).values()[0]['rt']
+			data.info_sampled_2 = 'missing'
+			data.info_sampled_2_rt = null
 		} else if (last_information_sampling_prompt_index === '3') {
 			data.info_sampled_1 = translate_key_press(jsPsych.data.get().last(6).values()[0]['key_press'])
 			data.info_sampled_1_rt = jsPsych.data.get().last(6).values()[0]['rt']
 			data.info_sampled_2 = translate_key_press(jsPsych.data.get().last(4).values()[0]['key_press'])
 			data.info_sampled_2_rt = jsPsych.data.get().last(4).values()[0]['rt']
-			data.info_sampled_3 = translate_key_press(jsPsych.data.get().last(2).values()[0]['key_press'])	
-			data.info_sampled_3_rt = jsPsych.data.get().last(2).values()[0]['rt']
+			data.info_sampled_3 = 'missing'
+			data.info_sampled_3_rt = null
 		} else if (last_information_sampling_prompt_index === '4') {
 			data.info_sampled_1 = translate_key_press(jsPsych.data.get().last(8).values()[0]['key_press'])
 			data.info_sampled_1_rt = jsPsych.data.get().last(8).values()[0]['rt']
@@ -387,8 +384,8 @@ var information_sampling_final_noChoice = {
 			data.info_sampled_2_rt = jsPsych.data.get().last(6).values()[0]['rt']
 			data.info_sampled_3 = translate_key_press(jsPsych.data.get().last(4).values()[0]['key_press'])	
 			data.info_sampled_3_rt = jsPsych.data.get().last(4).values()[0]['rt']
-			data.info_sampled_4 = translate_key_press(jsPsych.data.get().last(2).values()[0]['key_press'])
-			data.info_sampled_4_rt = jsPsych.data.get().last(2).values()[0]['rt']
+			data.info_sampled_4 = 'missing'
+			data.info_sampled_4_rt = null
 		} else {
 			alert("Problem saving data in noChoice trial.")
 		}
