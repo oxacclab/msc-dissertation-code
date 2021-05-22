@@ -47,7 +47,7 @@
 		document.getElementById('information-timer').max = INFORMATION_SAMPLING_DURATION
 
 		function saveData(filename, filedata){
-			$.ajax({
+			return $.ajax({
 				type:'post',
 				cache: false,
 				url: 'save_data.php',
