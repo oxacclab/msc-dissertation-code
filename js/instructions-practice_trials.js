@@ -195,7 +195,8 @@ var debrief = {
 				'<p>This brought you a total of '+acquiredPoints+' points from both lotteries.</p>'+
 				'<p>The bonus is calculated such that each 300 points above 35,000 grant £0.04 with the maximum £2.00 reached at 50,000 points.</p>'+
 				'<p>This means that your current bonus is equal to £'+currentBonus+'.</p>'+
-				'<p>Thank you for completing this experiment. <b>NB: Please click Continue to save your data and be redirected back to Prolific.</b></p>'
+				'<p>Thank you for completing this experiment.</p>'+
+				'<b>NB: When you click Next you will see a white screen and might need to wait for a short period of time (up to 1 minute, depending on your internet connection). This will ensure that your data are saved correctly and your bonus is recorded. Please wait patiently. After your data are saved, you will be AUTOMATICALLY redirected back to Prolific.</b></p>'
 	]},
 	show_clickable_nav: true
 }

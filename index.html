@@ -83,11 +83,9 @@
 								saveData(subject_id.toString()+'_interaction_data.csv', jsPsych.data.getInteractionData().csv()))
 						.done(function(s1, s2) {
 						// the code here will be executed when all four ajax requests resolve.
-						// a1, a2, a3 and a4 are lists of length 3 containing the response text,
-						// status, and jqXHR object for each of the four ajax calls respectively.
-						console.log(s1)
-						console.log(s2)
-						window.open("https://app.prolific.co/submissions/complete?cc=78A9CD78", "_blank").focus()
+						// s1, s2 are lists of length 3 containing the response text,
+						// status, and jqXHR object for each ajax call respectively.
+						window.open("https://app.prolific.co/submissions/complete?cc=78A9CD78", "_blank")
 					});
 					// saveData(subject_id.toString()+'_interaction_data.csv', jsPsych.data.getInteractionData().csv())
 					// if (subject_id == null) {

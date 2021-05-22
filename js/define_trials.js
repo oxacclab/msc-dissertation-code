@@ -149,7 +149,10 @@ var fixation_cross = {
 		// 	jsPsych.endCurrentTimeline()
 		// }
 
-		saveData(subject_id.toString()+'_'+DATA_SAVING_ITERATOR.toString()+'.csv', jsPsych.data.get().csv())
+		if (DATA_SAVING_ITERATOR % 5 === 0) {
+			// save request every 5 trials
+			saveData(subject_id.toString()+'_'+DATA_SAVING_ITERATOR.toString()+'.csv', jsPsych.data.get().csv())
+		}
 		DATA_SAVING_ITERATOR += 1
 	},
 	on_finish: function(data) {
