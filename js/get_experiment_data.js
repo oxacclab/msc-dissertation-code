@@ -56,7 +56,7 @@ function get_experiment_data_object() {
 
 	// ------------------------------------------------------------------------general participant-level randomisation
 	// counterbalancing ACROSS PPs, not trials [just randomly allocating to either friends or work]
-	let modular_connections_source = getRandom(['friends', 'work'], 1)[0]
+	let modular_connections_source = 'friends' //getRandom(['friends', 'work'], 1)[0]
 
 	// controlling card pairs
 	cards_no_middle_card = CARDS.filter(e => e !== 'seven')
