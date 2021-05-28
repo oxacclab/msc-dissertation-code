@@ -20,18 +20,18 @@ function save_all_trial_data(data) {
 	data.modular_connections_source = jsPsych.timelineVariable('modular_connections_source', true)
 }
 
-function translate_key_press(key_press) {
-	switch(key_press) {
-		case 49:
+function translate_button_press(button_press) {
+	switch(button_press) {
+		case '0':
 			info_sampled = 'lottery_1';
 			break;
-		case 50:
+		case '1':
 			info_sampled = 'lottery_2';
 			break;
-		case 51:
+		case '2':
 			info_sampled = 'friends';
 			break
-		case 52:
+		case '3':
 			info_sampled = 'work';
 			break;
 		default:
@@ -41,37 +41,165 @@ function translate_key_press(key_press) {
 	return info_sampled
 }
 
-function get_delay_trial_object(information_sampling_prompt_index_string) {
+function disable_selected_btns(trial_name) {
+	let selected_btns = []
+	if (trial_name == 'all') {
+		selected_btns = ['0', '1', '2', '3'] 
+	} else {
+		// sometimes the below switch mapping overshoots depending on whether it's called from main trial object or delay trial object
+		// but it's okay
+		switch(trial_name) {
+			case 'information_sampling_1':
+				last_trial_index_for_button_disabling = 1;
+				break;
+			case 'information_sampling_2':
+				last_trial_index_for_button_disabling = 2;
+				break;
+			case 'information_sampling_3':
+				last_trial_index_for_button_disabling = 4;
+				break
+			case 'information_sampling_4':
+				last_trial_index_for_button_disabling = 6;
+				break;
+		}
+
+		selected_btns = jsPsych.data.get().last(last_trial_index_for_button_disabling).values().map(x => x['button_pressed'])
+	}
+
+	for (var i=0; i<selected_btns.length; i++){
+		document.getElementById(translate_button_press(selected_btns[i])).setAttribute('disabled', 'disabled')
+	}
+}
+
+function get_trial_object(trial_name) {
+	return {
+		type: 'html-button-response',
+		stimulus: function() {
+			if (trial_name == 'information_sampling_1') {
+				return set_initial_information_sampling_stimulus(jsPsych.timelineVariable('high_variance_lottery_left_or_right', true), 
+															jsPsych.timelineVariable('high_variance_lottery_EV', true), 
+															jsPsych.timelineVariable('low_variance_lottery_EV', true), 
+															jsPsych.timelineVariable('dealer_id', true))
+			} else {
+				return jsPsych.data.get().last(1).values()[0]['stimulus']
+			}
+		},
+		choices: ['Tell me potential<br>winnings from lottery 1', 'Tell me potential<br>winnings from lottery 2', 
+					'Who are you<br>friends with?', 'Who works the<br>same time as you?'],
+		button_html: function() {
+			return ['<button id="lottery_1" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>',
+			'<button id="lottery_2" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>',
+			'<button id="friends" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>',
+			'<button id="work" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>']
+		},
+		margin_vertical: '',
+		margin_horizontal: '',
+		trial_duration: function() {
+			if (trial_name == 'information_sampling_1') {
+				return INFORMATION_SAMPLING_DURATION
+			} else {
+				return jsPsych.data.get().last(1).values()[0]['information_sampling_time_remaining']
+			}
+		},
+		response_ends_trial: true,
+		on_load: function() {
+			if (trial_name == 'information_sampling_1') {
+				document.getElementById('information-timer-container').style.display = 'block'
+				timer_interval_id = setInterval(function () {
+					document.getElementById('information-timer').value += 25//SCALED_TIMER_SPEED
+					if (show_timer_ms) {
+						document.getElementById('timer-text-test').innerHTML = parseInt(document.getElementById('information-timer').value)
+					}
+				}, 25)
+			} else {
+				document.getElementById('information-timer').value = INFORMATION_SAMPLING_DURATION - this.trial_duration
+				
+				disable_selected_btns(trial_name)
+			}
+		},
+		on_finish: function(data) {
+			data.trial_name = trial_name
+
+			data.information_sampling_time_remaining = data.rt === null ? null : this.trial_duration - data.rt
+			
+			if (trial_name == 'information_sampling_1') {
+				if (data.information_sampling_time_remaining === null) {
+					data.info_sampled_1 = jsPsych.data.get().last(1).values()[0]['button_pressed']
+					data.info_sampled_1_rt = jsPsych.data.get().last(1).values()[0]['rt']
+				}
+			} else if (trial_name == 'information_sampling_2') {
+				if (data.information_sampling_time_remaining === null) {
+					data.info_sampled_1 = jsPsych.data.get().last(3).values()[0]['button_pressed']
+					data.info_sampled_1_rt = jsPsych.data.get().last(3).values()[0]['rt']
+					data.info_sampled_2 = jsPsych.data.get().last(1).values()[0]['button_pressed']
+					data.info_sampled_2_rt = jsPsych.data.get().last(1).values()[0]['rt']
+				}
+			} else if (trial_name == 'information_sampling_3') {
+				if (data.information_sampling_time_remaining === null) {
+					data.info_sampled_1 = jsPsych.data.get().last(5).values()[0]['button_pressed']
+					data.info_sampled_1_rt = jsPsych.data.get().last(5).values()[0]['rt']
+					data.info_sampled_2 = jsPsych.data.get().last(3).values()[0]['button_pressed']
+					data.info_sampled_2_rt = jsPsych.data.get().last(3).values()[0]['rt']
+					data.info_sampled_3 = jsPsych.data.get().last(1).values()[0]['button_pressed']
+					data.info_sampled_3_rt = jsPsych.data.get().last(1).values()[0]['rt']
+				}
+			} else if (trial_name == 'information_sampling_4') {
+				if (data.information_sampling_time_remaining === null) {
+					data.info_sampled_1 = jsPsych.data.get().last(7).values()[0]['button_pressed']
+					data.info_sampled_1_rt = jsPsych.data.get().last(7).values()[0]['rt']
+					data.info_sampled_2 = jsPsych.data.get().last(5).values()[0]['button_pressed']
+					data.info_sampled_2_rt = jsPsych.data.get().last(5).values()[0]['rt']
+					data.info_sampled_3 = jsPsych.data.get().last(3).values()[0]['button_pressed']
+					data.info_sampled_3_rt = jsPsych.data.get().last(3).values()[0]['rt']
+					data.info_sampled_4 = jsPsych.data.get().last(1).values()[0]['button_pressed']
+					data.info_sampled_4_rt = jsPsych.data.get().last(1).values()[0]['rt']
+				}
+			}
+			save_all_trial_data(data)
+		}
+	}
+}
+
+function get_delay_trial_object(information_sampling_index_string) {
 	// the delay object repeats 3 times so this is abstracted in a func - onl the index of the delay trial changes
 	return {
-		type: 'html-keyboard-response',
+		type: 'html-button-response',
 		stimulus: function() {
 			return update_information_sampling_stimulus(previous_stimulus = jsPsych.data.get().last(1).values()[0]['stimulus'],
-														previous_key_press = jsPsych.data.get().last(1).values()[0]['key_press'],
+														previous_info_sampled = translate_button_press(jsPsych.data.get().last(1).values()[0]['button_pressed']),
 														jsPsych.timelineVariable('left_lottery_winnings', true),
 														jsPsych.timelineVariable('right_lottery_winnings', true),
 														jsPsych.timelineVariable('friends_dealer_id', true), 
 														jsPsych.timelineVariable('work_dealer_id', true))
 		},
-		choices: jsPsych.NO_KEYS,
-		prompt: function() {
-			return update_information_sampling_prompt(previous_prompt = jsPsych.data.get().last(1).values()[0]['information_sampling_'+information_sampling_prompt_index_string+'_prompt'],
-													previous_key_press = jsPsych.data.get().last(1).values()[0]['key_press'])
+		choices: ['Tell me potential<br>winnings from lottery 1', 'Tell me potential<br>winnings from lottery 2', 
+					'Who are you<br>friends with?', 'Who works the<br>same time as you?'],
+		button_html: function() {
+			return ['<button id="lottery_1" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>',
+			'<button id="lottery_2" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>',
+			'<button id="friends" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>',
+			'<button id="work" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>']
 		},
+		margin_vertical: '',
+		margin_horizontal: '',
 		trial_duration: function () {
+			// return INFORMATION_SAMPLING_INTERCHOICE_DELAY
 			return INFORMATION_SAMPLING_INTERCHOICE_DELAY
 		},
+		response_ends_trial: false,
 		on_load: function() {
 			document.getElementById('information-timer').value = INFORMATION_SAMPLING_DURATION - jsPsych.data.get().last(1).values()[0]['information_sampling_time_remaining']
+			disable_selected_btns('all')
 		},
 		on_finish: function(data) {
-			data.trial_name = 'information_sampling_'+information_sampling_prompt_index_string+'_delay'
+			data.trial_name = 'information_sampling_'+information_sampling_index_string+'_delay'
 
 			// on_finish means that if I try to get jsPsych data's last trial value, then it will be this trial, hence last(2) below
-			data['information_sampling_'+information_sampling_prompt_index_string+'_prompt'] = this.prompt
+			// data['information_sampling_'+information_sampling_index_string+'_prompt'] = this.prompt
 			data.information_sampling_time_remaining = jsPsych.data.get().last(2).values()[0]['information_sampling_time_remaining'] - this.trial_duration
-			data.key_press = jsPsych.data.get().last(2).values()[0]['key_press']
+			data.button_pressed = jsPsych.data.get().last(2).values()[0]['button_pressed']
 		}
+		
 	}
 }
 
@@ -160,232 +288,73 @@ var fixation_cross = {
 	}
 }
 
-var information_sampling_1 = {
-	type: 'html-keyboard-response',
-	stimulus: function() {
-		return set_initial_information_sampling_stimulus(jsPsych.timelineVariable('high_variance_lottery_left_or_right', true), 
-														jsPsych.timelineVariable('high_variance_lottery_EV', true), 
-														jsPsych.timelineVariable('low_variance_lottery_EV', true), 
-														jsPsych.timelineVariable('dealer_id', true))
-	},
-	choices: [49, 50, 51, 52], //['1', '2', '3', '4']
-	on_load: function() {
-		document.getElementById('information-timer-container').style.display = 'block'
-		timer_interval_id = setInterval(function () {
-			document.getElementById('information-timer').value += 25//SCALED_TIMER_SPEED
-			if (show_timer_ms) {
-				document.getElementById('timer-text-test').innerHTML = parseInt(document.getElementById('information-timer').value)
-			}
-		}, 25)
-	},
-	prompt: set_initial_information_sampling_prompt(),
-	trial_duration: function() {
-		return INFORMATION_SAMPLING_DURATION
-	},
-	on_finish: function(data) {
-		data.trial_name = 'information_sampling_1'
+var information_sampling_1 = get_trial_object('information_sampling_1')
 
-		data.information_sampling_1_prompt = this.prompt
-		data.information_sampling_time_remaining = data.rt === null ? null : this.trial_duration - data.rt
-		
-		if (data.information_sampling_time_remaining === null) {
-			data.info_sampled_1 = translate_key_press(jsPsych.data.get().last(1).values()[0]['key_press'])
-			data.info_sampled_1_rt = jsPsych.data.get().last(1).values()[0]['rt']
-			save_all_trial_data(data)
-		}
-	}
-}
+var information_sampling_1_delay = get_delay_trial_object(information_sampling_index_string = '1')
 
-var information_sampling_1_delay = get_delay_trial_object(information_sampling_prompt_index_string = '1')
+var information_sampling_2 = get_trial_object('information_sampling_2')
 
-var information_sampling_2 = {
-	type: 'html-keyboard-response',
-	stimulus: function() {
-		return jsPsych.data.get().last(1).values()[0]['stimulus']
-	},
-	choices: function() {
-		return INFORMATION_MULTIPLE_CHOICE ? [49, 50, 51, 52].filter(e => e !== jsPsych.data.get().last(1).values()[0]['key_press']) : 
-											jsPsych.NO_KEYS
-	},
-	prompt: function() {
-		return jsPsych.data.get().last(1).values()[0]['information_sampling_1_prompt']
-	},
-	trial_duration: function() {
-		return jsPsych.data.get().last(1).values()[0]['information_sampling_time_remaining']
-	},
-	on_load: function() {
-		document.getElementById('information-timer').value = INFORMATION_SAMPLING_DURATION - this.trial_duration
-	},
-	on_finish: function(data) {
-		data.trial_name = 'information_sampling_2'
+var information_sampling_2_delay = get_delay_trial_object(information_sampling_index_string = '2')
 
-		data.information_sampling_2_prompt = this.prompt
-		data.information_sampling_time_remaining = data.rt === null ? null : this.trial_duration - data.rt
+var information_sampling_3 = get_trial_object('information_sampling_3')
 
-		
-		if (data.information_sampling_time_remaining === null) {
-			data.info_sampled_1 = translate_key_press(jsPsych.data.get().last(3).values()[0]['key_press'])
-			data.info_sampled_1_rt = jsPsych.data.get().last(3).values()[0]['rt']
-			data.info_sampled_2 = translate_key_press(jsPsych.data.get().last(1).values()[0]['key_press'])
-			data.info_sampled_2_rt = jsPsych.data.get().last(1).values()[0]['rt']
-			save_all_trial_data(data)
-		}
-	}
-}
+var information_sampling_3_delay = get_delay_trial_object(information_sampling_index_string = '3')
 
-var information_sampling_2_delay = get_delay_trial_object(information_sampling_prompt_index_string = '2')
-
-var information_sampling_3 = {
-	type: 'html-keyboard-response',
-	stimulus: function() {
-		return update_information_sampling_stimulus(previous_stimulus = jsPsych.data.get().last(1).values()[0]['stimulus'],
-													previous_key_press = jsPsych.data.get().last(1).values()[0]['key_press'],
-													jsPsych.timelineVariable('left_lottery_winnings', true),
-													jsPsych.timelineVariable('right_lottery_winnings', true),
-													jsPsych.timelineVariable('friends_dealer_id', true), 
-													jsPsych.timelineVariable('work_dealer_id', true))
-	},
-	choices: function() {
-		keys_pressed = []
-		for (const e of jsPsych.data.get().last(3).values()) {
-			keys_pressed.push(e['key_press'])
-		}
-		return [49, 50, 51, 52].filter(x => !keys_pressed.includes(x))
-	},
-	prompt: function() {
-		return update_information_sampling_prompt(previous_prompt = jsPsych.data.get().last(1).values()[0]['information_sampling_2_prompt'],
-												previous_key_press = jsPsych.data.get().last(1).values()[0]['key_press'])
-	},
-	trial_duration: function() {
-		return jsPsych.data.get().last(1).values()[0]['information_sampling_time_remaining']
-	},
-	on_load: function() {
-		document.getElementById('information-timer').value = INFORMATION_SAMPLING_DURATION - this.trial_duration
-	},
-	on_finish: function(data) {
-		data.trial_name = 'information_sampling_3'
-
-		data.information_sampling_3_prompt = this.prompt
-		data.information_sampling_time_remaining = data.rt === null ? null : this.trial_duration - data.rt
-
-		
-		
-		if (data.information_sampling_time_remaining === null) {
-			data.info_sampled_1 = translate_key_press(jsPsych.data.get().last(5).values()[0]['key_press'])
-			data.info_sampled_1_rt = jsPsych.data.get().last(5).values()[0]['rt']
-			data.info_sampled_2 = translate_key_press(jsPsych.data.get().last(3).values()[0]['key_press'])
-			data.info_sampled_2_rt = jsPsych.data.get().last(3).values()[0]['rt']
-			data.info_sampled_3 = translate_key_press(jsPsych.data.get().last(1).values()[0]['key_press'])	
-			data.info_sampled_3_rt = jsPsych.data.get().last(1).values()[0]['rt']
-			save_all_trial_data(data)
-		}
-	}
-}
-
-var information_sampling_3_delay = get_delay_trial_object(information_sampling_prompt_index_string = '3')
-
-var information_sampling_4 = {
-	type: 'html-keyboard-response',
-	stimulus: function() {
-		return update_information_sampling_stimulus(previous_stimulus = jsPsych.data.get().last(1).values()[0]['stimulus'],
-													previous_key_press = jsPsych.data.get().last(1).values()[0]['key_press'],
-													jsPsych.timelineVariable('left_lottery_winnings', true),
-													jsPsych.timelineVariable('right_lottery_winnings', true),
-													jsPsych.timelineVariable('friends_dealer_id', true), 
-													jsPsych.timelineVariable('work_dealer_id', true))
-	},
-	choices: function() {
-		keys_pressed = []
-		for (const e of jsPsych.data.get().last(5).values()) {
-			keys_pressed.push(e['key_press'])
-		}
-		return [49, 50, 51, 52].filter(x => !keys_pressed.includes(x))
-	},
-	prompt: function() {
-		return update_information_sampling_prompt(previous_prompt = jsPsych.data.get().last(1).values()[0]['information_sampling_3_prompt'],
-												previous_key_press = jsPsych.data.get().last(1).values()[0]['key_press'])
-	},
-	trial_duration: function() {
-		return jsPsych.data.get().last(1).values()[0]['information_sampling_time_remaining']
-	},
-	on_load: function() {
-		document.getElementById('information-timer').value = INFORMATION_SAMPLING_DURATION - this.trial_duration
-	},
-	on_finish: function(data) {
-		data.trial_name = 'information_sampling_4'
-
-		data.information_sampling_4_prompt = this.prompt
-		data.information_sampling_time_remaining = data.rt === null ? null : this.trial_duration - data.rt
-
-		if (data.information_sampling_time_remaining === null) {
-			data.info_sampled_1 = translate_key_press(jsPsych.data.get().last(7).values()[0]['key_press'])
-			data.info_sampled_1_rt = jsPsych.data.get().last(7).values()[0]['rt']
-			data.info_sampled_2 = translate_key_press(jsPsych.data.get().last(5).values()[0]['key_press'])
-			data.info_sampled_2_rt = jsPsych.data.get().last(5).values()[0]['rt']
-			data.info_sampled_3 = translate_key_press(jsPsych.data.get().last(3).values()[0]['key_press'])	
-			data.info_sampled_3_rt = jsPsych.data.get().last(3).values()[0]['rt']
-			data.info_sampled_4 = translate_key_press(jsPsych.data.get().last(1).values()[0]['key_press'])
-			data.info_sampled_4_rt = jsPsych.data.get().last(1).values()[0]['rt']
-			save_all_trial_data(data)
-		}
-	}
-}
+var information_sampling_4 = get_trial_object('information_sampling_4')
 
 var information_sampling_final_noChoice = {
-	// using previous stimulus/prompt as no changes must be made (simulating not accepting any input)
-	type: 'html-keyboard-response',
+	type: 'html-button-response',
 	stimulus: function() {
 		return jsPsych.data.get().last(1).values()[0]['stimulus']
 	},
-	choices: jsPsych.NO_KEYS,
-	prompt: function() {
-		last_trial_data = jsPsych.data.get().last(1).values()[0]
-		Object.keys(last_trial_data).some(function(key) {
-			key_match_cond = key.match(/(information_sampling_)([1, 2, 3, 4])(_prompt)/) != null
-			if (key_match_cond) {
-				last_information_sampling_prompt = key
-			}
-		})
-		return jsPsych.data.get().last(1).values()[0][last_information_sampling_prompt]
+	choices: ['Tell me potential<br>winnings from lottery 1', 'Tell me potential<br>winnings from lottery 2', 
+				'Who are you<br>friends with?', 'Who works the<br>same time as you?'],
+	button_html: function() {
+		return ['<button id="lottery_1" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>',
+		'<button id="lottery_2" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>',
+		'<button id="friends" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>',
+		'<button id="work" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>']
 	},
+	margin_vertical: '',
+	margin_horizontal: '',
 	trial_duration: function() {
+		// return jsPsych.data.get().last(1).values()[0]['information_sampling_time_remaining']
+		// ------------------- to consider if this is correct
 		return INFORMATION_SAMPLING_INTERCHOICE_DELAY
 	},
+	response_ends_trial: false,
 	on_load: function() {
 		document.getElementById('information-timer').value = INFORMATION_SAMPLING_DURATION - jsPsych.data.get().last(1).values()[0]['information_sampling_time_remaining']
+
+		disable_selected_btns('all')
+
 	},
 	on_finish: function(data) {
 		data.trial_name = 'information_sampling_final_noChoice'
 
-		last_trial_data = jsPsych.data.get().last(2).values()[0]
-		Object.keys(last_trial_data).some(function(key) {
-			key_match_cond = key.match(/(information_sampling_)([1, 2, 3, 4])(_prompt)/) != null
-			if (key_match_cond) {
-				last_information_sampling_prompt_index = key[21] // the number is in the 21st pos
-			}
-		})
+		last_trial_name = jsPsych.data.get().last(2).values()[0]['trial_name']
 		// crucially, here, the last seen prompt will be missign as the button is clicked within the last second and hence nothing is sampled/displayed
-		if (last_information_sampling_prompt_index === '1') {
+		if (last_trial_name === 'information_sampling_1') {
 			data.info_sampled_1 = 'missing'
 			data.info_sampled_1_rt = null
-		} else if (last_information_sampling_prompt_index === '2') {
-			data.info_sampled_1 = translate_key_press(jsPsych.data.get().last(4).values()[0]['key_press'])
+		} else if (last_trial_name === 'information_sampling_2') {
+			data.info_sampled_1 = jsPsych.data.get().last(4).values()[0]['button_pressed']
 			data.info_sampled_1_rt = jsPsych.data.get().last(4).values()[0]['rt']
 			data.info_sampled_2 = 'missing'
 			data.info_sampled_2_rt = null
-		} else if (last_information_sampling_prompt_index === '3') {
-			data.info_sampled_1 = translate_key_press(jsPsych.data.get().last(6).values()[0]['key_press'])
+		} else if (last_trial_name === 'information_sampling_3') {
+			data.info_sampled_1 = jsPsych.data.get().last(6).values()[0]['button_pressed']
 			data.info_sampled_1_rt = jsPsych.data.get().last(6).values()[0]['rt']
-			data.info_sampled_2 = translate_key_press(jsPsych.data.get().last(4).values()[0]['key_press'])
+			data.info_sampled_2 = jsPsych.data.get().last(4).values()[0]['button_pressed']
 			data.info_sampled_2_rt = jsPsych.data.get().last(4).values()[0]['rt']
 			data.info_sampled_3 = 'missing'
 			data.info_sampled_3_rt = null
-		} else if (last_information_sampling_prompt_index === '4') {
-			data.info_sampled_1 = translate_key_press(jsPsych.data.get().last(8).values()[0]['key_press'])
+		} else if (last_trial_name === 'information_sampling_4') {
+			data.info_sampled_1 = jsPsych.data.get().last(8).values()[0]['button_pressed']
 			data.info_sampled_1_rt = jsPsych.data.get().last(8).values()[0]['rt']
-			data.info_sampled_2 = translate_key_press(jsPsych.data.get().last(6).values()[0]['key_press'])
+			data.info_sampled_2 = jsPsych.data.get().last(6).values()[0]['button_pressed']
 			data.info_sampled_2_rt = jsPsych.data.get().last(6).values()[0]['rt']
-			data.info_sampled_3 = translate_key_press(jsPsych.data.get().last(4).values()[0]['key_press'])	
+			data.info_sampled_3 = jsPsych.data.get().last(4).values()[0]['button_pressed']
 			data.info_sampled_3_rt = jsPsych.data.get().last(4).values()[0]['rt']
 			data.info_sampled_4 = 'missing'
 			data.info_sampled_4_rt = null
@@ -398,37 +367,219 @@ var information_sampling_final_noChoice = {
 }
 
 var information_sampling_final = {
-	type: 'html-keyboard-response',
+	type: 'html-button-response',
 	stimulus: function() {
-		return update_information_sampling_stimulus(previous_stimulus = jsPsych.data.get().last(1).values()[0]['stimulus'],
-													previous_key_press = jsPsych.data.get().last(1).values()[0]['key_press'],
-													jsPsych.timelineVariable('left_lottery_winnings', true),
-													jsPsych.timelineVariable('right_lottery_winnings', true),
-													jsPsych.timelineVariable('friends_dealer_id', true), 
-													jsPsych.timelineVariable('work_dealer_id', true))
+		return jsPsych.data.get().last(1).values()[0]['stimulus']
 	},
-	choices: jsPsych.NO_KEYS,
-	prompt: function() {
-		return update_information_sampling_prompt(previous_prompt = jsPsych.data.get().last(1).values()[0]['information_sampling_4_prompt'],
-												previous_key_press = jsPsych.data.get().last(1).values()[0]['key_press'])
+	choices: ['Tell me potential<br>winnings from lottery 1', 'Tell me potential<br>winnings from lottery 2', 
+				'Who are you<br>friends with?', 'Who works the<br>same time as you?'],
+	button_html: function() {
+		return ['<button id="lottery_1" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>',
+		'<button id="lottery_2" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>',
+		'<button id="friends" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>',
+		'<button id="work" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>']
 	},
+	margin_vertical: '',
+	margin_horizontal: '',
 	trial_duration: function() {
 		return jsPsych.data.get().last(1).values()[0]['information_sampling_time_remaining']
 	},
+	response_ends_trial: false,
 	on_load: function() {
 		document.getElementById('information-timer').value = INFORMATION_SAMPLING_DURATION - this.trial_duration
+
+		disable_selected_btns('all')
+
 	},
 	on_finish: function(data) {
 		data.trial_name = 'information_sampling_final'
-
-		data.info_sampled_1 = translate_key_press(jsPsych.data.get().last(8).values()[0]['key_press'])
+		
+		data.info_sampled_1 = jsPsych.data.get().last(8).values()[0]['button_pressed']
 		data.info_sampled_1_rt = jsPsych.data.get().last(8).values()[0]['rt']
-		data.info_sampled_2 = translate_key_press(jsPsych.data.get().last(6).values()[0]['key_press'])
+		data.info_sampled_2 = jsPsych.data.get().last(6).values()[0]['button_pressed']
 		data.info_sampled_2_rt = jsPsych.data.get().last(6).values()[0]['rt']
-		data.info_sampled_3 = translate_key_press(jsPsych.data.get().last(4).values()[0]['key_press'])	
+		data.info_sampled_3 = jsPsych.data.get().last(4).values()[0]['button_pressed']
 		data.info_sampled_3_rt = jsPsych.data.get().last(4).values()[0]['rt']
-		data.info_sampled_4 = translate_key_press(jsPsych.data.get().last(2).values()[0]['key_press'])
+		data.info_sampled_4 = jsPsych.data.get().last(2).values()[0]['button_pressed']
 		data.info_sampled_4_rt = jsPsych.data.get().last(2).values()[0]['rt']
+
 		save_all_trial_data(data)
 	}
 }
+
+
+
+
+
+
+
+
+// var information_sampling_1 = {
+// 	type: 'html-button-response',
+// 	stimulus: function() {
+// 		return set_initial_information_sampling_stimulus(jsPsych.timelineVariable('high_variance_lottery_left_or_right', true), 
+// 														jsPsych.timelineVariable('high_variance_lottery_EV', true), 
+// 														jsPsych.timelineVariable('low_variance_lottery_EV', true), 
+// 														jsPsych.timelineVariable('dealer_id', true))
+// 	},
+// 	choices: ['Tell me potential<br>winnings from lottery 1', 'Tell me potential<br>winnings from lottery 2', 
+// 				'Who are you<br>friends with?', 'Who works the<br>same time as you?'],
+// 	button_html: function() {
+// 		return ['<button id="lottery_1" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>',
+// 		'<button id="lottery_2" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>',
+// 		'<button id="friends" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>',
+// 		'<button id="work" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>']
+// 	},
+// 	margin_vertical: '',
+// 	margin_horizontal: '',
+// 	trial_duration: function() {
+// 		return INFORMATION_SAMPLING_DURATION
+// 	},
+// 	response_ends_trial: true,
+// 	on_load: function() {
+// 		document.getElementById('information-timer-container').style.display = 'block'
+// 		timer_interval_id = setInterval(function () {
+// 			document.getElementById('information-timer').value += 25//SCALED_TIMER_SPEED
+// 			if (show_timer_ms) {
+// 				document.getElementById('timer-text-test').innerHTML = parseInt(document.getElementById('information-timer').value)
+// 			}
+// 		}, 25)
+// 	},
+// 	on_finish: function(data) {
+// 		data.trial_name = 'information_sampling_1'
+
+// 		data.information_sampling_time_remaining = data.rt === null ? null : this.trial_duration - data.rt
+		
+// 		if (data.information_sampling_time_remaining === null) {
+// 			data.info_sampled_1 = jsPsych.data.get().last(1).values()[0]['button_pressed']
+// 			data.info_sampled_1_rt = jsPsych.data.get().last(1).values()[0]['rt']
+// 			save_all_trial_data(data)
+// 		}
+// 	}
+// }
+
+// var information_sampling_2 = {
+// 	type: 'html-button-response',
+// 	stimulus: function() {
+// 		return jsPsych.data.get().last(1).values()[0]['stimulus']
+// 	},
+// 	choices: ['Tell me potential<br>winnings from lottery 1', 'Tell me potential<br>winnings from lottery 2', 
+// 				'Who are you<br>friends with?', 'Who works the<br>same time as you?'],
+// 	button_html: function() {
+// 		return ['<button id="lottery_1" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>',
+// 		'<button id="lottery_2" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>',
+// 		'<button id="friends" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>',
+// 		'<button id="work" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>']
+// 	},
+// 	margin_vertical: '',
+// 	margin_horizontal: '',
+// 	trial_duration: function() {
+// 		return jsPsych.data.get().last(1).values()[0]['information_sampling_time_remaining']
+// 	},
+// 	response_ends_trial: true,
+// 	on_load: function() {
+// 		document.getElementById('information-timer').value = INFORMATION_SAMPLING_DURATION - this.trial_duration
+
+// 		disable_selected_btns('2')
+
+// 	},
+// 	on_finish: function(data) {
+// 		data.trial_name = 'information_sampling_2'
+
+// 		data.information_sampling_time_remaining = data.rt === null ? null : this.trial_duration - data.rt
+		
+// 		if (data.information_sampling_time_remaining === null) {
+// 			data.info_sampled_1 = jsPsych.data.get().last(3).values()[0]['button_pressed']
+// 			data.info_sampled_1_rt = jsPsych.data.get().last(3).values()[0]['rt']
+// 			data.info_sampled_2 = jsPsych.data.get().last(1).values()[0]['button_pressed']
+// 			data.info_sampled_2_rt = jsPsych.data.get().last(1).values()[0]['rt']
+// 			save_all_trial_data(data)
+// 		}
+// 	}
+// }
+
+// var information_sampling_3 = {
+// 	type: 'html-button-response',
+// 	stimulus: function() {
+// 		return jsPsych.data.get().last(1).values()[0]['stimulus']
+// 	},
+// 	choices: ['Tell me potential<br>winnings from lottery 1', 'Tell me potential<br>winnings from lottery 2', 
+// 				'Who are you<br>friends with?', 'Who works the<br>same time as you?'],
+// 	button_html: function() {
+// 		return ['<button id="lottery_1" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>',
+// 		'<button id="lottery_2" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>',
+// 		'<button id="friends" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>',
+// 		'<button id="work" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>']
+// 	},
+// 	margin_vertical: '',
+// 	margin_horizontal: '',
+// 	trial_duration: function() {
+// 		return jsPsych.data.get().last(1).values()[0]['information_sampling_time_remaining']
+// 	},
+// 	response_ends_trial: true,
+// 	on_load: function() {
+// 		document.getElementById('information-timer').value = INFORMATION_SAMPLING_DURATION - this.trial_duration
+
+// 		disable_selected_btns('3')
+
+// 	},
+// 	on_finish: function(data) {
+// 		data.trial_name = 'information_sampling_3'
+
+// 		data.information_sampling_time_remaining = data.rt === null ? null : this.trial_duration - data.rt
+		
+// 		if (data.information_sampling_time_remaining === null) {
+// 			data.info_sampled_1 = jsPsych.data.get().last(5).values()[0]['button_pressed']
+// 			data.info_sampled_1_rt = jsPsych.data.get().last(5).values()[0]['rt']
+// 			data.info_sampled_2 = jsPsych.data.get().last(3).values()[0]['button_pressed']
+// 			data.info_sampled_2_rt = jsPsych.data.get().last(3).values()[0]['rt']
+// 			data.info_sampled_3 = jsPsych.data.get().last(1).values()[0]['button_pressed']
+// 			data.info_sampled_3_rt = jsPsych.data.get().last(1).values()[0]['rt']
+// 			save_all_trial_data(data)
+// 		}
+// 	}
+// }
+
+// var information_sampling_4 = {
+// 	type: 'html-button-response',
+// 	stimulus: function() {
+// 		return jsPsych.data.get().last(1).values()[0]['stimulus']
+// 	},
+// 	choices: ['Tell me potential<br>winnings from lottery 1', 'Tell me potential<br>winnings from lottery 2', 
+// 				'Who are you<br>friends with?', 'Who works the<br>same time as you?'],
+// 	button_html: function() {
+// 		return ['<button id="lottery_1" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>',
+// 		'<button id="lottery_2" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>',
+// 		'<button id="friends" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>',
+// 		'<button id="work" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>']
+// 	},
+// 	margin_vertical: '',
+// 	margin_horizontal: '',
+// 	trial_duration: function() {
+// 		return jsPsych.data.get().last(1).values()[0]['information_sampling_time_remaining']
+// 	},
+// 	response_ends_trial: true,
+// 	on_load: function() {
+// 		document.getElementById('information-timer').value = INFORMATION_SAMPLING_DURATION - this.trial_duration
+
+// 		disable_selected_btns('4')
+
+// 	},
+// 	on_finish: function(data) {
+// 		data.trial_name = 'information_sampling_4'
+
+// 		data.information_sampling_time_remaining = data.rt === null ? null : this.trial_duration - data.rt
+		
+// 		if (data.information_sampling_time_remaining === null) {
+// 			data.info_sampled_1 = jsPsych.data.get().last(7).values()[0]['button_pressed']
+// 			data.info_sampled_1_rt = jsPsych.data.get().last(7).values()[0]['rt']
+// 			data.info_sampled_2 = jsPsych.data.get().last(5).values()[0]['button_pressed']
+// 			data.info_sampled_2_rt = jsPsych.data.get().last(5).values()[0]['rt']
+// 			data.info_sampled_3 = jsPsych.data.get().last(3).values()[0]['button_pressed']
+// 			data.info_sampled_3_rt = jsPsych.data.get().last(3).values()[0]['rt']
+// 			data.info_sampled_4 = jsPsych.data.get().last(1).values()[0]['button_pressed']
+// 			data.info_sampled_4_rt = jsPsych.data.get().last(1).values()[0]['rt']
+// 			save_all_trial_data(data)
+// 		}
+// 	}
+// }

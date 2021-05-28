@@ -1,3 +1,17 @@
+.jspsych-html-button-response-button {
+	width: 22.5%;
+	margin-left: 1.25%;
+	margin-right: 1.25%;
+	margin-top: 15px;
+	margin-bottom: 15px;
+}
+
+
+.jspsych-button {
+	width: 100%;
+}
+
+
 /*-------------------------------CSS loading bar; credits: https://github.com/loadingio/css-spinner*/
 .lds-facebook {
   display: inline-block;
@@ -156,9 +170,9 @@ body {
 
 .information_sampling_text {
 	background-color: lightblue; 
-	float: left;
-	width: 22.5%;
-	font-size: 16px;
+	/*float: left;*/
+	/*width: 22.5%;*/
+	font-size: 15px;
 }
 
 .information-individual-container {

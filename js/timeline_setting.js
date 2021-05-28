@@ -141,10 +141,10 @@ var pt_trials_NOfeedback_timeline = {
 	timeline_variables: Object.values(experiment_data_object['pt_trials'])
 }
 
-timeline.push(participant_intro_timeline)
-timeline.push(pt_trials_feedback_timeline)
-timeline.push(pt_trials_NOfeedback_timeline)
-timeline.push({timeline: [fixation_cross, pt_block_feedback, test_intro]})
+// timeline.push(participant_intro_timeline)
+// timeline.push(pt_trials_feedback_timeline)
+// timeline.push(pt_trials_NOfeedback_timeline)
+// timeline.push({timeline: [fixation_cross, pt_block_feedback, test_intro]})
 timeline.push(trials_timeline)
 timeline.push(fixation_cross)
 timeline.push(participant_debrief_timeline)

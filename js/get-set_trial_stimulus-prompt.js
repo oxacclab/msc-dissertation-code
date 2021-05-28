@@ -118,26 +118,26 @@ function set_initial_information_sampling_prompt(max_width = 800) {
 			'</div>'
 }
 
-function update_information_sampling_stimulus(previous_stimulus, previous_key_press, 
+function update_information_sampling_stimulus(previous_stimulus, previous_info_sampled, 
 												left_lottery_winnings = undefined,
 												right_lottery_winnings = undefined,
 												friends_dealer_id = undefined, work_dealer_id = undefined) {	
 	var parser = new DOMParser();
 	var newHTML = parser.parseFromString(previous_stimulus, 'text/html')
 
-	if (previous_key_press == 49 || previous_key_press == 50) {
+	if (previous_info_sampled == 'lottery_1' || previous_info_sampled == 'lottery_2') {
 		
 		// one of the lotteries is chosen - update the line and the text accordingly
 		// most likely not the best solution but there you go
 		current_winnings_text = newHTML.getElementById('winnings-text').innerHTML
 
 		if (current_winnings_text.length < 1) {
-			new_winnings_text = previous_key_press == 49 ? left_lottery_winnings+' + ?' : '? + '+right_lottery_winnings
+			new_winnings_text = previous_info_sampled == 'lottery_1' ? left_lottery_winnings+' + ?' : '? + '+right_lottery_winnings
 			winnings_text_margin_left = 170
-		} else if (previous_key_press == 49 && current_winnings_text != left_lottery_winnings+' + ?') {
+		} else if (previous_info_sampled == 'lottery_1' && current_winnings_text != left_lottery_winnings+' + ?') {
 			new_winnings_text = current_winnings_text.replace('?', left_lottery_winnings)
 			winnings_text_margin_left = 155
-		} else if (previous_key_press == 50 && current_winnings_text != '? + '+right_lottery_winnings) {
+		} else if (previous_info_sampled == 'lottery_2' && current_winnings_text != '? + '+right_lottery_winnings) {
 			new_winnings_text = current_winnings_text.replace('?', right_lottery_winnings)
 			winnings_text_margin_left = 155
 		}
@@ -145,16 +145,16 @@ function update_information_sampling_stimulus(previous_stimulus, previous_key_pr
 		newHTML.getElementById('winnings-text').innerHTML = new_winnings_text
 		newHTML.getElementById('winnings-text').style.cssText = 'display: block; margin-left: '+winnings_text_margin_left+'px'
 		// indices for the newHTML call are 0 for the left line and 1 for the right line
-		if (previous_key_press == 49) {
+		if (previous_info_sampled == 'lottery_1') {
 			newHTML.getElementsByClassName('winnings-line')[0].style.cssText = 'display: block; padding-bottom: '+(left_lottery_winnings-1)+'px'
 		} else {
 			newHTML.getElementsByClassName('winnings-line')[1].style.cssText = 'display: block; padding-bottom: '+(right_lottery_winnings-1)+'px'
 		}	
-	} else if (previous_key_press == 51) {
+	} else if (previous_info_sampled == 'friends') {
 		let friends_name = PT_TRIALS_DEALERS.includes(friends_dealer_id) ? PT_TRIALS_DEALER_ID_NAME_DICT[friends_dealer_id] : DEALER_ID_NAME_DICT[friends_dealer_id]
 		newHTML.getElementById('friends-name').innerHTML = friends_name
 		newHTML.getElementById('friends-img').src = 'images/'+friends_dealer_id+'.png'
-	} else if (previous_key_press == 52) {
+	} else if (previous_info_sampled == 'work') {
 		let work_name = PT_TRIALS_DEALERS.includes(work_dealer_id) ? PT_TRIALS_DEALER_ID_NAME_DICT[work_dealer_id] : DEALER_ID_NAME_DICT[work_dealer_id]
 		newHTML.getElementById('work-name').innerHTML = work_name
 		newHTML.getElementById('work-img').src = 'images/'+work_dealer_id+'.png'
