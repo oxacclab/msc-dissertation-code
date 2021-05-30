@@ -17,26 +17,45 @@ function save_all_trial_data(data) {
 	data.total_lottery_winnings = jsPsych.timelineVariable('total_lottery_winnings', true)
 	data.friends_dealer_id = jsPsych.timelineVariable('friends_dealer_id', true)
 	data.work_dealer_id = jsPsych.timelineVariable('work_dealer_id', true)
-	data.modular_connections_source = jsPsych.timelineVariable('modular_connections_source', true)
 }
 
 function translate_button_press(button_press) {
-	switch(button_press) {
-		case '0':
-			info_sampled = 'lottery_1';
-			break;
-		case '1':
-			info_sampled = 'lottery_2';
-			break;
-		case '2':
-			info_sampled = 'friends';
-			break
-		case '3':
-			info_sampled = 'work';
-			break;
-		default:
-			info_sampled = 'missing';
-			break;
+	if (REWARDINFO_POSITION == 'left') {
+		switch(button_press) {
+			case '0':
+				info_sampled = 'lottery_1';
+				break;
+			case '1':
+				info_sampled = 'lottery_2';
+				break;
+			case '2':
+				info_sampled = 'friends';
+				break
+			case '3':
+				info_sampled = 'work';
+				break;
+			default:
+				info_sampled = 'missing';
+				break;
+		}
+	} else if (REWARDINFO_POSITION == 'right') {
+		switch(button_press) {
+			case '0':
+				info_sampled = 'friends';
+				break;
+			case '1':
+				info_sampled = 'work';
+				break;
+			case '2':
+				info_sampled = 'lottery_1';
+				break
+			case '3':
+				info_sampled = 'lottery_2';
+				break;
+			default:
+				info_sampled = 'missing';
+				break;
+		}
 	}
 	return info_sampled
 }
@@ -64,10 +83,38 @@ function disable_selected_btns(trial_name) {
 		}
 
 		selected_btns = jsPsych.data.get().last(last_trial_index_for_button_disabling).values().map(x => x['button_pressed'])
+		
 	}
-
 	for (var i=0; i<selected_btns.length; i++){
 		document.getElementById(translate_button_press(selected_btns[i])).setAttribute('disabled', 'disabled')
+	}
+}
+
+function get_trial_choices() {
+	let trial_choices
+	if (REWARDINFO_POSITION == 'left') {
+		trial_choices = ['Tell me potential<br>winnings from lottery 1', 'Tell me potential<br>winnings from lottery 2', 
+							'Who are you<br>friends with?', 'Who works the<br>same time as you?']
+	} else if (REWARDINFO_POSITION == 'right') {
+		trial_choices = ['Who are you<br>friends with?', 'Who works the<br>same time as you?', 
+							'Tell me potential<br>winnings from lottery 1', 'Tell me potential<br>winnings from lottery 2']
+	} else {
+		alert("Problem occurred.")
+	}
+	return trial_choices
+}
+
+function get_trial_button_html() {
+	let lottery_1_html = '<button id="lottery_1" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>'
+	let lottery_2_html = '<button id="lottery_2" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>'
+	let friends_html = '<button id="friends" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>'
+	let work_html = '<button id="work" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>'
+	if (REWARDINFO_POSITION == 'left') {
+		return [lottery_1_html, lottery_2_html, friends_html, work_html]
+	} else if (REWARDINFO_POSITION == 'right') {
+		return [friends_html, work_html, lottery_1_html, lottery_2_html]
+	} else {
+		alert("Problem occurred.")
 	}
 }
 
@@ -77,20 +124,18 @@ function get_trial_object(trial_name) {
 		stimulus: function() {
 			if (trial_name == 'information_sampling_1') {
 				return set_initial_information_sampling_stimulus(jsPsych.timelineVariable('high_variance_lottery_left_or_right', true), 
-															jsPsych.timelineVariable('high_variance_lottery_EV', true), 
-															jsPsych.timelineVariable('low_variance_lottery_EV', true), 
-															jsPsych.timelineVariable('dealer_id', true))
+																jsPsych.timelineVariable('high_variance_lottery_EV', true), 
+																jsPsych.timelineVariable('low_variance_lottery_EV', true), 
+																jsPsych.timelineVariable('dealer_id', true))
 			} else {
 				return jsPsych.data.get().last(1).values()[0]['stimulus']
 			}
 		},
-		choices: ['Tell me potential<br>winnings from lottery 1', 'Tell me potential<br>winnings from lottery 2', 
-					'Who are you<br>friends with?', 'Who works the<br>same time as you?'],
+		choices: function() {
+			return get_trial_choices()
+		},
 		button_html: function() {
-			return ['<button id="lottery_1" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>',
-			'<button id="lottery_2" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>',
-			'<button id="friends" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>',
-			'<button id="work" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>']
+			return get_trial_button_html()
 		},
 		margin_vertical: '',
 		margin_horizontal: '',
@@ -172,15 +217,14 @@ function get_delay_trial_object(information_sampling_index_string) {
 														jsPsych.timelineVariable('left_lottery_winnings', true),
 														jsPsych.timelineVariable('right_lottery_winnings', true),
 														jsPsych.timelineVariable('friends_dealer_id', true), 
-														jsPsych.timelineVariable('work_dealer_id', true))
+														jsPsych.timelineVariable('work_dealer_id', true),
+														jsPsych.timelineVariable('REWARDINFO_POSITION'), true)
 		},
-		choices: ['Tell me potential<br>winnings from lottery 1', 'Tell me potential<br>winnings from lottery 2', 
-					'Who are you<br>friends with?', 'Who works the<br>same time as you?'],
+		choices: function() {
+			return get_trial_choices()
+		},
 		button_html: function() {
-			return ['<button id="lottery_1" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>',
-			'<button id="lottery_2" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>',
-			'<button id="friends" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>',
-			'<button id="work" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>']
+			return get_trial_button_html()
 		},
 		margin_vertical: '',
 		margin_horizontal: '',
@@ -309,13 +353,11 @@ var information_sampling_final_noChoice = {
 	stimulus: function() {
 		return jsPsych.data.get().last(1).values()[0]['stimulus']
 	},
-	choices: ['Tell me potential<br>winnings from lottery 1', 'Tell me potential<br>winnings from lottery 2', 
-				'Who are you<br>friends with?', 'Who works the<br>same time as you?'],
+	choices: function() {
+		return get_trial_choices()
+	},
 	button_html: function() {
-		return ['<button id="lottery_1" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>',
-		'<button id="lottery_2" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>',
-		'<button id="friends" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>',
-		'<button id="work" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>']
+		return get_trial_button_html()
 	},
 	margin_vertical: '',
 	margin_horizontal: '',
@@ -378,13 +420,11 @@ var information_sampling_final = {
 													jsPsych.timelineVariable('friends_dealer_id', true), 
 													jsPsych.timelineVariable('work_dealer_id', true))
 	},
-	choices: ['Tell me potential<br>winnings from lottery 1', 'Tell me potential<br>winnings from lottery 2', 
-				'Who are you<br>friends with?', 'Who works the<br>same time as you?'],
+	choices: function() {
+		return get_trial_choices()
+	},
 	button_html: function() {
-		return ['<button id="lottery_1" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>',
-		'<button id="lottery_2" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>',
-		'<button id="friends" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>',
-		'<button id="work" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>']
+		return get_trial_button_html()
 	},
 	margin_vertical: '',
 	margin_horizontal: '',

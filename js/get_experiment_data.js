@@ -55,9 +55,6 @@ function get_experiment_data_object() {
 	}
 
 	// ------------------------------------------------------------------------general participant-level randomisation
-	// counterbalancing ACROSS PPs, not trials [just randomly allocating to either friends or work]
-	let modular_connections_source = 'friends' //getRandom(['friends', 'work'], 1)[0]
-
 	// controlling card pairs
 	cards_no_middle_card = CARDS.filter(e => e !== 'seven')
 	cards_trials_masterlist = []
@@ -138,7 +135,7 @@ function get_experiment_data_object() {
 	// now, running function to get info for current pp
 	recursion_res = get_curr_pp_dealers_and_edges()
 	dealers_id_masterlist = recursion_res[0]
-	if (modular_connections_source == 'friends') {
+	if (MODULAR_CONNECTIONS_SOURCE == 'friends') {
 		friends_edges_masterlist = recursion_res[1]
 		work_edges_masterlist = recursion_res[2]
 	} else {
@@ -202,8 +199,7 @@ function get_experiment_data_object() {
 			'right_lottery_winnings': right_lottery_winnings,
 			'total_lottery_winnings': total_lottery_winnings,
 			'friends_dealer_id': friends_dealer_id, 
-			'work_dealer_id': work_dealer_id,
-			'modular_connections_source': modular_connections_source 
+			'work_dealer_id': work_dealer_id
 		}
 		// console.log(experiment_data_object)
 	}

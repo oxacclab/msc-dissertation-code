@@ -128,6 +128,8 @@ var trial_information_sampling_final_conditional_timeline = {
 // calculate BLOCKS here otherwise get_trials_timeline() does not work
 // note that BLOCKS is initially undefined as it could also be defined within the exp_paramters trial above in case paramters are set on the fly
 BLOCKS = TRIALS_NUM/TRIALS_PER_BLOCK 
+jsPsych.data.addProperties({BLOCKS: BLOCKS});
+
 experiment_data_object = get_experiment_data_object()
 single_trial_order = get_single_trial_order()
 trials_timeline = get_trials_timeline(single_trial_order, experiment_data_object)
