@@ -128,6 +128,8 @@ var trial_information_sampling_final_conditional_timeline = {
 // calculate BLOCKS here otherwise get_trials_timeline() does not work
 // note that BLOCKS is initially undefined as it could also be defined within the exp_paramters trial above in case paramters are set on the fly
 BLOCKS = TRIALS_NUM/TRIALS_PER_BLOCK 
+jsPsych.data.addProperties({BLOCKS: BLOCKS});
+
 experiment_data_object = get_experiment_data_object()
 single_trial_order = get_single_trial_order()
 trials_timeline = get_trials_timeline(single_trial_order, experiment_data_object)
@@ -141,10 +143,10 @@ var pt_trials_NOfeedback_timeline = {
 	timeline_variables: Object.values(experiment_data_object['pt_trials'])
 }
 
-timeline.push(participant_intro_timeline)
-timeline.push(pt_trials_feedback_timeline)
-timeline.push(pt_trials_NOfeedback_timeline)
-timeline.push({timeline: [fixation_cross, pt_block_feedback, test_intro]})
+// timeline.push(participant_intro_timeline)
+// timeline.push(pt_trials_feedback_timeline)
+// timeline.push(pt_trials_NOfeedback_timeline)
+// timeline.push({timeline: [fixation_cross, pt_block_feedback, test_intro]})
 timeline.push(trials_timeline)
 timeline.push(fixation_cross)
 timeline.push(participant_debrief_timeline)

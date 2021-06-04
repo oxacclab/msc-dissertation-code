@@ -9,3 +9,4 @@
     echo "<script type='text/javascript'>alert('$%_POST['filedata']');</script>";
     file_put_contents($filename, $data);
 ?>
+	

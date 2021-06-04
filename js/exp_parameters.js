@@ -2,8 +2,8 @@ var INFORMATION_MULTIPLE_CHOICE = true // this can be set to false but some feat
 
 var PT_TRIALS_NUM = 4
 var FEEDBACK_TRIALS = 2
-var TRIALS_NUM = 126
-var TRIALS_PER_BLOCK = 126/3
+var TRIALS_NUM = 108
+var TRIALS_PER_BLOCK = 108/3
 var BLOCKS
 
 var INFORMATION_SAMPLING_DURATION = 10000
@@ -22,12 +22,39 @@ let PT_TRIALS_DEALERS = Object.keys(PT_TRIALS_DEALER_ID_NAME_DICT)
 let CARDS = ['ace', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'jack', 'queen', 'king']
 let DELTA_EV_CATEGORIES = [-90, -70, -20, -5, 0, 5, 20, 70, 90]
 
-let MODULAR_NET_EDGES = ['d01--d02', 'd01--d03', 'd01--d04', 'd02--d03', 'd02--d04', 'd03--d12', 
-							'd04--d05', 'd05--d06', 'd05--d07', 'd06--d07', 'd06--d08', 'd07--d08', 
-							'd08--d09', 'd09--d10', 'd09--d11', 'd10--d11', 'd10--d12', 'd11--d12']
+let MODULAR_NET_EDGES = ['d01--d02', 'd01--d03', 'd01--d04', 'd02--d03', 'd02--d04', 'd03--d04', 
+							'd05--d06', 'd05--d07', 'd05--d08', 'd06--d07', 'd06--d08','d07--d08', 
+							'd09--d10', 'd09--d11', 'd09--d12', 'd10--d11', 'd10--d12', 'd11--d12']
+let MODULAR_NET_DEALER_GROUPS = [['d01', 'd02', 'd03', 'd04'], ['d05', 'd06', 'd07', 'd08'], ['d09', 'd10', 'd11', 'd12']]
 let RANDOM_NET_EDGES = 	['d01--d05', 'd01--d08', 'd01--d12', 'd02--d06', 'd02--d07', 'd02--d11', 
 							'd03--d05', 'd03--d10', 'd03--d11', 'd04--d08', 'd04--d09', 'd04--d11',
 							'd05--d09', 'd06--d09', 'd06--d12', 'd07--d10', 'd07--d12', 'd08--d10']
+
+let MODULAR_CONNECTIONS_SOURCE = getRandom(['friends', 'work'], 1)[0]
+let REWARDINFO_POSITION = 'right' // getRandom(['left', 'right'], 1)[0]
+
+jsPsych.data.addProperties({
+	INFORMATION_MULTIPLE_CHOICE: INFORMATION_MULTIPLE_CHOICE,
+	PT_TRIALS_NUM: PT_TRIALS_NUM,
+	FEEDBACK_TRIALS: FEEDBACK_TRIALS,
+	TRIALS_NUM: TRIALS_NUM,
+	TRIALS_PER_BLOCK: TRIALS_PER_BLOCK,
+	INFORMATION_SAMPLING_DURATION: INFORMATION_SAMPLING_DURATION,
+	CARD_PRESENTATION_TRIAL_DURATION: CARD_PRESENTATION_TRIAL_DURATION,
+	INFORMATION_SAMPLING_INTERCHOICE_DELAY: INFORMATION_SAMPLING_INTERCHOICE_DELAY,
+	HIGH_VARIANCE_VALUE: HIGH_VARIANCE_VALUE,
+	LOW_VARIANCE_VALUE: LOW_VARIANCE_VALUE,
+	DEALER_ID_NAME_DICT: JSON.stringify(DEALER_ID_NAME_DICT),
+	PT_TRIALS_DEALER_ID_NAME_DICT: JSON.stringify(PT_TRIALS_DEALER_ID_NAME_DICT),
+	PT_TRIALS_DEALERS: PT_TRIALS_DEALERS,
+	CARDS: CARDS,
+	DELTA_EV_CATEGORIES: DELTA_EV_CATEGORIES,
+	MODULAR_NET_EDGES: MODULAR_NET_EDGES,
+	MODULAR_NET_DEALER_GROUPS: MODULAR_NET_DEALER_GROUPS,
+	RANDOM_NET_EDGES: RANDOM_NET_EDGES,
+	MODULAR_CONNECTIONS_SOURCE: MODULAR_CONNECTIONS_SOURCE,
+	REWARDINFO_POSITION: REWARDINFO_POSITION,
+});
 
 function get_dealer_id_name_dict_randomised() {
 	let dealer_id_name_dict = {}

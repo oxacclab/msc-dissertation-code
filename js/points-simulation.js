@@ -54,7 +54,7 @@ const expandArray = (arr, times) => arr.map(x => Array(times).fill(x)).flat()
 let DELTA_EV_CATEGORIES = [-90, -70, -20, -5, 0, 5, 20, 70, 90]
 var HIGH_VARIANCE_VALUE = 160
 var LOW_VARIANCE_VALUE = 80
-let TRIALS_NUM = 126
+let TRIALS_NUM = 108
 
 // --------------------------------------------Setting up PPs
 // array with 50% trues and 50% falses
@@ -77,7 +77,7 @@ for (let s=0; s<15; s++) {
 }
 
 // ----------------------------------------------SIMULATIONS
-let SIMULATIONS = 40
+let SIMULATIONS = 400
 
 let random_pp_per_pp_winnings = []
 let below_avg_pp_per_pp_winnings = []

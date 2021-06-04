@@ -8,6 +8,7 @@
 		<script src="js/jspsych.js"></script>
 		<script src="js/jspsych-external-html.js"></script>
 		<script src="js/jspsych-html-keyboard-response.js"></script>
+		<script src="js/jspsych-html-button-response.js"></script>
 		<script src="js/jspsych-instructions.js"></script>
 		<script src="js/jspsych-fullscreen.js"></script>
 		<script src="js/jspsych-survey-html-form.js"></script>
@@ -79,6 +80,7 @@
 				on_finish: function() {
 					// document.getElementById('loading').remove()
 					// jsPsych.data.displayData('json');
+					a = 5
 					$.when(saveData(subject_id.toString()+'.csv', jsPsych.data.get().csv()),
 								saveData(subject_id.toString()+'_interaction_data.csv', jsPsych.data.getInteractionData().csv()))
 						.done(function(s1, s2) {
@@ -88,12 +90,13 @@
 						// window.open("https://app.prolific.co/submissions/complete?cc=78A9CD78", "_blank")
 						window.location = "https://app.prolific.co/submissions/complete?cc=78A9CD78"
 					});
+					a = 6
 					// saveData(subject_id.toString()+'_interaction_data.csv', jsPsych.data.getInteractionData().csv())
 					// if (subject_id == null) {
 					// 	subject_id = Math.floor(Math.random()*10000)
 					// }
 					// saveData(subject_id.toString()+'.csv', jsPsych.data.get().csv())
-					// jsPsych.data.get().localSave('csv', subject_id+'_testdata.csv')
+					jsPsych.data.get().localSave('csv', subject_id+'_testdata.csv')
 					
 				},
 				exclusions: {
