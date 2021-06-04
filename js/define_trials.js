@@ -348,6 +348,9 @@ var information_sampling_3_delay = get_delay_trial_object(information_sampling_i
 
 var information_sampling_4 = get_trial_object('information_sampling_4')
 
+// this handles the case when someone clicks a button within the last second
+// then the trial 'changes' to this one but acutally nothing changes on the screen
+// the click is also not saved in the data object - see on_finish
 var information_sampling_final_noChoice = {
 	type: 'html-button-response',
 	stimulus: function() {
@@ -410,6 +413,7 @@ var information_sampling_final_noChoice = {
 	}
 }
 
+// this is for when all 4 buttons have been revealed - then the screen persists until the stage expires
 var information_sampling_final = {
 	type: 'html-button-response',
 	stimulus: function() {

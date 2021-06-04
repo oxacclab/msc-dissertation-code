@@ -85,9 +85,9 @@ function get_experiment_data_object() {
 	modular_edges_masterlist = expandArray(MODULAR_NET_EDGES, 2)
 	random_edges_masterlist = expandArray(RANDOM_NET_EDGES, 2)
 	for (let s=0; s<5; s++) {
-			modular_edges_masterlist = shuffle(modular_edges_masterlist)
-			random_edges_masterlist = shuffle(random_edges_masterlist)
-		}
+		modular_edges_masterlist = shuffle(modular_edges_masterlist)
+		random_edges_masterlist = shuffle(random_edges_masterlist)
+	}
 
 	function get_curr_trial_edges_recursion() {
 		dealer_id = getRandom(DEALERS, 1)[0]
