@@ -184,12 +184,12 @@ var debrief = {
 	pages: function() {
 		let acquiredPoints = jsPsych.data.get().select('curr_trial_winnings').sum()
 		let currentBonus = 0
-		if (acquiredPoints >= 50000) {
+		if (acquiredPoints >= 45000) {
 			currentBonus = 2
-		} else if (acquiredPoints > 35000) {
+		} else if (acquiredPoints > 30000) {
 			// each 300 points above 35000 grant £0.04
 			// rounding algorithm credits with number.epsilon https://stackoverflow.com/a/11832950
-			currentBonus = Math.round((((acquiredPoints - 35000) / 300) * 0.04 + Number.EPSILON) * 100) / 100
+			currentBonus = Math.round((((acquiredPoints - 30000) / 300) * 0.04 + Number.EPSILON) * 100) / 100
 		}
 		return ['<p>During the test trials you made the correct decision '+jsPsych.data.get().filter({'pp_card_correct': true}).count()+' times.</p>'+
 				'<p>This brought you a total of '+acquiredPoints+' points from both lotteries.</p>'+

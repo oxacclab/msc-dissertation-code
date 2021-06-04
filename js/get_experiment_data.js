@@ -36,22 +36,20 @@ function get_dealers_friends_work_id_masterlists() {
 	}
 
 function get_cards_trials_masterlist() {
-	let cards_trials_masterlist = []
+	let cards_trials_cardSelf_masterlist = []
+	let cards_trials_cardHidden_masterlist = []
 
 	let cards_no_middle_card = CARDS.filter(e => e !== 'seven')
-	for (let cardSelf=0; cardSelf<cards_no_middle_card.length; cardSelf++) {
-		for (let cardHidden=0; cardHidden<cards_no_middle_card.length; cardHidden++) {
-			if (cards_no_middle_card[cardSelf] !== cards_no_middle_card[cardHidden]) {
-				cards_trials_masterlist.push([cards_no_middle_card[cardSelf], cards_no_middle_card[cardHidden]])
-			}
-		}
-	}
-	// shuffling a few times just for a nicely randomised set
-	for (let s=0; s<=5; s++) {
-		cards_trials_masterlist = shuffle(cards_trials_masterlist)
+
+	// 6 possible probabilities of winning depending on visible card
+	each_card_occurance = Math.ceil(TRIALS_NUM / 6)
+	cards_trials_cardSelf_masterlist = shuffle(expandArray(cards_no_middle_card, each_card_occurance))
+	for (cardSelf of cards_trials_cardSelf_masterlist) {
+		cardHidden = getRandom(cards_no_middle_card.filter(e  => e !== cardSelf), 1)[0]
+		cards_trials_cardHidden_masterlist.push(cardHidden)
 	}
 
-	return cards_trials_masterlist
+	return [cards_trials_cardSelf_masterlist, cards_trials_cardHidden_masterlist]
 }
 
 function get_experiment_data_object() {
@@ -112,8 +110,10 @@ function get_experiment_data_object() {
 
 	// ------------------------------------------------------------------------general participant-level randomisation
 	// controlling card pairs
-	cards_trials_masterlist = get_cards_trials_masterlist()
-	if (TRIALS_NUM > cards_trials_masterlist.length) {
+	const cards_trials_masterlist = get_cards_trials_masterlist()
+	const cards_trials_cardSelf_masterlist = cards_trials_masterlist[0]
+	const cards_trials_cardHidden_masterlist = cards_trials_masterlist[1]
+	if (TRIALS_NUM > cards_trials_cardSelf_masterlist.length) {
 		// modify the above cards_trials_masterlist to contain more card pairs in order to have more trials
 		alert('More than 132 trials selected and not enough card pairs.')
 	}
@@ -133,8 +133,8 @@ function get_experiment_data_object() {
 
 	for (let trial_ind = 0; trial_ind < TRIALS_NUM; trial_ind++) {	
 		// getting cards
-		let card_self = cards_trials_masterlist[trial_ind][0]
-		let card_hidden = cards_trials_masterlist[trial_ind][1]
+		let card_self = cards_trials_cardSelf_masterlist[trial_ind]
+		let card_hidden = cards_trials_cardHidden_masterlist[trial_ind]
 		let card_correct = CARDS.indexOf(card_hidden) > CARDS.indexOf(card_self) ? 'higher' : 'lower'
 
 		// lottery-related calculations
