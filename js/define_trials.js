@@ -15,8 +15,8 @@ function save_all_trial_data(data) {
 	data.left_lottery_winnings = jsPsych.timelineVariable('left_lottery_winnings', true)
 	data.right_lottery_winnings = jsPsych.timelineVariable('right_lottery_winnings', true)
 	data.total_lottery_winnings = jsPsych.timelineVariable('total_lottery_winnings', true)
-	data.friends_dealer_id = jsPsych.timelineVariable('friends_dealer_id', true)
-	data.work_dealer_id = jsPsych.timelineVariable('work_dealer_id', true)
+	data.friends_id = jsPsych.timelineVariable('friends_id', true)
+	data.work_id = jsPsych.timelineVariable('work_id', true)
 }
 
 function translate_button_press(button_press) {
@@ -216,8 +216,8 @@ function get_delay_trial_object(information_sampling_index_string) {
 														previous_info_sampled = translate_button_press(jsPsych.data.get().last(1).values()[0]['button_pressed']),
 														jsPsych.timelineVariable('left_lottery_winnings', true),
 														jsPsych.timelineVariable('right_lottery_winnings', true),
-														jsPsych.timelineVariable('friends_dealer_id', true), 
-														jsPsych.timelineVariable('work_dealer_id', true),
+														jsPsych.timelineVariable('friends_id', true), 
+														jsPsych.timelineVariable('work_id', true),
 														jsPsych.timelineVariable('REWARDINFO_POSITION'), true)
 		},
 		choices: function() {
@@ -421,8 +421,8 @@ var information_sampling_final = {
 													previous_info_sampled = translate_button_press(jsPsych.data.get().last(1).values()[0]['button_pressed']),
 													jsPsych.timelineVariable('left_lottery_winnings', true),
 													jsPsych.timelineVariable('right_lottery_winnings', true),
-													jsPsych.timelineVariable('friends_dealer_id', true), 
-													jsPsych.timelineVariable('work_dealer_id', true))
+													jsPsych.timelineVariable('friends_id', true), 
+													jsPsych.timelineVariable('work_id', true))
 	},
 	choices: function() {
 		return get_trial_choices()

@@ -126,7 +126,7 @@ function set_initial_information_sampling_stimulus(high_variance_lottery_left_or
 function update_information_sampling_stimulus(previous_stimulus, previous_info_sampled, 
 												left_lottery_winnings = undefined,
 												right_lottery_winnings = undefined,
-												friends_dealer_id = undefined, work_dealer_id = undefined) {	
+												friends_id = undefined, work_id = undefined) {	
 	var parser = new DOMParser();
 	var newHTML = parser.parseFromString(previous_stimulus, 'text/html')
 
@@ -161,13 +161,13 @@ function update_information_sampling_stimulus(previous_stimulus, previous_info_s
 			newHTML.getElementsByClassName('winnings-line')[1].style.cssText = 'display: block; padding-bottom: '+(right_lottery_winnings-1)+'px'
 		}	
 	} else if (previous_info_sampled == 'friends') {
-		let friends_name = PT_TRIALS_DEALERS.includes(friends_dealer_id) ? PT_TRIALS_DEALER_ID_NAME_DICT[friends_dealer_id] : DEALER_ID_NAME_DICT[friends_dealer_id]
+		let friends_name = PT_TRIALS_DEALERS.includes(friends_id) ? PT_TRIALS_DEALER_ID_NAME_DICT[friends_id] : DEALER_ID_NAME_DICT[friends_id]
 		newHTML.getElementById('friends-name').innerHTML = friends_name
-		newHTML.getElementById('friends-img').src = 'images/'+friends_dealer_id+'.png'
+		newHTML.getElementById('friends-img').src = 'images/'+friends_id+'.png'
 	} else if (previous_info_sampled == 'work') {
-		let work_name = PT_TRIALS_DEALERS.includes(work_dealer_id) ? PT_TRIALS_DEALER_ID_NAME_DICT[work_dealer_id] : DEALER_ID_NAME_DICT[work_dealer_id]
+		let work_name = PT_TRIALS_DEALERS.includes(work_id) ? PT_TRIALS_DEALER_ID_NAME_DICT[work_id] : DEALER_ID_NAME_DICT[work_id]
 		newHTML.getElementById('work-name').innerHTML = work_name
-		newHTML.getElementById('work-img').src = 'images/'+work_dealer_id+'.png'
+		newHTML.getElementById('work-img').src = 'images/'+work_id+'.png'
 	}
 
 	return newHTML.getElementsByTagName('body')[0].innerHTML

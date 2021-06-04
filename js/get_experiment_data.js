@@ -1,3 +1,59 @@
+function get_dealers_friends_work_id_masterlists() {
+		let dealers_id_masterlist = []
+		let friends_id_masterlist = []
+		let work_id_masterlist = []
+
+		// each modular edge is bi-directional, hence multiply by 2
+		// for 18 edges, one iteration of the outmost loop produces 36 entries
+		for (block_level_iteration_ind=0; block_level_iteration_ind<TRIALS_NUM/(MODULAR_NET_EDGES.length*2); block_level_iteration_ind++) {
+			// randomize order of each group for each iteration of all edges
+			modular_net_dealer_groups_curr = shuffle(MODULAR_NET_DEALER_GROUPS)
+
+			for (modular_net_dealer_group of modular_net_dealer_groups_curr) {
+				// randomize dealers within each group
+				modular_net_dealer_group = shuffle(modular_net_dealer_group)
+				for (curr_dealer_id of modular_net_dealer_group) {
+					if (MODULAR_CONNECTIONS_SOURCE == 'friends') {
+						dealer_friends_edges = shuffle(MODULAR_NET_EDGES.filter(edge => edge.includes(curr_dealer_id)))
+						dealer_work_edges = shuffle(RANDOM_NET_EDGES.filter(edge => edge.includes(curr_dealer_id)))
+					} else if (MODULAR_CONNECTIONS_SOURCE == 'work') {
+						dealer_friends_edges = shuffle(RANDOM_NET_EDGES.filter(edge => edge.includes(curr_dealer_id)))
+						dealer_work_edges = shuffle(MODULAR_NET_EDGES.filter(edge => edge.includes(curr_dealer_id)))
+					}
+					for (i=0; i<dealer_friends_edges.length; i++) {
+						friends_id = dealer_friends_edges[i].replace(curr_dealer_id, '').replace('--', '')
+						work_id = dealer_work_edges[i].replace(curr_dealer_id, '').replace('--', '')
+
+						dealers_id_masterlist.push(curr_dealer_id)
+						friends_id_masterlist.push(friends_id)
+						work_id_masterlist.push(work_id)
+					}
+				}
+			}
+		}
+
+		return [dealers_id_masterlist, friends_id_masterlist, work_id_masterlist]
+	}
+
+function get_cards_trials_masterlist() {
+	let cards_trials_masterlist = []
+
+	let cards_no_middle_card = CARDS.filter(e => e !== 'seven')
+	for (let cardSelf=0; cardSelf<cards_no_middle_card.length; cardSelf++) {
+		for (let cardHidden=0; cardHidden<cards_no_middle_card.length; cardHidden++) {
+			if (cards_no_middle_card[cardSelf] !== cards_no_middle_card[cardHidden]) {
+				cards_trials_masterlist.push([cards_no_middle_card[cardSelf], cards_no_middle_card[cardHidden]])
+			}
+		}
+	}
+	// shuffling a few times just for a nicely randomised set
+	for (let s=0; s<=5; s++) {
+		cards_trials_masterlist = shuffle(cards_trials_masterlist)
+	}
+
+	return cards_trials_masterlist
+}
+
 function get_experiment_data_object() {
 	// function instead of hard-coded in order to allow the opportunity to dynamically set parameters before start of test trials
 	const experiment_data_object = {'pt_trials_feedback': {}, 'pt_trials': {}, 'test_trials': {}}
@@ -31,8 +87,8 @@ function get_experiment_data_object() {
 
 		// dealer-ids generation
 		const dealer_id = getRandom(PT_TRIALS_DEALERS, 1)[0]
-		const friends_dealer_id = getRandom(PT_TRIALS_DEALERS.filter(e => e !== dealer_id), 1)[0]
-		const work_dealer_id = getRandom(PT_TRIALS_DEALERS.filter(e => e !== dealer_id & e!==friends_dealer_id), 1)[0]
+		const friends_id = getRandom(PT_TRIALS_DEALERS.filter(e => e !== dealer_id), 1)[0]
+		const work_id = getRandom(PT_TRIALS_DEALERS.filter(e => e !== dealer_id & e!==friends_id), 1)[0]
 
 		const pt_trials_block = pt_trial_ind < FEEDBACK_TRIALS ? 'pt_trials_feedback' : 'pt_trials'
 		const pt_trials_trial = 'trial_0' + pt_trial_ind
@@ -49,25 +105,14 @@ function get_experiment_data_object() {
 			'left_lottery_winnings': left_lottery_winnings,
 			'right_lottery_winnings': right_lottery_winnings,
 			'total_lottery_winnings': total_lottery_winnings,
-			'friends_dealer_id': friends_dealer_id, 
-			'work_dealer_id': work_dealer_id
+			'friends_id': friends_id, 
+			'work_id': work_id
 		}
 	}
 
 	// ------------------------------------------------------------------------general participant-level randomisation
 	// controlling card pairs
-	cards_no_middle_card = CARDS.filter(e => e !== 'seven')
-	cards_trials_masterlist = []
-	for (let cardSelf=0; cardSelf<cards_no_middle_card.length; cardSelf++) {
-		for (let cardHidden=0; cardHidden<cards_no_middle_card.length; cardHidden++) {
-			if (cards_no_middle_card[cardSelf] !== cards_no_middle_card[cardHidden]) {
-				cards_trials_masterlist.push([cards_no_middle_card[cardSelf], cards_no_middle_card[cardHidden]])
-			}
-		}
-	}
-	for (let s=0; s<=5; s++) {
-		cards_trials_masterlist = shuffle(cards_trials_masterlist)
-	}
+	cards_trials_masterlist = get_cards_trials_masterlist()
 	if (TRIALS_NUM > cards_trials_masterlist.length) {
 		// modify the above cards_trials_masterlist to contain more card pairs in order to have more trials
 		alert('More than 132 trials selected and not enough card pairs.')
@@ -80,69 +125,11 @@ function get_experiment_data_object() {
 	}
 	
 	// controlling friends and colleagues connections
-
-	// first, setting up some functions and variables --- very, very ugly and nasty recursions but they work
-	modular_edges_masterlist = expandArray(MODULAR_NET_EDGES, 2)
-	random_edges_masterlist = expandArray(RANDOM_NET_EDGES, 2)
-	for (let s=0; s<5; s++) {
-		modular_edges_masterlist = shuffle(modular_edges_masterlist)
-		random_edges_masterlist = shuffle(random_edges_masterlist)
-	}
-
-	function get_curr_trial_edges_recursion() {
-		dealer_id = getRandom(DEALERS, 1)[0]
-		// console.log('selected dealer:', dealer_id)
-		try {
-			modular_edge = getRandom(modular_edges_masterlist.filter(edge => edge.includes(dealer_id)), 1)[0]
-			random_edge = getRandom(random_edges_masterlist.filter(edge => edge.includes(dealer_id)), 1)[0]
-			// console.log(`isnde get_curr_trial_edges_recursion, modular_edge = ${modular_edge}, and random_edge = ${random_edge}`)
-			
-		}
-		catch(err) {
-			// console.log(err)
-			get_curr_trial_edges_recursion()
-		}
-		return [dealer_id, modular_edge, random_edge]
-	}
-
-	function get_curr_pp_dealers_and_edges() {
-		try {
-			curr_pp_dealers_order = []
-			curr_pp_modular_edges_order = []
-			curr_pp_random_edges_order = []
-			modular_edges_masterlist_copy = [...modular_edges_masterlist]
-			random_edges_masterlist_copy = [...random_edges_masterlist]
-			for (trial_ind=0; trial_ind<TRIALS_NUM; trial_ind++) {
-				recursion_res = get_curr_trial_edges_recursion()
-				dealer_id = recursion_res[0]
-				modular_edge = recursion_res[1]
-				random_edge = recursion_res[2]
-		
-				modular_edges_masterlist_copy.splice(modular_edges_masterlist_copy.indexOf(modular_edge), 1)
-				random_edges_masterlist_copy.splice(random_edges_masterlist_copy.indexOf(random_edge), 1)
-
-				curr_pp_dealers_order.push(dealer_id)
-				curr_pp_modular_edges_order.push(modular_edge)
-				curr_pp_random_edges_order.push(random_edge)
-			}
-		}
-		catch(err) {
-			get_curr_pp_dealers_and_edges()
-		}
-		return [curr_pp_dealers_order, curr_pp_modular_edges_order, curr_pp_random_edges_order]
-	}
-
-	// now, running function to get info for current pp
-	recursion_res = get_curr_pp_dealers_and_edges()
-	dealers_id_masterlist = recursion_res[0]
-	if (MODULAR_CONNECTIONS_SOURCE == 'friends') {
-		friends_edges_masterlist = recursion_res[1]
-		work_edges_masterlist = recursion_res[2]
-	} else {
-		work_edges_masterlist = recursion_res[1]
-		friends_edges_masterlist = recursion_res[2]
-	}
-
+	// JS does not support funcs with multiple return values, hence the 3 masterlists are stored in an array temporarily
+	const dealers_friends_work_id_masterlists = get_dealers_friends_work_id_masterlists()
+	const dealers_id_masterlist = dealers_friends_work_id_masterlists[0]
+	const friends_id_masterlist = dealers_friends_work_id_masterlists[1]
+	const work_id_masterlist = dealers_friends_work_id_masterlists[2]
 
 	for (let trial_ind = 0; trial_ind < TRIALS_NUM; trial_ind++) {	
 		// getting cards
@@ -171,10 +158,9 @@ function get_experiment_data_object() {
 		let right_lottery_winnings = high_variance_lottery_left_or_right === 'right' ? getRandom(high_variance_lottery_possible_winnings, 1)[0] : getRandom(low_variance_lottery_possible_winnings, 1)[0]
 		let total_lottery_winnings = left_lottery_winnings + right_lottery_winnings
 
-		// replacing applied on a case-by-case basis; alternatively could be done on the whole list above
 		const dealer_id = dealers_id_masterlist[trial_ind]
-		const friends_dealer_id = friends_edges_masterlist[trial_ind].replace(dealer_id, '').replace('--', '')
-		const work_dealer_id = work_edges_masterlist[trial_ind].replace(dealer_id, '').replace('--', '')
+		const friends_id = friends_id_masterlist[trial_ind]
+		const work_id = work_id_masterlist[trial_ind]
 
 		const block_ind = Math.floor(trial_ind / TRIALS_PER_BLOCK)
 		const block_key = `block_0${block_ind}`
@@ -198,8 +184,8 @@ function get_experiment_data_object() {
 			'left_lottery_winnings': left_lottery_winnings,
 			'right_lottery_winnings': right_lottery_winnings,
 			'total_lottery_winnings': total_lottery_winnings,
-			'friends_dealer_id': friends_dealer_id, 
-			'work_dealer_id': work_dealer_id
+			'friends_id': friends_id, 
+			'work_id': work_id
 		}
 		// console.log(experiment_data_object)
 	}

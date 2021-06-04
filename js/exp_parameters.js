@@ -2,8 +2,8 @@ var INFORMATION_MULTIPLE_CHOICE = true // this can be set to false but some feat
 
 var PT_TRIALS_NUM = 4
 var FEEDBACK_TRIALS = 2
-var TRIALS_NUM = 6
-var TRIALS_PER_BLOCK = 6/2
+var TRIALS_NUM = 108
+var TRIALS_PER_BLOCK = 108/3
 var BLOCKS
 
 var INFORMATION_SAMPLING_DURATION = 10000
@@ -25,6 +25,7 @@ let DELTA_EV_CATEGORIES = [-90, -70, -20, -5, 0, 5, 20, 70, 90]
 let MODULAR_NET_EDGES = ['d01--d02', 'd01--d03', 'd01--d04', 'd02--d03', 'd02--d04', 'd03--d04', 
 							'd05--d06', 'd05--d07', 'd05--d08', 'd06--d07', 'd06--d08','d07--d08', 
 							'd09--d10', 'd09--d11', 'd09--d12', 'd10--d11', 'd10--d12', 'd11--d12']
+let MODULAR_NET_DEALER_GROUPS = [['d01', 'd02', 'd03', 'd04'], ['d05', 'd06', 'd07', 'd08'], ['d09', 'd10', 'd11', 'd12']]
 let RANDOM_NET_EDGES = 	['d01--d05', 'd01--d08', 'd01--d12', 'd02--d06', 'd02--d07', 'd02--d11', 
 							'd03--d05', 'd03--d10', 'd03--d11', 'd04--d08', 'd04--d09', 'd04--d11',
 							'd05--d09', 'd06--d09', 'd06--d12', 'd07--d10', 'd07--d12', 'd08--d10']
@@ -49,6 +50,7 @@ jsPsych.data.addProperties({
 	CARDS: CARDS,
 	DELTA_EV_CATEGORIES: DELTA_EV_CATEGORIES,
 	MODULAR_NET_EDGES: MODULAR_NET_EDGES,
+	MODULAR_NET_DEALER_GROUPS: MODULAR_NET_DEALER_GROUPS,
 	RANDOM_NET_EDGES: RANDOM_NET_EDGES,
 	MODULAR_CONNECTIONS_SOURCE: MODULAR_CONNECTIONS_SOURCE,
 	REWARDINFO_POSITION: REWARDINFO_POSITION,
