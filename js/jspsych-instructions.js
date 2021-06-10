@@ -94,7 +94,8 @@ jsPsych.plugins.instructions = (function() {
     		back();
     	}
     	else if(this.id === 'jspsych-instructions-next'){
-    		next();
+        next();
+        $('#jspsych-target').animate({ scrollTop: 0 }, 200);
     	}
     }
 
@@ -135,7 +136,7 @@ jsPsych.plugins.instructions = (function() {
         } 
         display_element.innerHTML = html;
       }
-      
+
     }
 
     function next() {
