@@ -83,6 +83,8 @@ function get_experiment_data_object() {
 		let right_lottery_winnings = high_variance_lottery_left_or_right === 'right' ? getRandom(high_variance_lottery_possible_winnings, 1)[0] : getRandom(low_variance_lottery_possible_winnings, 1)[0]
 		let total_lottery_winnings = left_lottery_winnings + right_lottery_winnings
 
+		let rewardinfo_position = getRandom(['left', 'right'], 1)[0]
+
 		// dealer-ids generation
 		const dealer_id = getRandom(PT_TRIALS_DEALERS, 1)[0]
 		const friends_id = getRandom(PT_TRIALS_DEALERS.filter(e => e !== dealer_id), 1)[0]
@@ -103,6 +105,7 @@ function get_experiment_data_object() {
 			'left_lottery_winnings': left_lottery_winnings,
 			'right_lottery_winnings': right_lottery_winnings,
 			'total_lottery_winnings': total_lottery_winnings,
+			'rewardinfo_position': rewardinfo_position,
 			'friends_id': friends_id, 
 			'work_id': work_id
 		}
@@ -120,8 +123,13 @@ function get_experiment_data_object() {
 
 	// controlling position of left and right high variance lottery
 	high_variance_lottery_across_trials = expandArray(['left', 'right'], TRIALS_NUM/2)
-	for (let s=0; s<=high_variance_lottery_across_trials.length; s++) {
+	for (let s=0; s<5; s++) {
 		high_variance_lottery_across_trials = shuffle(high_variance_lottery_across_trials)
+	}
+
+	let rewardinfo_position_arr_randomised = expandArray(['left', 'right'], TRIALS_NUM/2)
+	for (let s=0; s<5; s++) {
+		rewardinfo_position_arr_randomised = shuffle(rewardinfo_position_arr_randomised)
 	}
 	
 	// controlling friends and colleagues connections
@@ -158,6 +166,8 @@ function get_experiment_data_object() {
 		let right_lottery_winnings = high_variance_lottery_left_or_right === 'right' ? getRandom(high_variance_lottery_possible_winnings, 1)[0] : getRandom(low_variance_lottery_possible_winnings, 1)[0]
 		let total_lottery_winnings = left_lottery_winnings + right_lottery_winnings
 
+		const rewardinfo_position = rewardinfo_position_arr_randomised[trial_ind]
+
 		const dealer_id = dealers_id_masterlist[trial_ind]
 		const friends_id = friends_id_masterlist[trial_ind]
 		const work_id = work_id_masterlist[trial_ind]
@@ -184,6 +194,7 @@ function get_experiment_data_object() {
 			'left_lottery_winnings': left_lottery_winnings,
 			'right_lottery_winnings': right_lottery_winnings,
 			'total_lottery_winnings': total_lottery_winnings,
+			'rewardinfo_position': rewardinfo_position,
 			'friends_id': friends_id, 
 			'work_id': work_id
 		}

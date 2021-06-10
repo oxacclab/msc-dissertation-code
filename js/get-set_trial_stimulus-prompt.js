@@ -97,7 +97,7 @@ function get_nonrewardinfo_html(dealer_name, current_dealer_id) {
 }
 
 function set_initial_information_sampling_stimulus(high_variance_lottery_left_or_right, high_variance_lottery_EV, low_variance_lottery_EV, 
-													current_dealer_id,
+													current_dealer_id, rewardinfo_position,
 													max_width = 800, height = 500) {
 
 	stimulus_html = '<div style=width: 800px; height: auto>'+
@@ -109,10 +109,10 @@ function set_initial_information_sampling_stimulus(high_variance_lottery_left_or
 						'<div id="winnings-text" style="display: none"></div>'
 
 	let dealer_name = PT_TRIALS_DEALERS.includes(current_dealer_id) ? PT_TRIALS_DEALER_ID_NAME_DICT[current_dealer_id] : DEALER_ID_NAME_DICT[current_dealer_id]
-	if (REWARDINFO_POSITION == 'left') {
+	if (rewardinfo_position == 'left') {
 		stimulus_html += get_lotteries_html(high_variance_lottery_left_or_right, high_variance_lottery_EV, low_variance_lottery_EV)
 		stimulus_html += get_nonrewardinfo_html(dealer_name, current_dealer_id)
-	} else if (REWARDINFO_POSITION == 'right') {
+	} else if (rewardinfo_position == 'right') {
 		stimulus_html += get_nonrewardinfo_html(dealer_name, current_dealer_id)
 		stimulus_html += get_lotteries_html(high_variance_lottery_left_or_right, high_variance_lottery_EV, low_variance_lottery_EV)
 	} else {
@@ -126,6 +126,7 @@ function set_initial_information_sampling_stimulus(high_variance_lottery_left_or
 function update_information_sampling_stimulus(previous_stimulus, previous_info_sampled, 
 												left_lottery_winnings = undefined,
 												right_lottery_winnings = undefined,
+												rewardinfo_position = undefined,
 												friends_id = undefined, work_id = undefined) {	
 	var parser = new DOMParser();
 	var newHTML = parser.parseFromString(previous_stimulus, 'text/html')
@@ -147,7 +148,7 @@ function update_information_sampling_stimulus(previous_stimulus, previous_info_s
 			winnings_text_margin_left = 155
 		}
 
-		if (REWARDINFO_POSITION == 'right') {
+		if (rewardinfo_position == 'right') {
 			// this seems to get the job done
 			winnings_text_margin_left += 400
 		}

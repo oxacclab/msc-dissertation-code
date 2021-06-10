@@ -31,7 +31,7 @@ let RANDOM_NET_EDGES = 	['d01--d05', 'd01--d08', 'd01--d12', 'd02--d06', 'd02--d
 							'd05--d09', 'd06--d09', 'd06--d12', 'd07--d10', 'd07--d12', 'd08--d10']
 
 let MODULAR_CONNECTIONS_SOURCE = getRandom(['friends', 'work'], 1)[0]
-let REWARDINFO_POSITION = 'right' // getRandom(['left', 'right'], 1)[0]
+// let REWARDINFO_POSITION = 'right' // getRandom(['left', 'right'], 1)[0]
 
 jsPsych.data.addProperties({
 	INFORMATION_MULTIPLE_CHOICE: INFORMATION_MULTIPLE_CHOICE,
@@ -53,7 +53,6 @@ jsPsych.data.addProperties({
 	MODULAR_NET_DEALER_GROUPS: MODULAR_NET_DEALER_GROUPS,
 	RANDOM_NET_EDGES: RANDOM_NET_EDGES,
 	MODULAR_CONNECTIONS_SOURCE: MODULAR_CONNECTIONS_SOURCE,
-	REWARDINFO_POSITION: REWARDINFO_POSITION,
 });
 
 function get_dealer_id_name_dict_randomised() {
