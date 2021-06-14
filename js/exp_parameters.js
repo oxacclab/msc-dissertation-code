@@ -2,8 +2,8 @@ var INFORMATION_MULTIPLE_CHOICE = true // this can be set to false but some feat
 
 var PT_TRIALS_NUM = 4
 var FEEDBACK_TRIALS = 2
-var TRIALS_NUM = 108
-var TRIALS_PER_BLOCK = 108/3
+var TRIALS_NUM = 6 // 108
+var TRIALS_PER_BLOCK = 6/3 // 108/3
 var BLOCKS
 
 var INFORMATION_SAMPLING_DURATION = 10000
