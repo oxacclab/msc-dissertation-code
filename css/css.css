@@ -162,16 +162,12 @@ body {
 }
 
 .card_decision_prompt {
-	width: 47.5%;
 	background-color: lightblue;
 	font-size: 24px;
-	float: left;
 }
 
 .information_sampling_text {
 	background-color: lightblue; 
-	/*float: left;*/
-	/*width: 22.5%;*/
 	font-size: 15px;
 }
 

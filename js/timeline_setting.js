@@ -4,6 +4,10 @@ var participant_intro_timeline = {
 	timeline: [fullscreen_message, pis, instructions]
 }
 
+var participant_intro_timeline = {
+	timeline: [instructions]
+}
+
 var participant_debrief_timeline = {
 	timeline: [debrief]
 }
