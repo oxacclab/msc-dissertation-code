@@ -258,8 +258,9 @@ function get_delay_trial_object(information_sampling_index_string) {
 }
 
 // -------------------------------------------defining trials
+
 var card_presentation_trial = {
-	type: 'html-keyboard-response',
+	type: 'html-button-response',
 	stimulus: function() {
 		// url property is sent to the css.css stylesheet and hence css.css' directory is the reference one which is why we start with ..
 		document.getElementById('jspsych-target').style.setProperty('--background', 'url(../images/card-presentation-background.jpg)')
@@ -267,39 +268,37 @@ var card_presentation_trial = {
 		return get_card_presentation_trial_stimulus(jsPsych.timelineVariable('card_self', true), 
 													jsPsych.timelineVariable('dealer_id', true))
 	},
+	choices: ['Lower', 'Higher'],
+	button_html: '<button class="card_decision_prompt jspsych-btn" style="visibility: hidden">%choice%</button>',
 	trial_duration: function() {
 		return CARD_PRESENTATION_TRIAL_DURATION
 	},
-	prompt: '<div style="width: 500px; visibility: hidden">'+
-				'<div class="decision-question-text">Is the hidden card lower or higher than yours?</div>'+
-				'<div class="card_decision_prompt" style="margin-right: 2.5%">Lower [Press 1]</div>'+
-				'<div class="card_decision_prompt" style="margin-left: 2.5%">Higher [Press 2]</div>'+
-			'</div>',
-	choices: jsPsych.NO_KEYS,
+	on_load: function() {
+		document.getElementById('jspsych-html-button-response-btngroup').style.setProperty('height', '50px') // magic number -- must be equal to the height of the btngroup of the next trial
+	},
 	on_finish: function(data) {
 		data.trial_name = 'card_presentation_trial'
-
-		data.card_decision_prompt = this.prompt	
 	}
 }
 
 var card_decision = {
-	type: 'html-keyboard-response',
+	type: 'html-button-response',
 	stimulus: function() {
-		return jsPsych.data.get().last(1).values()[0]['stimulus']
+		last_stimulus = jsPsych.data.get().last(1).values()[0]['stimulus']
+		curr_stimulus = last_stimulus.replace("visibility: hidden", "visibility: visible")
+		return curr_stimulus
 	},
-	choices: [49, 50], //['1', '2']
-	prompt: function() {
-		last_prompt = jsPsych.data.get().last(1).values()[0]['card_decision_prompt']
-		curr_prompt = last_prompt.replace("visibility: hidden", "visibility: visible")
-		return curr_prompt
+	choices: ['Lower', 'Higher'], //['1', '2']
+	button_html: '<button class="card_decision_prompt jspsych-btn">%choice%</button>',
+	on_load: function() {
+		document.getElementById('jspsych-html-button-response-btngroup').style.setProperty('height', '50px') // magic number -- must be equal to the height of the btngroup of the previous trial
 	},
 	on_finish: function(data) {
 		data.trial_name = 'card_decision'
 
 		data.block = jsPsych.timelineVariable('block', true)
 		data.trial = jsPsych.timelineVariable('trial', true)
-		data.pp_card_guess = data.key_press == 49 ? 'lower' : 'higher'
+		data.pp_card_guess = data.button_pressed == '0' ? 'lower' : 'higher'
 		if (jsPsych.timelineVariable('pt_trial', true)) {
 			data.pt_pp_card_correct = (data.pp_card_guess == 'lower' & jsPsych.timelineVariable('card_correct', true) == 'lower') || 
 								(data.pp_card_guess == 'higher' & jsPsych.timelineVariable('card_correct', true) == 'higher')
@@ -331,11 +330,11 @@ var fixation_cross = {
 		// 	jsPsych.endCurrentTimeline()
 		// }
 
-		// if (DATA_SAVING_ITERATOR % 5 === 0) {
-		// 	// save request every 5 trials
-		// 	saveData(subject_id.toString()+'_'+DATA_SAVING_ITERATOR.toString()+'.csv', jsPsych.data.get().csv())
-		// }
-		// DATA_SAVING_ITERATOR += 1
+		if (DATA_SAVING_ITERATOR % 5 === 0) {
+			// save request every 5 trials
+			saveData(subject_id.toString()+'_'+DATA_SAVING_ITERATOR.toString()+'.csv', jsPsych.data.get().csv())
+		}
+		DATA_SAVING_ITERATOR += 1
 	},
 	on_finish: function(data) {
 		data.trial_name = 'fixation_cross'

@@ -11,6 +11,9 @@ function get_card_presentation_trial_stimulus(card_self, dealer_id) {
 					'<div class="dealer-text" style="margin-top:60px;">Dealer: <b>'+dealer_name+'</b></div>'+
 					'<div class="card-presentation-image"><img src="images/'+dealer_id+'.png" style="margin-top: 15px; width: 150px; height: auto"></div>'+
 				'</div>'+
+			'</div>'+
+			'<div style="width: 500px; visibility: hidden">'+
+				'<div class="decision-question-text">Is the hidden card lower or higher than yours?</div>'+
 			'</div>'
 }
 
