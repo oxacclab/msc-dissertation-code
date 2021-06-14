@@ -92,6 +92,7 @@ jsPsych.plugins.instructions = (function() {
     	evt.target.removeEventListener('click', btnListener);
     	if(this.id === "jspsych-instructions-back"){
     		back();
+        $('#jspsych-target').animate({ scrollTop: 0 }, 200);
     	}
     	else if(this.id === 'jspsych-instructions-next'){
         next();

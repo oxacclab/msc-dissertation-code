@@ -56,6 +56,8 @@ function get_experiment_data_object() {
 	// function instead of hard-coded in order to allow the opportunity to dynamically set parameters before start of test trials
 	const experiment_data_object = {'pt_trials_feedback': {}, 'pt_trials': {}, 'test_trials': {}}
 
+
+	const pt_trials_rewardinfo_position_master = ['left', 'right', 'left', 'right'] // just making sure PPs experience all of them equally
 	for (let pt_trial_ind = 0; pt_trial_ind < PT_TRIALS_NUM; pt_trial_ind++) {
 		// getting cards
 		let card_self = getRandom(CARDS, 1)[0]
@@ -83,7 +85,7 @@ function get_experiment_data_object() {
 		let right_lottery_winnings = high_variance_lottery_left_or_right === 'right' ? getRandom(high_variance_lottery_possible_winnings, 1)[0] : getRandom(low_variance_lottery_possible_winnings, 1)[0]
 		let total_lottery_winnings = left_lottery_winnings + right_lottery_winnings
 
-		let rewardinfo_position = getRandom(['left', 'right'], 1)[0]
+		let rewardinfo_position = pt_trials_rewardinfo_position_master[pt_trial_ind]
 
 		// dealer-ids generation
 		const dealer_id = getRandom(PT_TRIALS_DEALERS, 1)[0]
