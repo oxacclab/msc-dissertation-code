@@ -169,6 +169,8 @@ function update_information_sampling_stimulus(previous_stimulus, previous_info_s
 		let work_name = PT_TRIALS_DEALERS.includes(work_id) ? PT_TRIALS_DEALER_ID_NAME_DICT[work_id] : DEALER_ID_NAME_DICT[work_id]
 		newHTML.getElementById('work-name').innerHTML = work_name
 		newHTML.getElementById('work-img').src = 'images/'+work_id+'.png'
+	} else {
+		alert('Problem occurred in update_information_sampling_stimulus')
 	}
 
 	return newHTML.getElementsByTagName('body')[0].innerHTML

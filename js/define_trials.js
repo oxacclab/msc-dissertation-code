@@ -129,7 +129,8 @@ function get_trial_object(trial_name) {
 				return set_initial_information_sampling_stimulus(jsPsych.timelineVariable('high_variance_lottery_left_or_right', true), 
 																jsPsych.timelineVariable('high_variance_lottery_EV', true), 
 																jsPsych.timelineVariable('low_variance_lottery_EV', true), 
-																jsPsych.timelineVariable('dealer_id', true))
+																jsPsych.timelineVariable('dealer_id', true),
+																jsPsych.timelineVariable('rewardinfo_position', true))
 			} else {
 				return jsPsych.data.get().last(1).values()[0]['stimulus']
 			}
@@ -426,8 +427,10 @@ var information_sampling_final_noChoice = {
 var information_sampling_final = {
 	type: 'html-button-response',
 	stimulus: function() {
+		previous_info_sampled = translate_button_press(jsPsych.data.get().last(1).values()[0]['button_pressed'], 
+															jsPsych.timelineVariable('rewardinfo_position', true))
 		return update_information_sampling_stimulus(previous_stimulus = jsPsych.data.get().last(1).values()[0]['stimulus'],
-													previous_info_sampled = translate_button_press(jsPsych.data.get().last(1).values()[0]['button_pressed']),
+													previous_info_sampled = previous_info_sampled,
 													jsPsych.timelineVariable('left_lottery_winnings', true),
 													jsPsych.timelineVariable('right_lottery_winnings', true),
 													jsPsych.timelineVariable('rewardinfo_position', true),
