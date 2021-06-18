@@ -80,8 +80,8 @@
 				on_finish: function() {
 					// document.getElementById('loading').remove()
 					// jsPsych.data.displayData('json');
-					$.when(saveData(subject_id.toString()+'.csv', jsPsych.data.get().csv()),
-								saveData(subject_id.toString()+'_interaction_data.csv', jsPsych.data.getInteractionData().csv()))
+					$.when(saveData(subject_id.toString(), jsPsych.data.get().csv()),
+								saveData(subject_id.toString()+'_interaction_data', jsPsych.data.getInteractionData().csv()))
 						.done(function(s1, s2) {
 						// the code here will be executed when all four ajax requests resolve.
 						// s1, s2 are lists of length 3 containing the response text,
