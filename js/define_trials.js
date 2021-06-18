@@ -312,6 +312,7 @@ var card_decision = {
 	} 
 }
 
+
 var fixation_cross = {
 	type: 'html-keyboard-response',
 	stimulus: '<div class="fixation-cross">+</div>',
@@ -332,6 +333,7 @@ var fixation_cross = {
 
 		if (DATA_SAVING_ITERATOR % 5 === 0) {
 			// save request every 5 trials
+			console.log(subject_id.toString()+'_'+DATA_SAVING_ITERATOR.toString()+'.csv', jsPsych.data.get().csv())
 			saveData(subject_id.toString()+'_'+DATA_SAVING_ITERATOR.toString()+'.csv', jsPsych.data.get().csv())
 		}
 		DATA_SAVING_ITERATOR += 1
