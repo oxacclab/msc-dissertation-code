@@ -6,7 +6,7 @@
     $data = $_POST['filedata'];
     function crash_and_burn($reason) {
       http_response_code(500);
-      die("{error: \"$reason\", message: \"\"}");
+      die("{error: \"$reason\", message: \"\", filename: \"$filename\"}");
     }
     // Because the above came from the participant's machine, we sanitize the input
     if(!preg_match("/^[0-9a-zA-Z]+$/", $filename)) {
@@ -20,6 +20,5 @@
       crash_and_burn('Could not write file to server');
     } else {
       http_response_code(200);
-      die("{error: \"\", message: \"Saved data to server.\"}");
+      die("{error: \"\", message: \"Saved $filename to server.\"}");
     }
-?>
