@@ -6,7 +6,7 @@
     $data = $_POST['filedata'];
     function crash_and_burn($reason) {
       http_response_code(500);
-      die("{error: \"$reason\", message: \"\", filename: \"$filename\"}");
+      die("{error: \"$reason\", message: \"\", postdata: ".json_encode($_POST)."}");
     }
     // Because the above came from the participant's machine, we sanitize the input
     if(!preg_match("/^[0-9a-zA-Z]+$/", $filename)) {
