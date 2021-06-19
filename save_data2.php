@@ -9,7 +9,7 @@
       die("{error: \"$reason\", message: \"\", filename: \"$filename\"}");
     }
     // Because the above came from the participant's machine, we sanitize the input
-    if(!preg_match("/^[0-9a-zA-Z]+$/", $filename)) {
+    if(!preg_match("/^[0-9a-zA-Z_]+$/", $filename)) {
         http_response_code(400);
         crash_and_burn("Invalid filename");
     } else {
