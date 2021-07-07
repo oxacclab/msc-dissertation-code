@@ -54,60 +54,27 @@ function get_cards_trials_masterlist() {
 
 function get_experiment_data_object() {
 	// function instead of hard-coded in order to allow the opportunity to dynamically set parameters before start of test trials
-	const experiment_data_object = {'pt_trials_feedback': {}, 'pt_trials': {}, 'test_trials': {}}
+	const experiment_data_object = {'pt_trials': {}, 'test_trials': {}}
 
-
-	const pt_trials_rewardinfo_position_master = ['left', 'right', 'left', 'right'] // just making sure PPs experience all of them equally
 	for (let pt_trial_ind = 0; pt_trial_ind < PT_TRIALS_NUM; pt_trial_ind++) {
 		// getting cards
 		let card_self = getRandom(CARDS, 1)[0]
 		let card_hidden = getRandom(CARDS.filter(e => e !== card_self), 1)[0]
 		let card_correct = CARDS.indexOf(card_hidden) > CARDS.indexOf(card_self) ? 'higher' : 'lower'
 
-		// lottery-related calculations
-		let random_number = getRandomInt(111, 389)
-		let delta_EV = getRandom(DELTA_EV_CATEGORIES, 1)[0]
-		// lottery-related vars to save (except possible_winnings_arrays)
-		let high_variance_lottery_left_or_right = getRandom(['left', 'right'], 1)[0] // 'left' // getRandom(['left', 'right'], 1)[0]
-		let high_variance_lottery_EV = random_number // 150 // random_number
-		let low_variance_lottery_EV = random_number - delta_EV // 170 // random_number - delta_EV
-		let high_variance_lottery_possible_winnings = [high_variance_lottery_EV - ((HIGH_VARIANCE_VALUE/4)*2),
-													high_variance_lottery_EV - ((HIGH_VARIANCE_VALUE/4)*1),
-													high_variance_lottery_EV - ((HIGH_VARIANCE_VALUE/4)*0),
-													high_variance_lottery_EV - ((HIGH_VARIANCE_VALUE/4)*(-1)),
-													high_variance_lottery_EV - ((HIGH_VARIANCE_VALUE/4)*(-2))]
-		let low_variance_lottery_possible_winnings = [low_variance_lottery_EV - ((LOW_VARIANCE_VALUE/4)*2),
-													low_variance_lottery_EV - ((LOW_VARIANCE_VALUE/4)*1),
-													low_variance_lottery_EV - ((LOW_VARIANCE_VALUE/4)*0),
-													low_variance_lottery_EV - ((LOW_VARIANCE_VALUE/4)*(-1)),
-													low_variance_lottery_EV - ((LOW_VARIANCE_VALUE/4)*(-2))]
-		let left_lottery_winnings = high_variance_lottery_left_or_right === 'left' ? getRandom(high_variance_lottery_possible_winnings, 1)[0] : getRandom(low_variance_lottery_possible_winnings, 1)[0]
-		let right_lottery_winnings = high_variance_lottery_left_or_right === 'right' ? getRandom(high_variance_lottery_possible_winnings, 1)[0] : getRandom(low_variance_lottery_possible_winnings, 1)[0]
-		let total_lottery_winnings = left_lottery_winnings + right_lottery_winnings
-
-		let rewardinfo_position = pt_trials_rewardinfo_position_master[pt_trial_ind]
-
 		// dealer-ids generation
 		const dealer_id = getRandom(PT_TRIALS_DEALERS, 1)[0]
 		const friends_id = getRandom(PT_TRIALS_DEALERS.filter(e => e !== dealer_id), 1)[0]
 		const work_id = getRandom(PT_TRIALS_DEALERS.filter(e => e !== dealer_id & e!==friends_id), 1)[0]
 
-		const pt_trials_block = pt_trial_ind < FEEDBACK_TRIALS ? 'pt_trials_feedback' : 'pt_trials'
 		const pt_trials_trial = 'trial_0' + pt_trial_ind
-		experiment_data_object[pt_trials_block][pt_trials_trial] = {
+		experiment_data_object['pt_trials'][pt_trials_trial] = {
 			'pt_trial': true,
 			'block': 'pt',
 			'dealer_id': dealer_id, 
 			'card_self': card_self,
 			'card_hidden': card_hidden,
 			'card_correct': card_correct,
-			'high_variance_lottery_left_or_right': high_variance_lottery_left_or_right, 
-			'high_variance_lottery_EV': high_variance_lottery_EV,
-			'low_variance_lottery_EV': low_variance_lottery_EV,
-			'left_lottery_winnings': left_lottery_winnings,
-			'right_lottery_winnings': right_lottery_winnings,
-			'total_lottery_winnings': total_lottery_winnings,
-			'rewardinfo_position': rewardinfo_position,
 			'friends_id': friends_id, 
 			'work_id': work_id
 		}
@@ -122,17 +89,6 @@ function get_experiment_data_object() {
 		// modify the above cards_trials_masterlist to contain more card pairs in order to have more trials
 		alert('More than 132 trials selected and not enough card pairs.')
 	}
-
-	// controlling position of left and right high variance lottery
-	high_variance_lottery_across_trials = expandArray(['left', 'right'], TRIALS_NUM/2)
-	for (let s=0; s<5; s++) {
-		high_variance_lottery_across_trials = shuffle(high_variance_lottery_across_trials)
-	}
-
-	let rewardinfo_position_arr_randomised = expandArray(['left', 'right'], TRIALS_NUM/2)
-	for (let s=0; s<5; s++) {
-		rewardinfo_position_arr_randomised = shuffle(rewardinfo_position_arr_randomised)
-	}
 	
 	// controlling friends and colleagues connections
 	// JS does not support funcs with multiple return values, hence the 3 masterlists are stored in an array temporarily
@@ -146,29 +102,6 @@ function get_experiment_data_object() {
 		let card_self = cards_trials_cardSelf_masterlist[trial_ind]
 		let card_hidden = cards_trials_cardHidden_masterlist[trial_ind]
 		let card_correct = CARDS.indexOf(card_hidden) > CARDS.indexOf(card_self) ? 'higher' : 'lower'
-
-		// lottery-related calculations
-		let random_number = getRandomInt(131, 369)
-		let delta_EV = getRandom(DELTA_EV_CATEGORIES, 1)[0]
-		// lottery-related vars to save (except possible_winnings_arrays)
-		let high_variance_lottery_left_or_right = high_variance_lottery_across_trials[trial_ind]
-		let high_variance_lottery_EV = random_number
-		let low_variance_lottery_EV = random_number - delta_EV
-		let high_variance_lottery_possible_winnings = [high_variance_lottery_EV - ((HIGH_VARIANCE_VALUE/4)*2),
-													high_variance_lottery_EV - ((HIGH_VARIANCE_VALUE/4)*1),
-													high_variance_lottery_EV - ((HIGH_VARIANCE_VALUE/4)*0),
-													high_variance_lottery_EV - ((HIGH_VARIANCE_VALUE/4)*(-1)),
-													high_variance_lottery_EV - ((HIGH_VARIANCE_VALUE/4)*(-2))]
-		let low_variance_lottery_possible_winnings = [low_variance_lottery_EV - ((LOW_VARIANCE_VALUE/4)*2),
-													low_variance_lottery_EV - ((LOW_VARIANCE_VALUE/4)*1),
-													low_variance_lottery_EV - ((LOW_VARIANCE_VALUE/4)*0),
-													low_variance_lottery_EV - ((LOW_VARIANCE_VALUE/4)*(-1)),
-													low_variance_lottery_EV - ((LOW_VARIANCE_VALUE/4)*(-2))]
-		let left_lottery_winnings = high_variance_lottery_left_or_right === 'left' ? getRandom(high_variance_lottery_possible_winnings, 1)[0] : getRandom(low_variance_lottery_possible_winnings, 1)[0]
-		let right_lottery_winnings = high_variance_lottery_left_or_right === 'right' ? getRandom(high_variance_lottery_possible_winnings, 1)[0] : getRandom(low_variance_lottery_possible_winnings, 1)[0]
-		let total_lottery_winnings = left_lottery_winnings + right_lottery_winnings
-
-		const rewardinfo_position = rewardinfo_position_arr_randomised[trial_ind]
 
 		const dealer_id = dealers_id_masterlist[trial_ind]
 		const friends_id = friends_id_masterlist[trial_ind]
@@ -190,13 +123,6 @@ function get_experiment_data_object() {
 			'card_self': card_self,
 			'card_hidden': card_hidden,
 			'card_correct': card_correct,
-			'high_variance_lottery_left_or_right': high_variance_lottery_left_or_right, 
-			'high_variance_lottery_EV': high_variance_lottery_EV,
-			'low_variance_lottery_EV': low_variance_lottery_EV,
-			'left_lottery_winnings': left_lottery_winnings,
-			'right_lottery_winnings': right_lottery_winnings,
-			'total_lottery_winnings': total_lottery_winnings,
-			'rewardinfo_position': rewardinfo_position,
 			'friends_id': friends_id, 
 			'work_id': work_id
 		}
@@ -204,4 +130,45 @@ function get_experiment_data_object() {
 	}
 	// console.log(experiment_data_object)
 	return experiment_data_object
+}
+
+function get_experiment_data_object_for_memory_test() {
+	MEMORY_TEST_TRIALS = 10
+	STIMULUS_QUESTION_HTML_OPTS = ['<p>Who is the dealer <b>friends with</b>?</p>', '<p>Who <b>works the same time</b> as the dealer?</p>']
+	TARGET_DEALER_ID_LIST = getRandom(DEALERS, 10)
+	DEALER_CHOICE_1_ID_LIST = getRandom(DEALERS, 10)
+	DEALER_CHOICE_2_ID_LIST = getRandom(DEALERS, 10)
+
+	// function instead of hard-coded in order to allow the opportunity to dynamically set parameters before start of test trials
+	const experiment_data_object = {'test_trials': {}}
+
+	for (let trial_ind = 0; trial_ind < MEMORY_TEST_TRIALS; trial_ind++) {	
+
+		const trial_key = format_ind_to_key(trial_ind, 'trial')
+
+		experiment_data_object['test_trials'][trial_key] = {
+			'trial': trial_ind,
+			'stimulus_question_html': getRandom(STIMULUS_QUESTION_HTML_OPTS, 1)[0],
+			'target_dealer_id': TARGET_DEALER_ID_LIST[trial_ind],
+			'dealer_choice_1_id': DEALER_CHOICE_1_ID_LIST[trial_ind],
+			'dealer_choice_2_id': DEALER_CHOICE_2_ID_LIST[trial_ind],
+			'correct_choice': getRandom([DEALER_CHOICE_1_ID_LIST[trial_ind], DEALER_CHOICE_2_ID_LIST[trial_ind]], 1)[0],
+		}
+		// console.log(experiment_data_object)
+	}
+	// console.log(experiment_data_object)
+	return experiment_data_object
+}
+
+// helper func to translate a zero-based index to a key in the format 001
+function format_ind_to_key(ind, type) {
+	let key
+	if (ind < 10) {
+		key = `${type}_00${ind}`
+	} else if (ind >= 10 && ind < 100) {
+		key = `${type}_0${ind}`
+	} else {
+		key = `${type}_${ind}`
+	}
+	return key
 }

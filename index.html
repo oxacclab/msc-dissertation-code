@@ -9,6 +9,7 @@
 		<script src="js/jspsych-external-html.js"></script>
 		<script src="js/jspsych-html-keyboard-response.js"></script>
 		<script src="js/jspsych-html-button-response.js"></script>
+		<!-- <script src="js/jspsych-image-button-response.js"></script> -->
 		<script src="js/jspsych-instructions.js"></script>
 		<script src="js/jspsych-fullscreen.js"></script>
 		<script src="js/jspsych-survey-html-form.js"></script>
@@ -16,11 +17,11 @@
 
 		<script src="js/helper_funcs.js"></script>
 		<script src="js/exp_parameters.js"></script>
-		<script src="js/get-set_trial_stimulus-prompt.js"></script>
+		<!-- <script src="js/get-set_trial_stimulus-prompt.js"></script> -->
 		<script src="js/instructions-practice_trials.js"></script>
 		<script src="js/define_trials.js"></script>
 		<script src="js/get_experiment_data.js"></script>
-		<script src="js/get_trials_and_trial-timeline.js"></script>
+		<!-- <script src="js/get_trials_and_trial-timeline.js"></script> -->
 		<script src="js/timeline_setting.js"></script>
 
 		<script src="js/jquery.min.js"></script>
@@ -31,10 +32,6 @@
 	</head>
 	<body>
 
-		<div id="information-timer-container">
-			<span>Continuing to next trial: <progress value="0" id="information-timer"></progress></span> <!-- max is set via JS -->
-			<span id='timer-text-test'></span>
-		</div>
 		<div id="jspsych-target">
 			<!-- <div id="loading" style="">Experiment is loading - please wait</div> -->
 			<div id="loading" class="lds-facebook"><div></div><div></div><div></div></div>
@@ -43,9 +40,6 @@
 	</body>
 
 	<script>
-		show_timer_ms = false
-
-		document.getElementById('information-timer').max = INFORMATION_SAMPLING_DURATION
 
 		function saveData(filename, filedata){
 			return $.ajax({
@@ -78,8 +72,6 @@
 				display_element: 'jspsych-target',
 				timeline: timeline,
 				on_finish: function() {
-					// document.getElementById('loading').remove()
-					// jsPsych.data.displayData('json');
 					$.when(saveData(subject_id.toString(), jsPsych.data.get().csv()),
 								saveData(subject_id.toString()+'_interaction_data', jsPsych.data.getInteractionData().csv()))
 						.done(function(s1, s2) {
@@ -88,14 +80,7 @@
 						// status, and jqXHR object for each ajax call respectively.
 						// window.open("https://app.prolific.co/submissions/complete?cc=78A9CD78", "_blank")
 						window.location = "https://app.prolific.co/submissions/complete?cc=78A9CD78"
-					});
-					// saveData(subject_id.toString()+'_interaction_data.csv', jsPsych.data.getInteractionData().csv())
-					// if (subject_id == null) {
-					// 	subject_id = Math.floor(Math.random()*10000)
-					// }
-					// saveData(subject_id.toString()+'.csv', jsPsych.data.get().csv())
-					// jsPsych.data.get().localSave('csv', subject_id+'_testdata.csv')
-					
+					});					
 				},
 				exclusions: {
 					min_width: 992,
@@ -115,9 +100,9 @@
 		for (dealer of DEALERS) {
 			images.push('images/'+dealer+'.png')
 		}
-		for (instruction_image_html=1; instruction_image_html<=5; instruction_image_html++) {
-			images.push('images/instructions-multi-html/image'+instruction_image_html+'.png')
-		}
+		images.push('images/instructions-multi-html/image1.png')
+		images.push('images/instructions-multi-html/image2.png')
+		images.push('images/instructions-multi-html/image3_v2.png')
 		images.push('images/face_down_card.png')
 		images.push('images/question-mark.png')
 		images.push('images/arrow.png')
