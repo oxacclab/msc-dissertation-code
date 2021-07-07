@@ -168,6 +168,12 @@ var information_sampling = {
 	margin_vertical: '',
 	margin_horizontal: '',
 	response_ends_trial: true,
+	on_load: function() {
+		buttons = document.getElementsByClassName('jspsych-html-button-response-button')
+		for (i of buttons) {
+			i.classList.add('information_smapling_button_styling')
+		}
+	},
 	on_finish: function(data) {
 		data.information_sampling_stimulus = this.stimulus
 		// save data from this trial
@@ -206,6 +212,11 @@ var information_sampling_delay = {
 	on_load: function() {
 		document.getElementById('friends').setAttribute('disabled', 'disabled')
 		document.getElementById('work').setAttribute('disabled', 'disabled')
+
+		buttons = document.getElementsByClassName('jspsych-html-button-response-button')
+		for (i of buttons) {
+			i.classList.add('information_smapling_button_styling')
+		}
 	},
 	on_finish: function(data) {
 	}
