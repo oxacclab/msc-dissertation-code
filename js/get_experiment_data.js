@@ -162,7 +162,8 @@ function get_experiment_data_object() {
 
 function get_experiment_data_object_for_memory_test(dealer_id, curr_trial_choices_sources) {
 	memory_test_trials_per_opt = 12
-	stimulus_question_html_opts = expandArray(['<p>Who is the dealer <b>friends with</b>?</p>', '<p>Who <b>works the same time</b> as the dealer?</p>'], memory_test_trials_per_opt)
+	// shuffle to randomize the order of the two between-participants
+	stimulus_question_html_opts = expandArray(shuffle(['<p>Who is the dealer <b>friends with</b>?</p>', '<p>Who <b>works the same time</b> as the dealer?</p>']), memory_test_trials_per_opt)
 	target_dealer_id_list = shuffle(DEALERS).concat(shuffle(DEALERS))
 
 	function get_curr_trial_choices_sources_and_ids_nested_list(dealer_id) {
@@ -189,6 +190,7 @@ function get_experiment_data_object_for_memory_test(dealer_id, curr_trial_choice
 
 	for (let trial_ind = 0; trial_ind < 24; trial_ind++) {	
 		let curr_trial_choices_sources_and_ids_nested_list = get_curr_trial_choices_sources_and_ids_nested_list(target_dealer_id_list[trial_ind])
+		let current_trial_stimulus_question_friends_or_work = stimulus_question_html_opts[trial_ind].includes('friends') ? 'friends' : 'work'
 
 		const trial_key = format_ind_to_key(trial_ind, 'trial')
 		experiment_data_object['test_trials'][trial_key] = {
@@ -201,10 +203,8 @@ function get_experiment_data_object_for_memory_test(dealer_id, curr_trial_choice
 			'dealer_choice_1_id': curr_trial_choices_sources_and_ids_nested_list[0][1],
 			'dealer_choice_2_id': curr_trial_choices_sources_and_ids_nested_list[1][1],
 			'dealer_choice_3_id': curr_trial_choices_sources_and_ids_nested_list[2][1],
-			'correct_choice_id': trial_ind < 12 ? curr_trial_choices_sources_and_ids_nested_list.find(e => e.indexOf('friends') != -1)[1]:
-												curr_trial_choices_sources_and_ids_nested_list.find(e => e.indexOf('work') != -1)[1],
-			'correct_choice_button_press': trial_ind < 12 ? curr_trial_choices_sources_and_ids_nested_list.findIndex(e => e.indexOf('friends') != -1):
-												curr_trial_choices_sources_and_ids_nested_list.findIndex(e => e.indexOf('work') != -1)
+			'correct_choice_id': curr_trial_choices_sources_and_ids_nested_list.find(e => e.indexOf(current_trial_stimulus_question_friends_or_work) != -1)[1],
+			'correct_choice_button_press': curr_trial_choices_sources_and_ids_nested_list.findIndex(e => e.indexOf(current_trial_stimulus_question_friends_or_work) != -1)
 		}
 		// console.log(experiment_data_object)
 	}
