@@ -1,3 +1,13 @@
+.skip_button_styling {
+	width: 40%;
+	margin: auto;
+}
+
+.information_sampling_skip_button_text {
+	background-color: yellow;
+	font-size: 15px;
+}
+
 .information_smapling_button_styling {
 	width: 22.5%;
 	margin-left: 1.25%;
@@ -6,6 +16,9 @@
 	margin-bottom: 15px;
 }
 
+.jspsych-content-during-information-sampling {
+	margin-top: 2%;
+}
 
 .jspsych-button {
 	width: 100%;

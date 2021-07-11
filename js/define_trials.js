@@ -81,6 +81,17 @@ function update_information_sampling_stimulus(previous_stimulus, previous_info_s
 	return newHTML.getElementsByTagName('body')[0].innerHTML
 }
 
+function information_sampling_buttons_add_styling_class(buttons) {
+	for (i of buttons) {
+		if (i.getAttribute('data-choice') !== '2') {
+			i.classList.add('information_smapling_button_styling')
+		} else if (i.getAttribute('data-choice') !== '2') {
+			i.classList.add('information_sampling_skip_button_styling')
+		}
+	}
+}
+		
+
 
 // -------------------------------------------defining trials
 
@@ -169,81 +180,153 @@ var information_sampling = {
 	margin_horizontal: '',
 	response_ends_trial: true,
 	on_load: function() {
+		document.getElementById('jspsych-content').style['margin-top'] = '2%'
+
 		buttons = document.getElementsByClassName('jspsych-html-button-response-button')
 		for (i of buttons) {
 			i.classList.add('information_smapling_button_styling')
 		}
 	},
 	on_finish: function(data) {
-		data.information_sampling_stimulus = this.stimulus
+		// data.information_sampling_stimulus = this.stimulus
+		data.choices = this.choices
+		data.button_html = this.button_html
+
 		// save data from this trial
 		data.trial_name = 'information_sampling'
 		data.info_sampled = jsPsych.data.get().last(1).values()[0]['button_pressed']
-		data.info_sampled_rt = jsPsych.data.get().last(1).values()[0]['rt']
-
-		// save meta trial data
-		data.pt_trial = jsPsych.timelineVariable('pt_trial', true)
-		data.block = jsPsych.timelineVariable('block', true)
-		data.trial = jsPsych.timelineVariable('trial', true)
-		data.dealer_id = jsPsych.timelineVariable('dealer_id', true)
-		data.card_self = jsPsych.timelineVariable('card_self', true)
-		data.card_hidden = jsPsych.timelineVariable('card_hidden', true)
-		data.card_correct = jsPsych.timelineVariable('card_correct', true)
-		data.friends_id = jsPsych.timelineVariable('friends_id', true)
-		data.work_id = jsPsych.timelineVariable('work_id', true)	
+		data.info_sampled_rt = jsPsych.data.get().last(1).values()[0]['rt']	
 	}
 }
 
 var information_sampling_delay = {
 	type: 'html-button-response',
 	stimulus: function() {
-		previous_info_sampled = jsPsych.data.get().last(1).values()[0]['button_pressed'] == '0' ? 'friends' : 'work'
+		let previous_info_sampled = jsPsych.data.get().last(1).values()[0]['button_pressed'] == '0' ? 'friends' : 'work'
+		let first_or_second_choice_string = jsPsych.data.get().last(1).values()[0]['trial_name'] == 'information_sampling' ? 'first_choice_' : 'second_choice_'
 		return update_information_sampling_stimulus(jsPsych.data.get().last(1).values()[0]['stimulus'],
 													previous_info_sampled,
-													jsPsych.timelineVariable('friends_id', true), 
-													jsPsych.timelineVariable('work_id', true))
+													jsPsych.timelineVariable(first_or_second_choice_string+'friends_id', true), 
+													jsPsych.timelineVariable(first_or_second_choice_string+'work_id', true))
 	},
-	choices: ['Who are you<br>friends with?', 'Who works the<br>same time as you?'],
-	button_html: [	'<button id="friends" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>',
-					'<button id="work" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>'],
+	choices: function() {
+		return jsPsych.data.get().last(1).values()[0]['choices']
+	},
+	button_html: function() {
+		return jsPsych.data.get().last(1).values()[0]['button_html']
+	},
 	margin_vertical: '',
 	margin_horizontal: '',
 	trial_duration: function() {return INFORMATION_SAMPLING_DELAY},
 	on_load: function() {
+		document.getElementById('jspsych-content').style['margin-top'] = '2%'
+
 		document.getElementById('friends').setAttribute('disabled', 'disabled')
 		document.getElementById('work').setAttribute('disabled', 'disabled')
+		if (document.getElementById('skip') != null) {
+			document.getElementById('skip').setAttribute('disabled', 'disabled')
+		}
 
 		buttons = document.getElementsByClassName('jspsych-html-button-response-button')
-		for (i of buttons) {
-			i.classList.add('information_smapling_button_styling')
+		information_sampling_buttons_add_styling_class(buttons)
+
+		if (jsPsych.data.get().last(1).values()[0]['trial_name'] == 'information_sampling_2_optional') {
+			skip_button = document.querySelector("div[data-choice='2']")
+			skip_button.style.display = 'block' // this must defined here due to specificity
+			skip_button.className = 'skip_button_styling'
 		}
+
 	},
 	on_finish: function(data) {
+		document.getElementById('jspsych-content').style['margin-top'] = 'auto'
+	}
+}
+
+var information_sampling_2_optional = {
+	type: 'html-button-response',
+	stimulus: function() {
+		return set_initial_information_sampling_stimulus(jsPsych.timelineVariable('dealer_id', true))
+	},
+	choices: ['Who are you<br>friends with?', 'Who works the<br>same time as you?', 'Skip information and proceed to next trial'],
+	button_html: [	'<button id="friends" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>',
+					'<button id="work" class="information_sampling_text jspsych-btn" style="width: 100%">%choice%</button>',
+					'<button id="skip" class="information_sampling_skip_button_text jspsych-btn" style="width: 100%">%choice%</button>'],
+	margin_vertical: '',
+	margin_horizontal: '',
+	response_ends_trial: true,
+	on_load: function() {
+		document.getElementById('jspsych-content').style['margin-top'] = '2%'
+
+		buttons = document.getElementsByClassName('jspsych-html-button-response-button')
+		information_sampling_buttons_add_styling_class(buttons)
+
+		skip_button = document.querySelector("div[data-choice='2']")
+		skip_button.style.display = 'block' // this must defined here due to specificity
+		skip_button.className = 'skip_button_styling'
+	},
+	on_finish: function(data) {
+		document.getElementById('jspsych-content').style['margin-top'] = 'auto'
+
+		data.choices = this.choices
+		data.button_html = this.button_html
+		data.trial_name = 'information_sampling_2_optional'
+
+		// save data from information sampling trials
+		data.first_choice_info_sampled = jsPsych.data.get().last(3).values()[0]['button_pressed']
+		data.first_choice_info_sampled_rt = jsPsych.data.get().last(3).values()[0]['rt']
+		data.second_choice_info_sampled = jsPsych.data.get().last(1).values()[0]['button_pressed']
+		data.second_choice_info_sampled_rt = jsPsych.data.get().last(1).values()[0]['rt']
+
+		// save meta trial data
+		data.pt_trial = jsPsych.timelineVariable('pt_trial', true)
+		data.block = jsPsych.timelineVariable('block', true)
+		data.trial = jsPsych.timelineVariable('trial', true)
+		data.card_self = jsPsych.timelineVariable('card_self', true)
+		data.card_hidden = jsPsych.timelineVariable('card_hidden', true)
+		data.card_correct = jsPsych.timelineVariable('card_correct', true)
+		data.dealer_id = jsPsych.timelineVariable('dealer_id', true)
+		data.first_choice_friends_id = jsPsych.timelineVariable('first_choice_friends_id', true)
+		data.first_choice_work_id = jsPsych.timelineVariable('first_choice_work_id', true)	
+		data.second_choice_friends_id = jsPsych.timelineVariable('second_choice_friends_id', true)
+		data.second_choice_work_id = jsPsych.timelineVariable('second_choice_work_id', true)
+		data.structure = jsPsych.timelineVariable('structure', true)
 	}
 }
 
 var memory_test_trial = {
 	type: 'html-button-response',
 	stimulus: function() {
-		console.log(jsPsych.timelineVariable('stimulus_question_html', true))
 		return 	jsPsych.timelineVariable('stimulus_question_html', true)+
+				'<p style="font-size: 0.8em">(click on a person from the lineup below)</p>'+
 				'<div>'+
 					'<p class="dealer-text" style="width: 70%; margin: auto">'+DEALER_ID_NAME_DICT[jsPsych.timelineVariable('target_dealer_id', true)]+'</p>'+
 					'<img style="width: 300px; margin-bottom: 30px" src="images/'+jsPsych.timelineVariable('target_dealer_id', true)+'.png">'+
 				'</div>'
 	},
-	choices: function () {return [jsPsych.timelineVariable('dealer_choice_1_id', true), jsPsych.timelineVariable('dealer_choice_2_id', true)]},
+	choices: function () {return [	jsPsych.timelineVariable('dealer_choice_1_id', true), 
+									jsPsych.timelineVariable('dealer_choice_2_id', true),
+									jsPsych.timelineVariable('dealer_choice_3_id', true)]
+	},
 	button_html: function () {
 		return [	'<button style="float: left" class="jspsych-btn">'+
 						'<p class="dealer-text">'+DEALER_ID_NAME_DICT[jsPsych.timelineVariable('dealer_choice_1_id', true)]+'</p>'+
-						'<img src="images/%choice%.png" style="width: 200px">'+
+						'<img src="images/%choice%.png" style="width: 150px">'+
 					'</button>', 
 					'<button style="float: left" class="jspsych-btn">'+
 						'<p class="dealer-text">'+DEALER_ID_NAME_DICT[jsPsych.timelineVariable('dealer_choice_2_id', true)]+'</p>'+
-						'<img src="images/%choice%.png" style="width: 200px">'+
+						'<img src="images/%choice%.png" style="width: 150px">'+
+					'</button>',
+					'<button style="float: left" class="jspsych-btn">'+
+						'<p class="dealer-text">'+DEALER_ID_NAME_DICT[jsPsych.timelineVariable('dealer_choice_3_id', true)]+'</p>'+
+						'<img src="images/%choice%.png" style="width: 150px">'+
 					'</button>']
 	},
 	response_ends_trial: true,
-	post_trial_gap: 250
+	post_trial_gap: 250,
+	on_finish: function(data) {
+		data.trial_name = 'memory_test_trial'
+
+		data.correct = data.button_pressed == String(jsPsych.timelineVariable('correct_choice_button_press', true))
+	}
 }
 

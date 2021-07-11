@@ -56,8 +56,13 @@ var instructions = {
 					
 					// Page 5
 					'<p class="instructions-text">Each card game round will consist of 2 stages:</p>'+
-					'<p class="instructions-text"><b>Stage 2: </b>You will now be able to chat to the dealer and ask them questions. You can ask them who the dealer is friends with or who works the same time as the dealer - to do so press on the respective blue button. Note that you can only reveal one piece of information at a time. After you have made your decision, you will have 2 seconds to look at the information from your choice after which you will progress to the next trial.</p>'+
+					'<p class="instructions-text"><b>Stage 2: </b>You will now be able to chat to the dealer and ask them questions. You can ask them who the dealer is friends with or who works the same time as the dealer - to do so press on the respective blue button. Note that you can only reveal one piece of information at a time. After you have made your decision, you will have 2 seconds to look at the information from your choice.</p>'+
 					'<div><img src="images/instructions-multi-html/image3_v2.png"></div>',
+
+					// Page 5
+					'<p class="instructions-text">Each card game round will consist of 2 stages:</p>'+
+					'<p class="instructions-text"><b>Stage 2: </b>After you have asked the dealer your first question, you can ask them another either of the two questions - who they are friends with or who works the same time as them - again. You will be given different information compared to your first ask. This time, however, you are allowed to skip asking them anything by using the yellow-colored button at the bottom of the screen in order to immediately proceed to the next card game round. If you do decide to ask them a question again, similar to before, you will have 2 seconds to look at the information from your choice.</p>'+
+					'<div><img src="images/instructions-multi-html/image3_v3.png"></div>',
 
 					// Page 6
 					'<p class="instructions-text">Your total winnings will be shown to you at the end of the experiment and your bonus (up to £2) will be based on your points. For each correct card decision you will gain 10 points. The more points you win, the higher the bonus.</p>',
@@ -103,6 +108,18 @@ var inter_block_text = {
 				'<p>There is/are '+(BLOCKS - (last_block_id+1))+' block(s) remaining.</p>'+
 				'<p>You can take a break now if you wish and continue when you feel ready.</p>']
 	},
+	show_clickable_nav: true
+}
+
+var memory_test_intro = {
+	type: 'instructions',
+	pages: ['<p class="instructions-text">Thank you for completing the main part of the experiment and getting to this stage.</p>'+
+			'<p class="instructions-text">Your bonus has already been calculated and will be shown to you shortly.</p>'+
+			'<p class="instructions-text">Before that, we would now like you ask you to complete a short quiz to see how many dealers\' friends and colleagues you remember.</p>'+
+			'<p class="instructions-text">Please <b>NOTE</b> that this is <b>NOT</b> going to have any effect on your bonus and is not designed to trick you in any way. Just please try to do your best and do not worry if you cannot remember everything - just make a buest guess.</p>'+
+			'<p class="instructions-text">This quiz will have 24 questions, asking you who dealers are friends with and who works the same time as them. Simply click on one of the people in the lineup on the bottom of your screen to make your choice. This should take approximately 3 minutes.</p>'+
+			'<p class="instructions-text">Press Next when you are ready to begin.</p>'
+	],
 	show_clickable_nav: true
 }
 
