@@ -57,17 +57,17 @@ var instructions = {
 					// Page 5
 					'<p class="instructions-text">Each card game round will consist of 2 stages:</p>'+
 					'<p class="instructions-text"><b>Stage 2: </b>You will now be able to chat to the dealer and ask them questions. You can ask them who the dealer is friends with or who works the same time as the dealer - to do so press on the respective blue button. Note that you can only reveal one piece of information at a time. After you have made your decision, you will have 2 seconds to look at the information from your choice.</p>'+
-					'<div><img src="images/instructions-multi-html/image3_v2.png"></div>',
-
-					// Page 5
-					'<p class="instructions-text">Each card game round will consist of 2 stages:</p>'+
-					'<p class="instructions-text"><b>Stage 2: </b>After you have asked the dealer your first question, you can ask them another either of the two questions - who they are friends with or who works the same time as them - again. You will be given different information compared to your first ask. This time, however, you are allowed to skip asking them anything by using the yellow-colored button at the bottom of the screen in order to immediately proceed to the next card game round. If you do decide to ask them a question again, similar to before, you will have 2 seconds to look at the information from your choice.</p>'+
-					'<div><img src="images/instructions-multi-html/image3_v3.png"></div>',
+					'<div><img style="width: 350px" src="images/instructions-multi-html/image3_v2.png"></div>',
 
 					// Page 6
-					'<p class="instructions-text">Your total winnings will be shown to you at the end of the experiment and your bonus (up to £2) will be based on your points. For each correct card decision you will gain 10 points. The more points you win, the higher the bonus.</p>',
+					'<p class="instructions-text">Each card game round will consist of 2 stages:</p>'+
+					'<p class="instructions-text"><b>Stage 2: </b>After you have asked the dealer your first question, you can ask them another either of the two questions - who they are friends with or who works the same time as them - again. You will be given different information compared to your first ask. This time, however, you are allowed to skip asking them anything by using the yellow-colored button at the bottom of the screen in order to immediately proceed to the next card game round. If you do decide to ask them a question again, similar to before, you will have 2 seconds to look at the information from your choice.</p>'+
+					'<div><img style="width: 350px" src="images/instructions-multi-html/image3_v3.png"></div>',
 
 					// Page 7
+					'<p class="instructions-text">Your total winnings will be shown to you at the end of the experiment and your bonus (up to £2) will be based on your points. For each correct card decision you will gain 10 points. The more points you win, the higher the bonus.</p>',
+
+					// Page 8
 					'<p class="instructions-text">You will now complete '+PT_TRIALS_NUM+' practice trials.</p>'+
 					'<p class="instructions-text">Click the "Next" button to start.</p>'
 				]
