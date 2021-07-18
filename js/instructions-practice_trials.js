@@ -82,7 +82,7 @@ var pt_block_feedback = {
 	type: 'instructions',
 	pages: function() {
 		return ['<p>During the practice trials you made the correct decision '+jsPsych.data.get().filter({'pp_card_correct': true, 'trial_name': 'card_decision'}).count()+' times.</p>'+
-				'<p>This brought you a total of '+jsPsych.data.get().filter('trial_name': 'card_decision').select('curr_trial_winnings').sum()+' points from both lotteries.']
+				'<p>This brought you a total of '+jsPsych.data.get().filter({'trial_name': 'card_decision'}).select('curr_trial_winnings').sum()+' points from both lotteries.']
 	},
 	show_clickable_nav: true
 }
