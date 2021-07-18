@@ -140,6 +140,7 @@ function get_experiment_data_object() {
 		if (!experiment_data_object['test_trials'][block_key]) {
 			experiment_data_object['test_trials'][block_key] = {}
 		}
+		console.log(block_key, trial_key)
 		experiment_data_object['test_trials'][block_key][trial_key] = {
 			'pt_trial': false,
 			'block': block_ind, 
