@@ -277,7 +277,8 @@ var information_sampling_2_optional = {
 		data.trial_name = 'information_sampling_2_optional'
 
 		// save data from card decision trial
-		last_card_decision_trial_data = jsPsych.data.get().filter({trial_name: 'card_decision'}).last(1)[0]
+		last_card_decision_trial_data = jsPsych.data.get().filter({trial_name: 'card_decision'}).last(1).values()
+
 		data.pp_card_guess = last_card_decision_trial_data['pp_card_guess']
 		data.pp_card_correct = last_card_decision_trial_data['pp_card_correct']
 		data.curr_trial_winnings = last_card_decision_trial_data['curr_trial_winnings']
