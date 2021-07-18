@@ -149,7 +149,7 @@ var debrief = {
 			// rounding algorithm credits with number.epsilon https://stackoverflow.com/a/11832950
 			currentBonus = Math.round((((acquiredPoints - 600) / 2) * 0.01 + Number.EPSILON) * 100) / 100
 		}
-		return ['<p>During the test trials you made the correct decision '+jsPsych.data.get().filter({'pp_card_correct': true, 'pt_trial': false}).count()+' times.</p>'+
+		return ['<p>During the test trials you made the correct decision '+jsPsych.data.get().filter({'pp_card_correct': true, 'pt_trial': false, 'trial_name': 'card_decision'}).count()+' times.</p>'+
 				'<p>This brought you a total of '+acquiredPoints+' points.</p>'+
 				'<p>The bonus is calculated such that each 2 points above 600 grant £0.01 with the maximum £2.00 reached at 1,000 points.</p>'+
 				'<p>This means that your current bonus is equal to £'+currentBonus+'.</p>'+
