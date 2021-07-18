@@ -144,6 +144,7 @@ var card_decision = {
 	on_finish: function(data) {
 		data.trial_name = 'card_decision'
 
+		data.pt_trial = jsPsych.timelineVariable('pt_trial', true)
 		data.block = jsPsych.timelineVariable('block', true)
 		data.trial = jsPsych.timelineVariable('trial', true)
 		data.pp_card_guess = data.button_pressed == '0' ? 'lower' : 'higher'

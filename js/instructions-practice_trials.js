@@ -81,8 +81,8 @@ var instructions = {
 var pt_block_feedback = {
 	type: 'instructions',
 	pages: function() {
-		return ['<p>During the practice trials you made the correct decision '+jsPsych.data.get().filter({'pt_pp_card_correct': true}).count()+' times.</p>'+
-				'<p>This brought you a total of '+jsPsych.data.get().select('pt_curr_trial_winnings').sum()+' points from both lotteries.']
+		return ['<p>During the practice trials you made the correct decision '+jsPsych.data.get().filter({'pp_card_correct': true, 'trial_name': 'card_decision'}).count()+' times.</p>'+
+				'<p>This brought you a total of '+jsPsych.data.get().filter('trial_name': 'card_decision').select('curr_trial_winnings').sum()+' points from both lotteries.']
 	},
 	show_clickable_nav: true
 }
@@ -101,8 +101,8 @@ var inter_block_text = {
 	pages: function() {
 		// order is final trial-fixation cross-this trial, hence we use last(2) below
 		last_block_id = jsPsych.data.get().last(2).values()[0]['block']
-		last_block_winnings = jsPsych.data.get().filter([{'pp_card_guess': 'lower', 'block': last_block_id},
-											{'pp_card_guess': 'higher', 'block': last_block_id}])
+		last_block_winnings = jsPsych.data.get().filter([{'pp_card_guess': 'lower', 'block': last_block_id, 'pt_trial': false, 'trial_name': 'card_decision'},
+											{'pp_card_guess': 'higher', 'block': last_block_id, 'pt_trial': false, 'trial_name': 'card_decision'}])
 											.select('curr_trial_winnings').sum()
 		return ['<p>This is the end of block '+(last_block_id+1)+'. In this block you won '+last_block_winnings+' points.</p>'+
 				'<p>There is/are '+(BLOCKS - (last_block_id+1))+' block(s) remaining.</p>'+
@@ -140,7 +140,7 @@ var memory_test_stimulus_question_type_intro = {
 var debrief = {
 	type: 'instructions',
 	pages: function() {
-		let acquiredPoints = jsPsych.data.get().select('curr_trial_winnings').sum()
+		let acquiredPoints = jsPsych.data.get().filter({'pt_trial': false, 'trial_name': 'card_decision'}).select('curr_trial_winnings').sum()
 		let currentBonus = 0
 		if (acquiredPoints >= 1000) {
 			currentBonus = 2
