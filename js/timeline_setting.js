@@ -37,6 +37,7 @@ pt_trials_timeline = {
 const trials_timeline = get_trials_timeline(single_trial_order, experiment_data_object)
 
 const experiment_data_object_for_memory_test = get_experiment_data_object_for_memory_test()
+console.log('memory obj', experiment_data_object_for_memory_test)
 
 
 

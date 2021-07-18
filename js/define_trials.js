@@ -90,6 +90,18 @@ function information_sampling_buttons_add_styling_class(buttons) {
 		}
 	}
 }
+
+function translate_button_press(button_pressed) {
+	let info_sampled
+	if (button_pressed == 0) {
+		info_sampled = 'friends'
+	} else if (button_pressed == 1) {
+		info_sampled = 'work'
+	} else if (button_pressed == 2) {
+		info_sampled = 'skip'
+	}
+	return info_sampled
+}
 		
 
 
@@ -132,19 +144,12 @@ var card_decision = {
 	on_finish: function(data) {
 		data.trial_name = 'card_decision'
 
-		// data.block = jsPsych.timelineVariable('block', true)
-		// data.trial = jsPsych.timelineVariable('trial', true)
+		data.block = jsPsych.timelineVariable('block', true)
+		data.trial = jsPsych.timelineVariable('trial', true)
 		data.pp_card_guess = data.button_pressed == '0' ? 'lower' : 'higher'
-		if (jsPsych.timelineVariable('pt_trial', true)) {
-			data.pt_pp_card_correct = (data.pp_card_guess == 'lower' & jsPsych.timelineVariable('card_correct', true) == 'lower') || 
+		data.pp_card_correct = (data.pp_card_guess == 'lower' & jsPsych.timelineVariable('card_correct', true) == 'lower') || 
 								(data.pp_card_guess == 'higher' & jsPsych.timelineVariable('card_correct', true) == 'higher')
-			data.pt_curr_trial_winnings = data.pt_pp_card_correct ? 10 : 0
-		} else {
-			data.pp_card_correct = (data.pp_card_guess == 'lower' & jsPsych.timelineVariable('card_correct', true) == 'lower') || 
-								(data.pp_card_guess == 'higher' & jsPsych.timelineVariable('card_correct', true) == 'higher')
-			data.curr_trial_winnings = data.pp_card_correct ? 10 : 0	
-							
-		}
+		data.curr_trial_winnings = data.pp_card_correct ? 10 : 0
 	} 
 }
 
@@ -271,10 +276,17 @@ var information_sampling_2_optional = {
 		data.button_html = this.button_html
 		data.trial_name = 'information_sampling_2_optional'
 
+		// save data from card decision trial
+		last_card_decision_trial_data = jsPsych.data.get().filter({trial_name: 'card_decision'}).last(1)[0]
+		data.pp_card_guess = last_card_decision_trial_data['pp_card_guess']
+		data.pp_card_correct = last_card_decision_trial_data['pp_card_correct']
+		data.curr_trial_winnings = last_card_decision_trial_data['curr_trial_winnings']
+		data.card_decision_rt = last_card_decision_trial_data['rt']
+
 		// save data from information sampling trials
-		data.first_choice_info_sampled = jsPsych.data.get().last(3).values()[0]['button_pressed']
+		data.first_choice_info_sampled = translate_button_press(jsPsych.data.get().last(3).values()[0]['button_pressed'])
 		data.first_choice_info_sampled_rt = jsPsych.data.get().last(3).values()[0]['rt']
-		data.second_choice_info_sampled = jsPsych.data.get().last(1).values()[0]['button_pressed']
+		data.second_choice_info_sampled = translate_button_press(jsPsych.data.get().last(1).values()[0]['button_pressed'])
 		data.second_choice_info_sampled_rt = jsPsych.data.get().last(1).values()[0]['rt']
 
 		// save meta trial data
@@ -326,7 +338,20 @@ var memory_test_trial = {
 	on_finish: function(data) {
 		data.trial_name = 'memory_test_trial'
 
-		data.correct = data.button_pressed == String(jsPsych.timelineVariable('correct_choice_button_press', true))
+		data.correct = data.button_pressed == String(jsPsych.timelineVariable('correct_choice_button_press', true)) ? 1 : 0
+
+		// trial meta-data
+		data.trial = jsPsych.timelineVariable('trial', true)
+		data.stimulus_question_friends_or_work = jsPsych.timelineVariable('stimulus_question_friends_or_work', true)
+		data.target_dealer_id = jsPsych.timelineVariable('target_dealer_id', true)
+		data.dealer_choice_1_source = jsPsych.timelineVariable('dealer_choice_1_source', true)
+		data.dealer_choice_2_source = jsPsych.timelineVariable('dealer_choice_2_source', true)
+		data.dealer_choice_3_source = jsPsych.timelineVariable('dealer_choice_3_source', true)
+		data.dealer_choice_1_id = jsPsych.timelineVariable('dealer_choice_1_id', true)
+		data.dealer_choice_2_id = jsPsych.timelineVariable('dealer_choice_2_id', true)
+		data.dealer_choice_3_id = jsPsych.timelineVariable('dealer_choice_3_id', true)
+		data.correct_choice_id = jsPsych.timelineVariable('correct_choice_id', true)
+		data.correct_choice_button_press = jsPsych.timelineVariable('correct_choice_button_press', true)
 	}
 }
 

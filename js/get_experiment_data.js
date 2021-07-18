@@ -197,6 +197,7 @@ function get_experiment_data_object_for_memory_test(dealer_id, curr_trial_choice
 		experiment_data_object['test_trials'][trial_key] = {
 			'trial': trial_ind,
 			'stimulus_question_html': stimulus_question_html_opts[trial_ind],
+			'stimulus_question_friends_or_work': current_trial_stimulus_question_friends_or_work
 			'target_dealer_id': target_dealer_id_list[trial_ind],
 			'dealer_choice_1_source': curr_trial_choices_sources_and_ids_nested_list[0][0],
 			'dealer_choice_2_source': curr_trial_choices_sources_and_ids_nested_list[1][0],
