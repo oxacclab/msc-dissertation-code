@@ -339,8 +339,6 @@ var memory_test_trial = {
 	on_finish: function(data) {
 		data.trial_name = 'memory_test_trial'
 
-		data.correct = data.button_pressed == String(jsPsych.timelineVariable('correct_choice_button_press', true)) ? 1 : 0
-
 		// trial meta-data
 		data.trial = jsPsych.timelineVariable('trial', true)
 		data.stimulus_question_friends_or_work = jsPsych.timelineVariable('stimulus_question_friends_or_work', true)
@@ -353,6 +351,17 @@ var memory_test_trial = {
 		data.dealer_choice_3_id = jsPsych.timelineVariable('dealer_choice_3_id', true)
 		data.correct_choice_id = jsPsych.timelineVariable('correct_choice_id', true)
 		data.correct_choice_button_press = jsPsych.timelineVariable('correct_choice_button_press', true)
+
+		// trial data
+		data.correct = data.button_pressed == String(jsPsych.timelineVariable('correct_choice_button_press', true)) ? 1 : 0
+		if (data.button_pressed == 0) {
+			data.button_pressed_source = data.dealer_choice_1_source
+		} else if (data.button_pressed == 1) {
+			data.button_pressed_source = data.dealer_choice_2_source
+		} else if (data.button_pressed == 2) {
+			data.button_pressed_source = data.dealer_choice_3_source
+		}
+		
 	}
 }
 
