@@ -124,7 +124,7 @@ function get_experiment_data_object() {
 	
 	// controlling friends and colleagues connections
 	const information_sampling_trials_obj = get_information_sampling_trials_obj()
-	console.log(information_sampling_trials_obj)
+	// console.log(information_sampling_trials_obj)
 
 	for (let trial_ind = 0; trial_ind < TRIALS_NUM; trial_ind++) {	
 		// getting cards
@@ -140,7 +140,6 @@ function get_experiment_data_object() {
 		if (!experiment_data_object['test_trials'][block_key]) {
 			experiment_data_object['test_trials'][block_key] = {}
 		}
-		console.log(block_key, trial_key)
 		experiment_data_object['test_trials'][block_key][trial_key] = {
 			'pt_trial': false,
 			'block': block_ind, 
@@ -157,7 +156,7 @@ function get_experiment_data_object() {
 		}
 		// console.log(experiment_data_object)
 	}
-	console.log(experiment_data_object)
+	// console.log(experiment_data_object)
 	return experiment_data_object
 }
 
@@ -197,7 +196,7 @@ function get_experiment_data_object_for_memory_test(dealer_id, curr_trial_choice
 		experiment_data_object['test_trials'][trial_key] = {
 			'trial': trial_ind,
 			'stimulus_question_html': stimulus_question_html_opts[trial_ind],
-			'stimulus_question_friends_or_work': current_trial_stimulus_question_friends_or_work
+			'stimulus_question_friends_or_work': current_trial_stimulus_question_friends_or_work,
 			'target_dealer_id': target_dealer_id_list[trial_ind],
 			'dealer_choice_1_source': curr_trial_choices_sources_and_ids_nested_list[0][0],
 			'dealer_choice_2_source': curr_trial_choices_sources_and_ids_nested_list[1][0],
@@ -210,7 +209,7 @@ function get_experiment_data_object_for_memory_test(dealer_id, curr_trial_choice
 		}
 		// console.log(experiment_data_object)
 	}
-	console.log(experiment_data_object)
+	// console.log(experiment_data_object)
 	return experiment_data_object
 }
 

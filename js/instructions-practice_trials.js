@@ -123,6 +123,20 @@ var memory_test_intro = {
 	show_clickable_nav: true
 }
 
+var memory_test_stimulus_question_type_intro = {
+	type: 'instructions',
+	pages: function() {
+		let question_type_text
+		if (jsPsych.timelineVariable('question_type', true) == 'friends') {
+			question_type_text = 'who each dealer is <b>FRIENDS</b> with'
+		} else if (jsPsych.timelineVariable('question_type', true) == 'work') {
+			question_type_text = 'who <b>works the same time</b> as the dealer'
+		}
+		return ['<p class="instructions-text">You will now be asked about '+question_type_text+'. Click Next when you are ready to continue.</p>']
+	},
+	show_clickable_nav: true
+}
+
 var debrief = {
 	type: 'instructions',
 	pages: function() {

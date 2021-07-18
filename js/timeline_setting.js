@@ -37,9 +37,6 @@ pt_trials_timeline = {
 const trials_timeline = get_trials_timeline(single_trial_order, experiment_data_object)
 
 const experiment_data_object_for_memory_test = get_experiment_data_object_for_memory_test()
-console.log('memory obj', experiment_data_object_for_memory_test)
-
-
 
 var timeline = []
 
@@ -52,5 +49,8 @@ if (skip_to_memory_test !== 'true') {
 	timeline.push(trials_timeline)
 }
 timeline.push(memory_test_intro)
-timeline.push({timeline: [memory_test_trial], timeline_variables: Object.values(experiment_data_object_for_memory_test['test_trials'])})
+timeline.push({timeline: [memory_test_stimulus_question_type_intro], timeline_variables: [{'question_type': Object.values(experiment_data_object_for_memory_test['test_trials'])[0]["stimulus_question_friends_or_work"]}]})
+timeline.push({timeline: [memory_test_trial], timeline_variables: Object.values(experiment_data_object_for_memory_test['test_trials']).slice(0, 12)})
+timeline.push({timeline: [memory_test_stimulus_question_type_intro], timeline_variables: [{'question_type': Object.values(experiment_data_object_for_memory_test['test_trials'])[12]["stimulus_question_friends_or_work"]}]})
+timeline.push({timeline: [memory_test_trial], timeline_variables: Object.values(experiment_data_object_for_memory_test['test_trials']).slice(12)})
 timeline.push(debrief)
