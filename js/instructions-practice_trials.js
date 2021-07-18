@@ -116,7 +116,7 @@ var memory_test_intro = {
 	pages: ['<p class="instructions-text">Thank you for completing the main part of the experiment and getting to this stage.</p>'+
 			'<p class="instructions-text">Your bonus has already been calculated and will be shown to you shortly.</p>'+
 			'<p class="instructions-text">Before that, we would now like you ask you to complete a short quiz to see how many dealers\' friends and colleagues you remember.</p>'+
-			'<p class="instructions-text">Please <b>NOTE</b> that this is <b>NOT</b> going to have any effect on your bonus and is not designed to trick you in any way. Just please try to do your best and do not worry if you cannot remember everything - just make a buest guess.</p>'+
+			'<p class="instructions-text">Please <b>NOTE</b> that this is <b>NOT</b> going to have any effect on your bonus and is not designed to trick you in any way. Just please try to do your best and do not worry if you cannot remember everything - just make a best guess.</p>'+
 			'<p class="instructions-text">This quiz will have 24 questions, asking you who dealers are friends with and who works the same time as them. Simply click on one of the people in the lineup on the bottom of your screen to make your choice. This should take approximately 3 minutes.</p>'+
 			'<p class="instructions-text">Press Next when you are ready to begin.</p>'
 	],
