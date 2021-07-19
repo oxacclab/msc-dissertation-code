@@ -24,7 +24,7 @@ let RANDOM_NET_EDGES = 	['d01--d05', 'd01--d08', 'd01--d12', 'd02--d06', 'd02--d
 							'd03--d05', 'd03--d10', 'd03--d11', 'd04--d08', 'd04--d09', 'd04--d11',
 							'd05--d09', 'd06--d09', 'd06--d12', 'd07--d10', 'd07--d12', 'd08--d10']
 
-let MODULAR_CONNECTIONS_SOURCE = getRandom(['friends', 'work'], 1)[0]
+let MODULAR_CONNECTIONS_SOURCE = 'friends'//getRandom(['friends', 'work'], 1)[0]
 
 jsPsych.data.addProperties({
 	PT_TRIALS_NUM: PT_TRIALS_NUM,
